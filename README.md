@@ -251,4 +251,4 @@ dnsimple.dns.delete( 'one.com', 1234 );
 
 # License
 
-This module is **copyleft** meaning you can do anything you want except copyrighting it. It would be nice to refer back to http://github.com/fvdm/nodejs-fibonacci for later reference.
+This module is **copyleft** meaning you can do anything you want except copyrighting it. It would be nice to refer back to http://github.com/fvdm/nodejs-dnsimple for later reference.
