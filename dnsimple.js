@@ -9,9 +9,10 @@ Source:  http://github.com/fvdm/nodejs-dnsimple
 Version: 0.1.2
 Date:    2012-05-18
 
-License: CC BY-SA 3.0
-This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
-To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/
+License: This module is copyleft meaning you can do anything you
+         want except copyrighting it. It would be nice to refer
+         back to http://github.com/fvdm/nodejs-fibonacci for
+         later reference.
 */
 
 var	https = require('https'),
