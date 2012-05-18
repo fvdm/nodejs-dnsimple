@@ -1,0 +1,27 @@
+{
+  "author": "Franklin van de Meent <fr@nkl.in> (http://frankl.in)",
+  "name": "dnsimple",
+  "description": "Access the DNSimple API",
+  "version": "0.1.2",
+  "homepage": "https://github.com/fvdm/nodejs-dnsimple",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fvdm/nodejs-dnsimple.git"
+  },
+  "main": "dnsimple.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/fvdm/nodejs-dnsimple/issues"
+  },
+  "tags": [
+    "dnsimple",
+    "domains",
+    "dns",
+    "api"
+  ]
+}
