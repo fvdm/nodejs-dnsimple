@@ -2,7 +2,7 @@
   "author": "Franklin van de Meent <fr@nkl.in> (http://frankl.in)",
   "name": "dnsimple",
   "description": "Access the DNSimple API",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "homepage": "https://github.com/fvdm/nodejs-dnsimple",
   "repository": {
     "type": "git",

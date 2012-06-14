@@ -474,7 +474,7 @@ app.talk = function( method, path, fields, callback ) {
 	
 	// error
 	req.on( 'error', function( error ) {
-		dnsimple.emit( 'error', error, options, fields );
+		app.emit( 'error', error, options, fields );
 	});
 	
 	// post and close
