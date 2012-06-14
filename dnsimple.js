@@ -474,7 +474,7 @@ app.talk = function( method, path, fields, callback ) {
 	
 	// error
 	req.on( 'error', function( error ) {
-		directvps.emit( 'error', error, options, fields );
+		dnsimple.emit( 'error', error, options, fields );
 	});
 	
 	// post and close
