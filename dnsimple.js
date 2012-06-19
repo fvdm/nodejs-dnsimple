@@ -5,13 +5,11 @@ Author:  Franklin van de Meent
 Website: http://frankl.in/
 Twitter: @unknownt
 
-Source:  http://github.com/fvdm/nodejs-dnsimple
-Version: 0.1.2
-Date:    2012-05-18
+Source:  https://github.com/fvdm/nodejs-dnsimple
 
 License: This module is copyleft meaning you can do anything you
          want except copyrighting it. It would be nice to refer
-         back to http://github.com/fvdm/nodejs-dnsimple for
+         back to https://github.com/fvdm/nodejs-dnsimple for
          later reference.
 */
 
