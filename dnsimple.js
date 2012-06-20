@@ -215,6 +215,33 @@ app.domains = {
 		})
 	},
 	
+	// Renew domainname registration - auto-payment!
+	renew: function( domainname, whoisPrivacy, callback ) {
+		var vars = {
+			domain: {
+				name:			domainname
+			}
+		}
+		
+		// fix 2 & 3 params
+		if( !callback && typeof whoisPrivacy == 'function' ) {
+			var callback = whoisPrivacy
+		} else {
+			// string matching
+			var whoisPrivacy = whoisPrivacy +''
+			if( whoisPrivacy.match( /^(true|yes|1)$/i ) ) {
+				vars.domain.renew_whois_privacy = 'true'
+			} else if( whoisPrivate.match( /^(false|no|0)$/i ) ) {
+				vars.domain.renew_whois_privacy = 'false'
+			}
+		}
+		
+		// send
+		app.talk( 'POST', 'domain_renewal', vars, function( result ) {
+			callback( result )
+		})
+	},
+	
 	
 	
 	//////////////

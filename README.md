@@ -189,6 +189,18 @@ dnsimple.domains.register( 'example.tld', 1, console.log )
 dnsimple.domains.transfer( 'example.tld', 1, 'abcdefg', console.log )
 ```
 
+## domains.renew
+### ( domainname, [whoisPrivacy], cb )
+
+Renew a domainname registration for a new period.
+
+* **domainname** - *required* - the domain to renew
+* **whoisPrivacy** - *optional* - also renew whois privacy protection, true or false
+
+```js
+dnsimple.domains.renew( 'example.tld', true, console.log )
+```
+
 
 List applied services (vendor presets) for a domain
 
