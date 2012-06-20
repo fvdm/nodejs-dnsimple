@@ -229,6 +229,25 @@ Prepare a domain for transferring to another registrar.
 domains.transferout( 'example.tld', console.log )
 ```
 
+## domains.nameservers
+### ( domainname, nameservers, cb )
+
+Set nameservers for a domain at the registry.
+
+* **domainname** - *required* - the domain to set nameservers for
+* **nameservers** - *required* - object with nameservers to set
+
+```js
+dnsimple.domains.nameservers(
+	'example.tld',
+	{
+		ns1:	'ns1.company.tld',
+		ns2:	'ns2.company.tld'
+	},
+	console.log
+)
+```
+
 # Services
 
 ## domains.services.list

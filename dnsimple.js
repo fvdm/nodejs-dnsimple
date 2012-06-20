@@ -263,6 +263,16 @@ app.domains = {
 		})
 	},
 	
+	// Set nameservers at registry
+	nameservers: function( domainname, nameservers, callback ) {
+		var ns = {
+			name_servers:	nameservers
+		}
+		app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, function( result ) {
+			callback( result )
+		})
+	},
+	
 	
 	//////////////
 	// SERVICES //
