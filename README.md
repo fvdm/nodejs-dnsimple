@@ -165,6 +165,19 @@ dnsimple.domains.check( 'frankl.in', console.log )
 ```
 
 ### domains.services.list ( domainname, cb )
+## domains.register
+### ( domainname, registrantID, [extendedAttribute], cb )
+
+Register a domainname at DNSimple. Your account will be charged on successful registration.
+
+* **domainname** - *required* - the domain to register
+* **registrantID** - *required* - the owner of the domain
+* **extendedAttribute** - *optional* - extra fields for certain TLDs
+
+```js
+dnsimple.domains.register( 'example.tld', 1, console.log )
+```
+
 
 List applied services (vendor presets) for a domain
 

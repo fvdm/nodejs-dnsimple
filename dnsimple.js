@@ -169,6 +169,28 @@ app.domains = {
 		})
 	},
 	
+	// Register domainname - auto-payment!
+	register: function( domainname, registrantID, extendedAttribute, callback ) {
+		var vars = {
+			domain: {
+				name:			domainname,
+				registrant_id:	registrantID
+			}
+		}
+		
+		// fix 3 & 4 params
+		if( !callback && typeof extendedAttribute == 'function' ) {
+			var callback = extendedAttribute
+		} else if( typeof extendedAttribute == 'object' ) {
+			vars.domain.extended_attribute = extendedAttribute
+		}
+		
+		// send
+		app.talk( 'POST', 'domain_registrations', vars, function( result ) {
+			callback( result )
+		})
+	},
+	
 	
 	
 	//////////////
