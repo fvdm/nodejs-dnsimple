@@ -157,6 +157,11 @@ app.domains = {
 		});
 	},
 	
+	
+	//////////////////
+	// REGISTRATION //
+	//////////////////
+	
 	// Check availability
 	check: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/check', {}, function( result ) {
@@ -164,6 +169,11 @@ app.domains = {
 		})
 	},
 	
+	
+	
+	//////////////
+	// SERVICES //
+	//////////////
 	
 	// Services for domain
 	services: {
