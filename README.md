@@ -201,6 +201,18 @@ Renew a domainname registration for a new period.
 dnsimple.domains.renew( 'example.tld', true, console.log )
 ```
 
+## domains.autorenew
+### ( domainname, status, cb )
+
+Enable or disable auto-renewal for a domainname.
+
+* **domainname** - *required* - the domain to set the autorenew for
+* **status** - *required* - enabled or disable autorenewal
+
+```js
+dnsimple.domains.autorenew( 'example.tld', true, console.log )
+```
+
 
 List applied services (vendor presets) for a domain
 

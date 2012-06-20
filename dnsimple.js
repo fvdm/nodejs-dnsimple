@@ -242,6 +242,20 @@ app.domains = {
 		})
 	},
 	
+	// Set auto-renewal for domain
+	autorenew: function( domainname, status, cb ) {
+		var status = status +''
+		if( status.match( /^(true|yes|on|enable|enabled|1)$/i ) ) {
+			app.talk( 'POST', 'domains/'+ domainname +'/auto_renewal', {auto_renewal:{}}, function( result ) {
+				callback( result )
+			})
+		} else if( status.match( /^(false|no|off|disable|disabled|0)$/i ) ) {
+			app.talk( 'DELETE', 'domains/'+ domainname +'/auto_renewal', {}, function( result ) {
+				callback( result )
+			})
+		}
+	},
+	
 	
 	
 	//////////////
