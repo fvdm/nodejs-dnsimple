@@ -135,6 +135,35 @@ Delete a domains and its DNS records from your account
 dnsimple.domains.delete( 'two.com', console.log );
 ```
 
+### domains.check ( domainname, cb )
+
+Check domainname availability for registration or transfer to DNSimple.
+
+```js
+dnsimple.domains.check( 'frankl.in', console.log )
+```
+**Unavailable:**
+
+```js
+{ name: 'frankl.in',
+  status: 'unavailable',
+  price: '25.00',
+  currency: 'USD',
+  currency_symbol: '$',
+  minimum_number_of_years: 1 }
+```
+
+**Available:**
+
+```js
+{ name: 'awesome-stuff.org',
+  status: 'available',
+  price: '14.00',
+  currency: 'USD',
+  currency_symbol: '$',
+  minimum_number_of_years: 1 }
+```
+
 ### domains.services.list ( domainname, cb )
 
 List applied services (vendor presets) for a domain
