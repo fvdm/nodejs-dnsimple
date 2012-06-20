@@ -191,6 +191,30 @@ app.domains = {
 		})
 	},
 	
+	// Transfer domainname - auto-payment!
+	transfer: function( domainname, registrantID, authinfo, callback ) {
+		var vars = {
+			domain: {
+				name:			domainname,
+				registrant_id:	registrantID
+			}
+		}
+		
+		// fix 3 & 4 params
+		if( !callback && typeof authinfo == 'function' ) {
+			var callback = authinfo
+		} else if( typeof authinfo == 'string' ) {
+			vars.transfer_order = {
+				authinfo:		authinfo
+			}
+		}
+		
+		// send
+		app.talk( 'POST', 'domain_transfers', vars, function( result ) {
+			callback( result )
+		})
+	},
+	
 	
 	
 	//////////////

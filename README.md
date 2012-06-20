@@ -178,6 +178,17 @@ Register a domainname at DNSimple. Your account will be charged on successful re
 dnsimple.domains.register( 'example.tld', 1, console.log )
 ```
 
+## domains.transfer
+### ( domainname, registrantID, [authinfo], cb )
+
+* **domainname** - *required* - the domain to transfer into your account
+* **registrantID** - *required* - the new owner of the domain
+* **authinfo** - *optional* - the auth-code required for some TLDs
+
+```js
+dnsimple.domains.transfer( 'example.tld', 1, 'abcdefg', console.log )
+```
+
 
 List applied services (vendor presets) for a domain
 
