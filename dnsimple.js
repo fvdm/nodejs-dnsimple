@@ -243,7 +243,7 @@ app.domains = {
 	},
 	
 	// Set auto-renewal for domain
-	autorenew: function( domainname, status, cb ) {
+	autorenew: function( domainname, status, callback ) {
 		var status = status +''
 		if( status.match( /^(true|yes|on|enable|enabled|1)$/i ) ) {
 			app.talk( 'POST', 'domains/'+ domainname +'/auto_renewal', {auto_renewal:{}}, function( result ) {
@@ -257,7 +257,7 @@ app.domains = {
 	},
 	
 	// Prepare domain for transferring out
-	transferout: function( domainname, cb ) {
+	transferout: function( domainname, callback ) {
 		app.talk( 'POST', 'domains/'+ domainname +'/transfer_out', {}, function( result ) {
 			callback( result )
 		})
