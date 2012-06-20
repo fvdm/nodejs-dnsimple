@@ -213,6 +213,15 @@ Enable or disable auto-renewal for a domainname.
 dnsimple.domains.autorenew( 'example.tld', true, console.log )
 ```
 
+## domains.transferout
+### ( domainname, cb )
+
+Prepare a domain for transferring to another registrar.
+
+```js
+domains.transferout( 'example.tld', console.log )
+```
+
 
 List applied services (vendor presets) for a domain
 

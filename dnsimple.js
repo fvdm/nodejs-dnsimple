@@ -256,6 +256,12 @@ app.domains = {
 		}
 	},
 	
+	// Prepare domain for transferring out
+	transferout: function( domainname, cb ) {
+		app.talk( 'POST', 'domains/'+ domainname +'/transfer_out', {}, function( result ) {
+			callback( result )
+		})
+	},
 	
 	
 	//////////////
