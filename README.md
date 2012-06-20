@@ -48,9 +48,10 @@ The functions all allow a callback parameter at the end. The first arguement is 
 
 **cb = callback function()**
 
-## domains
+# Domains
 
-### domains.list ( simpleBool, cb )
+## domains.list
+### ( simpleBool, cb )
 
 List domainnames in account.
 
@@ -102,7 +103,8 @@ An object with domainnames details, the keys are their IDs.
 }
 ```
 
-### domains.findByRegex ( regexString, cb )
+## domains.findByRegex
+### ( regexString, cb )
 
 List only domains with names matching on regex.
 
@@ -111,7 +113,8 @@ List only domains with names matching on regex.
 dnsimple.domains.findByRegex( '\.com$', console.log );
 ```
 
-### domains.show ( domainname, cb )
+## domains.show
+### ( domainname, cb )
 
 Get details about one domainname
 
@@ -119,7 +122,8 @@ Get details about one domainname
 dnsimple.domains.show( 'one.com', console.log );
 ```
 
-### domains.add ( domainname, cb )
+## domains.add
+### ( domainname, cb )
 
 Add a domain to your account
 
@@ -127,7 +131,8 @@ Add a domain to your account
 dnsimple.domains.add( 'two.com', console.log );
 ```
 
-### domains.delete ( domainname, cb )
+## domains.delete
+### ( domainname, cb )
 
 Delete a domains and its DNS records from your account
 
@@ -135,7 +140,10 @@ Delete a domains and its DNS records from your account
 dnsimple.domains.delete( 'two.com', console.log );
 ```
 
-### domains.check ( domainname, cb )
+# Registration
+
+## domains.check
+### ( domainname, cb )
 
 Check domainname availability for registration or transfer to DNSimple.
 
@@ -164,7 +172,6 @@ dnsimple.domains.check( 'frankl.in', console.log )
   minimum_number_of_years: 1 }
 ```
 
-### domains.services.list ( domainname, cb )
 ## domains.register
 ### ( domainname, registrantID, [extendedAttribute], cb )
 
@@ -222,6 +229,10 @@ Prepare a domain for transferring to another registrar.
 domains.transferout( 'example.tld', console.log )
 ```
 
+# Services
+
+## domains.services.list
+### ( domainname, cb )
 
 List applied services (vendor presets) for a domain
 
@@ -229,7 +240,8 @@ List applied services (vendor presets) for a domain
 dnsimple.domains.services.list( 'one.com', console.log );
 ```
 
-### domains.services.available ( domainname, cb )
+## domains.services.available
+### ( domainname, cb )
 
 List available services for a domain
 
@@ -237,7 +249,8 @@ List available services for a domain
 dnsimple.domains.services.available( 'one.com', console.log );
 ```
 
-### domains.services.add ( domainname, serviceID, cb )
+## domains.services.add
+### ( domainname, serviceID, cb )
 
 Apply a service to a domain
 
@@ -248,7 +261,8 @@ Apply a service to a domain
 dnsimple.domains.services.add( 'one.com', 'heroku', console.log );
 ```
 
-### domains.services.delete ( domainname, serviceID, cb )
+## domains.services.delete
+### ( domainname, serviceID, cb )
 
 Remove a service from a domain
 
@@ -259,7 +273,8 @@ Remove a service from a domain
 dnsimple.domains.services.delete( 'one.com', 'heroku', console.log );
 ```
 
-### domains.template ( domainname, templateID, cb )
+## domains.template
+### ( domainname, templateID, cb )
 
 Apply a template (custom presets) to a domain. This is an alias for *templates.apply*.
 
@@ -270,9 +285,10 @@ Apply a template (custom presets) to a domain. This is an alias for *templates.a
 dnsimple.domains.template( 'one.com', 'office', console.log );
 ```
 
-## DNS
+# DNS
 
-### dns.list ( domainname, cb )
+## dns.list
+### ( domainname, cb )
 
 List DNS records for a domain
 
@@ -280,7 +296,8 @@ List DNS records for a domain
 dnsimple.dns.list( 'one.com', console.log );
 ```
 
-### dns.show ( domainname, recordID cb )
+## dns.show
+### ( domainname, recordID cb )
 
 Get DNS record details for a *recordID* on *domainname*
 
@@ -305,7 +322,8 @@ Returns an object with the record details:
   updated_at: '2011-11-28T20:39:51Z' }
 ```
 
-### dns.add ( domainname, recordObject, cb )
+## dns.add
+### ( domainname, recordObject, cb )
 
 **Required:** name, record_type, content
 
@@ -323,11 +341,13 @@ dnsimple.dns.add(
 );
 ```
 
-### dns.update ( domainname, recordID, cb )
+## dns.update
+### ( domainname, recordID, cb )
 
 Replace a record's details, same syntax as **dns.add**.
 
-### dns.delete ( domainname, recordID, cb )
+## dns.delete
+### ( domainname, recordID, cb )
 
 Delete a DNS record from a domain.
 
