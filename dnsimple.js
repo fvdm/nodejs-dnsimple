@@ -78,7 +78,7 @@ app.dns = {
 	// Show DNS record
 	show: function( domainname, recordID, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, function( record, error ) {
-			if( status.label == 'success' ) {
+			if( !error ) {
 				callback( record.record )
 			} else {
 				callback( record, error )
@@ -92,7 +92,7 @@ app.dns = {
 	add: function( domainname, record, callback ) {
 		var post = { record: record }
 		app.talk( 'POST', 'domains/'+ domainname +'/records', post, function( result, error ) {
-			if( status.label == 'success' ) {
+			if( !error ) {
 				callback( result.record )
 			} else {
 				callback( result, error )
@@ -104,7 +104,7 @@ app.dns = {
 	update: function( domainname, recordID, record, callback ) {
 		var post = { record: record }
 		app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( result, error ) {
-			if( status.label == 'success' ) {
+			if( !error ) {
 				callback( result.record )
 			} else {
 				callback( result, error )
@@ -156,7 +156,7 @@ app.domains = {
 	findByRegex: function( regex, callback ) {
 		var result = {}
 		app.domains.list( false, function( domains, error ) {
-			if( status.label == 'success' ) {
+			if( !error ) {
 				var regexp = new RegExp( regex )
 				for( var d in domains ) {
 					if( domains[d].name.match( regexp ) ) {
@@ -174,7 +174,7 @@ app.domains = {
 	// Show domain
 	show: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname, function( domain, error ) {
-			if( status.label == 'success' ) {
+			if( !error ) {
 				callback( domain.domain )
 			} else {
 				callback( domain, error )
@@ -606,7 +606,7 @@ app.talk = function( method, path, fields, callback ) {
 				data = JSON.parse( data )
 			} else {
 				// failed, no need to continue
-				callback( {}, 'invalid json' )
+				callback( data, 'invalid json' )
 				return
 			}
 			
