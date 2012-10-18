@@ -34,22 +34,26 @@ app.dns = {
 	
 	// List DNS records for domain
 	list: function( domainname, callback ) {
-		app.talk( 'GET', 'domains/'+ domainname +'/records', {}, function( records ) {
-			var result = {}
-			for( var r in records ) {
-				result[ records[r].record.id ] = records[r].record
+		app.talk( 'GET', 'domains/'+ domainname +'/records', {}, function( records, error ) {
+			if( !error ) {
+				var result = {}
+				for( var r in records ) {
+					result[ records[r].record.id ] = records[r].record
+				}
+				callback( result )
+			} else {
+				callback( {}, error )
 			}
-			callback( result )
 		})
 	},
 	
 	// Show DNS record
 	show: function( domainname, recordID, callback ) {
-		app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, {}, function( record, status ) {
+		app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, {}, function( record, error ) {
 			if( status.label == 'success' ) {
 				callback( record.record )
 			} else {
-				callback( record )
+				callback( record, status )
 			}
 		})
 	},
@@ -59,11 +63,11 @@ app.dns = {
 	// OPTIONAL: ttl, prio
 	add: function( domainname, record, callback ) {
 		var post = { record: record }
-		app.talk( 'POST', 'domains/'+ domainname +'/records', post, function( result, status ) {
+		app.talk( 'POST', 'domains/'+ domainname +'/records', post, function( result, error ) {
 			if( status.label == 'success' ) {
 				callback( result.record )
 			} else {
-				callback( result )
+				callback( result, status )
 			}
 		})
 	},
@@ -71,20 +75,18 @@ app.dns = {
 	// Update DNS record
 	update: function( domainname, recordID, record, callback ) {
 		var post = { record: record }
-		app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( result, status ) {
+		app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( result, error ) {
 			if( status.label == 'success' ) {
 				callback( result.record )
 			} else {
-				callback( result )
+				callback( result, status )
 			}
 		})
 	},
 	
 	// Delete DNS record
 	delete: function( domainname, recordID, callback ) {
-		app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, {}, function( result, status ) {
-			callback( result )
-		})
+		app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, {}, callback )
 	}
 
 }
@@ -100,7 +102,7 @@ app.domains = {
 	// List domains, simple returns only array with domainnames
 	list: function( simple, callback ) {
 		var result = simple ? [] : {}
-		app.talk( 'GET', 'domains', {}, function( domains, status ) {
+		app.talk( 'GET', 'domains', {}, function( domains, error ) {
 			for( var d in domains ) {
 				if( simple ) {
 					result.push( domains[d].domain.name )
@@ -116,7 +118,7 @@ app.domains = {
 	// Find domains by regex match
 	findByRegex: function( regex, callback ) {
 		var result = {}
-		app.domains.list( false, function( domains, status ) {
+		app.domains.list( false, function( domains, error ) {
 			if( status.label == 'success' ) {
 				var regexp = new RegExp( regex )
 				for( var d in domains ) {
@@ -126,15 +128,19 @@ app.domains = {
 				}
 				
 				callback( result )
+			} else {
+				callback( {}, status )
 			}
 		})
 	},
 	
 	// Show domain
 	show: function( domainname, callback ) {
-		app.talk( 'GET', 'domains/'+ domainname, {}, function( domain, status ) {
+		app.talk( 'GET', 'domains/'+ domainname, {}, function( domain, error ) {
 			if( status.label == 'success' ) {
 				callback( domain.domain )
+			} else {
+				callback( {}, status )
 			}
 		})
 	},
@@ -142,18 +148,18 @@ app.domains = {
 	// Add domain
 	add: function( domainname, callback ) {
 		var dom = { domain: { name: domainname } }
-		app.talk( 'POST', 'domains', dom, function( domain, status ) {
+		app.talk( 'POST', 'domains', dom, function( domain, error ) {
 			if( status.label == 'success' ) {
 				callback( domain.domain )
+			} else {
+				callback( {}, status )
 			}
 		})
 	},
 	
 	// Delete domain
 	delete: function( domainname, callback ) {
-		app.talk( 'DELETE', 'domains/'+ domainname, {}, function( result ) {
-			callback( result )
-		})
+		app.talk( 'DELETE', 'domains/'+ domainname, {}, callback )
 	},
 	
 	
@@ -163,9 +169,7 @@ app.domains = {
 	
 	// Check availability
 	check: function( domainname, callback ) {
-		app.talk( 'GET', 'domains/'+ domainname +'/check', {}, function( result ) {
-			callback( result )
-		})
+		app.talk( 'GET', 'domains/'+ domainname +'/check', {}, callback )
 	},
 	
 	// Register domainname - auto-payment!
@@ -185,9 +189,7 @@ app.domains = {
 		}
 		
 		// send
-		app.talk( 'POST', 'domain_registrations', vars, function( result ) {
-			callback( result )
-		})
+		app.talk( 'POST', 'domain_registrations', vars, callback )
 	},
 	
 	// Transfer domainname - auto-payment!
@@ -204,21 +206,19 @@ app.domains = {
 			var callback = authinfo
 		} else if( typeof authinfo == 'string' ) {
 			vars.transfer_order = {
-				authinfo:	authinfo
+				authinfo: authinfo
 			}
 		}
 		
 		// send
-		app.talk( 'POST', 'domain_transfers', vars, function( result ) {
-			callback( result )
-		})
+		app.talk( 'POST', 'domain_transfers', vars, callback )
 	},
 	
 	// Renew domainname registration - auto-payment!
 	renew: function( domainname, whoisPrivacy, callback ) {
 		var vars = {
 			domain: {
-				name:		domainname
+				name: domainname
 			}
 		}
 		
@@ -236,30 +236,22 @@ app.domains = {
 		}
 		
 		// send
-		app.talk( 'POST', 'domain_renewal', vars, function( result ) {
-			callback( result )
-		})
+		app.talk( 'POST', 'domain_renewal', vars, callback )
 	},
 	
 	// Set auto-renewal for domain
 	autorenew: function( domainname, status, callback ) {
 		var status = status +''
 		if( status.match( /^(true|yes|on|enable|enabled|1)$/i ) ) {
-			app.talk( 'POST', 'domains/'+ domainname +'/auto_renewal', {auto_renewal:{}}, function( result ) {
-				callback( result )
-			})
+			app.talk( 'POST', 'domains/'+ domainname +'/auto_renewal', {auto_renewal:{}}, callback )
 		} else if( status.match( /^(false|no|off|disable|disabled|0)$/i ) ) {
-			app.talk( 'DELETE', 'domains/'+ domainname +'/auto_renewal', {}, function( result ) {
-				callback( result )
-			})
+			app.talk( 'DELETE', 'domains/'+ domainname +'/auto_renewal', {}, callback )
 		}
 	},
 	
 	// Prepare domain for transferring out
 	transferout: function( domainname, callback ) {
-		app.talk( 'POST', 'domains/'+ domainname +'/transfer_out', {}, function( result ) {
-			callback( result )
-		})
+		app.talk( 'POST', 'domains/'+ domainname +'/transfer_out', {}, callback )
 	},
 	
 	// Set nameservers at registry
@@ -267,9 +259,7 @@ app.domains = {
 		var ns = {
 			name_servers:	nameservers
 		}
-		app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, function( result ) {
-			callback( result )
-		})
+		app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback )
 	},
 	
 	
@@ -282,26 +272,30 @@ app.domains = {
 		
 		// already applied
 		list: function( domainname, callback ) {
-			app.talk( 'GET', 'domains/'+ domainname +'/applied_services', {}, function( result, status ) {
+			app.talk( 'GET', 'domains/'+ domainname +'/applied_services', {}, function( result, error ) {
 				if( status.label == 'success' ) {
 					var services = {}
 					for( var s in result ) {
 						services[ result[s].service.id ] = result[s].service
 					}
 					callback( services )
+				} else {
+					callback( {}, status )
 				}
 			})
 		},
 		
 		// available
 		available: function( domainname, callback ) {
-			app.talk( 'GET', 'domains/'+ domainname +'/available_services', {}, function( result, status ) {
+			app.talk( 'GET', 'domains/'+ domainname +'/available_services', {}, function( result, error ) {
 				if( status.label == 'success' ) {
 					var services = {}
 					for( var s in result ) {
 						services[ result[s].service.id ] = result[s].service
 					}
 					callback( services )
+				} else {
+					callback( {}, status )
 				}
 			})
 		},
@@ -309,14 +303,14 @@ app.domains = {
 		// apply one
 		add: function( domainname, serviceID, callback ) {
 			var service = { service: { id: serviceID } }
-			app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, function( result, status ) {
+			app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, function( result, error ) {
 				callback( result )
 			})
 		},
 		
 		// delete one
 		delete: function( domainname, serviceID, callback ) {
-			app.talk( 'DELETE', 'domains/'+ domainname +'/applied_services/'+ serviceID, {}, function( result ) {
+			app.talk( 'DELETE', 'domains/'+ domainname +'/applied_services/'+ serviceID, {}, function( error ) {
 				callback( result )
 			})
 		}
@@ -353,7 +347,7 @@ app.services = {
 	
 	// Get one service' details
 	show: function( serviceID, callback ) {
-		app.talk( 'GET', 'services/'+ serviceID, {}, function( service, status ) {
+		app.talk( 'GET', 'services/'+ serviceID, {}, function( service, error ) {
 			if( status.label == 'success' ) {
 				callback( service.service )
 			} else {
@@ -386,7 +380,7 @@ app.templates = {
 	
 	// Get a specific template
 	show: function( templateID, callback ) {
-		app.talk( 'GET', 'templates/'+ templateID, {}, function( template, status ) {
+		app.talk( 'GET', 'templates/'+ templateID, {}, function( template, error ) {
 			if( status.label == 'success' ) {
 				callback( template.dns_template )
 			} else {
@@ -400,7 +394,7 @@ app.templates = {
 	// OPTIONAL: description
 	add: function( template, callback ) {
 		var set = { dns_template: template }
-		app.talk( 'POST', 'templates', set, function( result, status ) {
+		app.talk( 'POST', 'templates', set, function( result, error ) {
 			if( status.label == 'success' ) {
 				callback( result.dns_template )
 			} else {
@@ -411,14 +405,14 @@ app.templates = {
 	
 	// Delete the given template
 	delete: function( templateID, callback ) {
-		app.talk( 'DELETE', 'templates/'+ templateID, {}, function( result ) {
+		app.talk( 'DELETE', 'templates/'+ templateID, {}, function( result, error ) {
 			callback( result )
 		})
 	},
 	
 	// Apply a template to a domain
 	apply: function( domainname, templateID, callback ) {
-		app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', {}, function( result, status ) {
+		app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', {}, function( result, error ) {
 			if( status.label == 'success' ) {
 				callback( result )
 			} else {
@@ -433,7 +427,7 @@ app.templates = {
 		
 		// list records in template
 		list: function( templateID, callback ) {
-			app.talk( 'GET', 'templates/'+ templateID +'/template_records', {}, function( result, status ) {
+			app.talk( 'GET', 'templates/'+ templateID +'/template_records', {}, function( result, error ) {
 				if( status.label == 'success' ) {
 					var records = {}
 					for( var r in result ) {
@@ -448,7 +442,7 @@ app.templates = {
 		
 		// Get one record for template
 		show: function( templateID, recordID, callback ) {
-			app.talk( 'GET', 'templates/'+ templateID +'/template_records/'+ recordID, {}, function( result, status ) {
+			app.talk( 'GET', 'templates/'+ templateID +'/template_records/'+ recordID, {}, function( result, error ) {
 				if( status.label == 'success' ) {
 					callback( result.dns_template_record )
 				} else {
@@ -462,7 +456,7 @@ app.templates = {
 		// OPTIONAL: ttl, prio
 		add: function( templateID, record, callback ) {
 			var rec = { dns_template_record: record }
-			app.talk( 'POST', 'templates/'+ templateID +'/template_records', rec, function( result, status ) {
+			app.talk( 'POST', 'templates/'+ templateID +'/template_records', rec, function( result, error ) {
 				if( status.label == 'success' ) {
 					callback( result.dns_template_record )
 				} else {
@@ -473,7 +467,7 @@ app.templates = {
 		
 		// Delete record from template
 		delete: function( templateID, recordID, callback ) {
-			app.talk( 'DELETE', 'templates/'+ templateID +'/template_records/'+ recordID, {}, function( result ) {
+			app.talk( 'DELETE', 'templates/'+ templateID +'/template_records/'+ recordID, {}, function( result, error ) {
 				callback( result )
 			})
 		}
@@ -490,23 +484,19 @@ app.contacts = {
 	
 	// list
 	list: function( callback ) {
-		app.talk( 'GET', 'contacts', {}, function( result ) {
-			callback( result )
-		})
+		app.talk( 'GET', 'contacts', callback )
 	},
 	
 	// get one
 	show: function( contactID, callback ) {
-		app.talk( 'GET', 'contacts/'+ contactID, {}, function( result ) {
-			callback( result )
-		})
+		app.talk( 'GET', 'contacts/'+ contactID, callback )
 	},
 	
-	// create contact
+	// create
+	// http://developer.dnsimple.com/contacts/#create-a-contact
 	add: function( contact, callback ) {
-		app.talk( 'POST', 'contacts', {contact: contact}, function( result ) {
-			callback( result )
-		})
+		app.talk( 'POST', 'contacts', {contact: contact}, callback )
+	},
 	}
 	
 }
@@ -560,61 +550,43 @@ app.talk = function( method, path, fields, callback ) {
 			
 			// process response
 			var data = ''
-			var status = {}
+			var requestOK = [100, 200, 201, 202, 203, 204]
 			
 			response.on( 'data', function( chunk ) { data += chunk })
 			
 			// request finished
 			response.on( 'end', function() {
 				
-				// parse status
-				if( response.headers.status !== undefined ) {
-					// from header
-					status.code = parseInt( response.headers.status.substr(0,3) )
-					status.text = response.headers.status ? response.headers.status : ''
+				// parse JSON
 				data = data.toString('utf8').trim()
+				if( data.match(/^(\{.*\}|\[.*\])$/) ) {
+					data = JSON.parse( data )
 				} else {
-					// from body
-					data.replace( /<title>(([\d]{3}) ([^<]+))<\/title>/, function( m, text, code, t ) {
-						status.code = parseInt( code )
-						status.text = text
-					})
+					// failed, no need to continue
+					callback( {}, 'invalid json' )
+					return
 				}
 				
-				if( status.code >= 100 && status.code < 300 ) {
-					status.label = 'success'
-				} else if( status.code >= 300 && status.code < 400 ) {
-					status.label = 'redirection'
-				} else if( status.code >= 400 && status.code < 500 ) {
-					status.label = 'error'
-				} else if( status.code >= 500 && status.code < 600 ) {
-					status.label = 'fail'
-				} else if( status.code < 100 || !status.code.match( /^[0-9]{3}$/ ) ) {
-					status.label = 'fatal'
-				}
-				
-				if( status.label.match( /^(fatal|fail)$/ ) {
-					
-					// Panda Alert
-					status.details = {
-						request: {
-							options: options,
-							body: querystr
-						},
-						response: {
-							headers: response.headers,
-							body: data
+				// check HTTP status code
+				if( response.headers.status !== undefined ) {
+					for( var c = 0; c < requestOK.length; c++ ) {
+						if( requestOK[c] == response.headers.status ) {
+							// method ok
+							callback( data )
+							return
 						}
+					})
+					
+					if( response.headers.status >= 400 && response.headers.status < 500 ) {
+						// method error
+						callback( data, response.headers.status )
+					} else {
+						// API fail
+						callback( {}, response.headers.status )
 					}
-					
-					callback( {}, status )
-					
 				} else {
-					
-					// looks fine
-					data = data.match( /^[\[\{]/ ) ? JSON.parse( data ) : {}
-					callback( data, status )
-					
+					// API fail
+					callback( {}, 'api error' )
 				}
 			})
 			
