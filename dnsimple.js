@@ -13,11 +13,10 @@ License: This module is copyleft meaning you can do anything you
          later reference.
 */
 
-var	https = require('https'),
-	EventEmitter = require('events').EventEmitter
+var https = require('https')
 
 // init
-var app = new EventEmitter()
+var app = {}
 
 app.api = {
 	hostname:	'dnsimple.com',
@@ -603,7 +602,6 @@ app.talk = function( method, path, fields, callback ) {
 						}
 					}
 					
-					app.emit( 'api-'+ status.label, status )
 					callback( {}, status )
 					
 				} else {
@@ -620,7 +618,7 @@ app.talk = function( method, path, fields, callback ) {
 	
 	// error
 	req.on( 'error', function( error ) {
-		app.emit( 'error', error, options, fields )
+		callback( error, 'request error' )
 	})
 	
 	// post and close
