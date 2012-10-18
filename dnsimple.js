@@ -509,6 +509,12 @@ app.contacts = {
 	add: function( contact, callback ) {
 		app.talk( 'POST', 'contacts', {contact: contact}, callback )
 	},
+	
+	// update
+	// http://developer.dnsimple.com/contacts/#update-a-contact
+	update: function( contactID, contact, callback ) {
+		app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback )
+	},
 	}
 	
 }
