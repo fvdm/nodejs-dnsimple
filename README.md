@@ -1,11 +1,11 @@
-[![Build Status](https://secure.travis-ci.org/fvdm/nodejs-dnsimple.png?branch=master)](http://travis-ci.org/fvdm/nodejs-dnsimple)
-
 nodejs-dnsimple
 ===============
 
 This is an unofficial [DNSimple](http://dnsimple.com/) API module for [Node.js](http://nodejs.org/). You need a DNSimple account to use this.
 
 # Installation
+
+[![Build Status](https://secure.travis-ci.org/fvdm/nodejs-dnsimple.png?branch=master)](http://travis-ci.org/fvdm/nodejs-dnsimple)
 
 ```
 npm install dnsimple
