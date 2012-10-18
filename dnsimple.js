@@ -14,10 +14,10 @@ License: This module is copyleft meaning you can do anything you
 */
 
 var	https = require('https'),
-	EventEmitter = require('events').EventEmitter;
+	EventEmitter = require('events').EventEmitter
 
 // init
-var app = new EventEmitter();
+var app = new EventEmitter()
 
 app.api = {
 	hostname:	'dnsimple.com',
@@ -36,56 +36,56 @@ app.dns = {
 	// List DNS records for domain
 	list: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/records', {}, function( records ) {
-			var result = {};
+			var result = {}
 			for( var r in records ) {
-				result[ records[r].record.id ] = records[r].record;
+				result[ records[r].record.id ] = records[r].record
 			}
-			callback( result );
-		});
+			callback( result )
+		})
 	},
 	
 	// Show DNS record
 	show: function( domainname, recordID, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, {}, function( record, status ) {
 			if( status.label == 'success' ) {
-				callback( record.record );
+				callback( record.record )
 			} else {
-				callback( record );
+				callback( record )
 			}
-		});
+		})
 	},
 	
 	// Create DNS record
 	// REQUIRED: name, record_type, content
 	// OPTIONAL: ttl, prio
 	add: function( domainname, record, callback ) {
-		var post = { record: record };
+		var post = { record: record }
 		app.talk( 'POST', 'domains/'+ domainname +'/records', post, function( result, status ) {
 			if( status.label == 'success' ) {
-				callback( result.record );
+				callback( result.record )
 			} else {
-				callback( result );
+				callback( result )
 			}
-		});
+		})
 	},
 	
 	// Update DNS record
 	update: function( domainname, recordID, record, callback ) {
-		var post = { record: record };
+		var post = { record: record }
 		app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( result, status ) {
 			if( status.label == 'success' ) {
-				callback( result.record );
+				callback( result.record )
 			} else {
-				callback( result );
+				callback( result )
 			}
-		});
+		})
 	},
 	
 	// Delete DNS record
 	delete: function( domainname, recordID, callback ) {
 		app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, {}, function( result, status ) {
-			callback( result );
-		});
+			callback( result )
+		})
 	}
 
 }
@@ -100,61 +100,61 @@ app.domains = {
 	
 	// List domains, simple returns only array with domainnames
 	list: function( simple, callback ) {
-		var result = simple ? [] : {};
+		var result = simple ? [] : {}
 		app.talk( 'GET', 'domains', {}, function( domains, status ) {
 			for( var d in domains ) {
 				if( simple ) {
-					result.push( domains[d].domain.name );
+					result.push( domains[d].domain.name )
 				} else {
-					result[ domains[d].domain.id ] = domains[d].domain;
+					result[ domains[d].domain.id ] = domains[d].domain
 				}
 			}
 			
-			callback( result, status );
-		});
+			callback( result, status )
+		})
 	},
 	
 	// Find domains by regex match
 	findByRegex: function( regex, callback ) {
-		var result = {};
+		var result = {}
 		app.domains.list( false, function( domains, status ) {
 			if( status.label == 'success' ) {
-				var regexp = new RegExp( regex );
+				var regexp = new RegExp( regex )
 				for( var d in domains ) {
 					if( domains[d].name.match( regexp ) ) {
-						result[ domains[d].id ] = domains[d];
+						result[ domains[d].id ] = domains[d]
 					}
 				}
 				
-				callback( result );
+				callback( result )
 			}
-		});
+		})
 	},
 	
 	// Show domain
 	show: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname, {}, function( domain, status ) {
 			if( status.label == 'success' ) {
-				callback( domain.domain );
+				callback( domain.domain )
 			}
-		});
+		})
 	},
 	
 	// Add domain
 	add: function( domainname, callback ) {
-		var dom = { domain: { name: domainname } };
+		var dom = { domain: { name: domainname } }
 		app.talk( 'POST', 'domains', dom, function( domain, status ) {
 			if( status.label == 'success' ) {
-				callback( domain.domain );
+				callback( domain.domain )
 			}
-		});
+		})
 	},
 	
 	// Delete domain
 	delete: function( domainname, callback ) {
 		app.talk( 'DELETE', 'domains/'+ domainname, {}, function( result ) {
-			callback( result );
-		});
+			callback( result )
+		})
 	},
 	
 	
@@ -173,7 +173,7 @@ app.domains = {
 	register: function( domainname, registrantID, extendedAttribute, callback ) {
 		var vars = {
 			domain: {
-				name:			domainname,
+				name:		domainname,
 				registrant_id:	registrantID
 			}
 		}
@@ -195,7 +195,7 @@ app.domains = {
 	transfer: function( domainname, registrantID, authinfo, callback ) {
 		var vars = {
 			domain: {
-				name:			domainname,
+				name:		domainname,
 				registrant_id:	registrantID
 			}
 		}
@@ -205,7 +205,7 @@ app.domains = {
 			var callback = authinfo
 		} else if( typeof authinfo == 'string' ) {
 			vars.transfer_order = {
-				authinfo:		authinfo
+				authinfo:	authinfo
 			}
 		}
 		
@@ -219,7 +219,7 @@ app.domains = {
 	renew: function( domainname, whoisPrivacy, callback ) {
 		var vars = {
 			domain: {
-				name:			domainname
+				name:		domainname
 			}
 		}
 		
@@ -285,41 +285,41 @@ app.domains = {
 		list: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/applied_services', {}, function( result, status ) {
 				if( status.label == 'success' ) {
-					var services = {};
+					var services = {}
 					for( var s in result ) {
-						services[ result[s].service.id ] = result[s].service;
+						services[ result[s].service.id ] = result[s].service
 					}
-					callback( services );
+					callback( services )
 				}
-			});
+			})
 		},
 		
 		// available
 		available: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/available_services', {}, function( result, status ) {
 				if( status.label == 'success' ) {
-					var services = {};
+					var services = {}
 					for( var s in result ) {
-						services[ result[s].service.id ] = result[s].service;
+						services[ result[s].service.id ] = result[s].service
 					}
-					callback( services );
+					callback( services )
 				}
-			});
+			})
 		},
 		
 		// apply one
 		add: function( domainname, serviceID, callback ) {
-			var service = { service: { id: serviceID } };
+			var service = { service: { id: serviceID } }
 			app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, function( result, status ) {
-				callback( result );
-			});
+				callback( result )
+			})
 		},
 		
 		// delete one
 		delete: function( domainname, serviceID, callback ) {
 			app.talk( 'DELETE', 'domains/'+ domainname +'/applied_services/'+ serviceID, {}, function( result ) {
-				callback( result );
-			});
+				callback( result )
+			})
 		}
 	
 	},
@@ -327,7 +327,7 @@ app.domains = {
 	
 	// apply template -- alias for templates.apply
 	template: function( domainname, templateID, callback ) {
-		app.templates.apply( domainname, templateID, callback );
+		app.templates.apply( domainname, templateID, callback )
 	}
 
 }
@@ -343,24 +343,24 @@ app.services = {
 	list: function( callback ) {
 		app.talk( 'GET', 'services', {}, function( list, status ) {
 			if( status.label == 'success' ) {
-				var services = {};
+				var services = {}
 				for( var s in list ) {
-					services[ list[s].service.id ] = list[s].service;
+					services[ list[s].service.id ] = list[s].service
 				}
-				callback( services );
+				callback( services )
 			}
-		});
+		})
 	},
 	
 	// Get one service' details
 	show: function( serviceID, callback ) {
 		app.talk( 'GET', 'services/'+ serviceID, {}, function( service, status ) {
 			if( status.label == 'success' ) {
-				callback( service.service );
+				callback( service.service )
 			} else {
-				callback( service );
+				callback( service )
 			}
-		});
+		})
 	}
 	
 }
@@ -376,56 +376,56 @@ app.templates = {
 	list: function( callback ) {
 		app.talk( 'GET', 'templates', {}, function( list, status ) {
 			if( status.label == 'success' ) {
-				var templates = {};
+				var templates = {}
 				for( var t in list ) {
-					templates[ list[t].dns_template.id ] = list[t].dns_template;
+					templates[ list[t].dns_template.id ] = list[t].dns_template
 				}
-				callback( templates );
+				callback( templates )
 			}
-		});
+		})
 	},
 	
 	// Get a specific template
 	show: function( templateID, callback ) {
 		app.talk( 'GET', 'templates/'+ templateID, {}, function( template, status ) {
 			if( status.label == 'success' ) {
-				callback( template.dns_template );
+				callback( template.dns_template )
 			} else {
-				callback( template );
+				callback( template )
 			}
-		});
+		})
 	},
 	
 	// Create a custom template
 	// REQUIRED: name, shortname
 	// OPTIONAL: description
 	add: function( template, callback ) {
-		var set = { dns_template: template };
+		var set = { dns_template: template }
 		app.talk( 'POST', 'templates', set, function( result, status ) {
 			if( status.label == 'success' ) {
-				callback( result.dns_template );
+				callback( result.dns_template )
 			} else {
-				callback( result );
+				callback( result )
 			}
-		});
+		})
 	},
 	
 	// Delete the given template
 	delete: function( templateID, callback ) {
 		app.talk( 'DELETE', 'templates/'+ templateID, {}, function( result ) {
-			callback( result );
-		});
+			callback( result )
+		})
 	},
 	
 	// Apply a template to a domain
 	apply: function( domainname, templateID, callback ) {
 		app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', {}, function( result, status ) {
 			if( status.label == 'success' ) {
-				callback( result );
+				callback( result )
 			} else {
-				callback( result );
+				callback( result )
 			}
-		});
+		})
 	},
 	
 	
@@ -436,51 +436,80 @@ app.templates = {
 		list: function( templateID, callback ) {
 			app.talk( 'GET', 'templates/'+ templateID +'/template_records', {}, function( result, status ) {
 				if( status.label == 'success' ) {
-					var records = {};
+					var records = {}
 					for( var r in result ) {
-						records[ result[r].dns_template_record.id ] = result[r].dns_template_record;
+						records[ result[r].dns_template_record.id ] = result[r].dns_template_record
 					}
-					callback( records );
+					callback( records )
 				} else {
-					callback( result );
+					callback( result )
 				}
-			});
+			})
 		},
 		
 		// Get one record for template
 		show: function( templateID, recordID, callback ) {
 			app.talk( 'GET', 'templates/'+ templateID +'/template_records/'+ recordID, {}, function( result, status ) {
 				if( status.label == 'success' ) {
-					callback( result.dns_template_record );
+					callback( result.dns_template_record )
 				} else {
-					callback( result );
+					callback( result )
 				}
-			});
+			})
 		},
 		
 		// Add record to template
 		// REQUIRED: name, record_type, content
 		// OPTIONAL: ttl, prio
 		add: function( templateID, record, callback ) {
-			var rec = { dns_template_record: record };
+			var rec = { dns_template_record: record }
 			app.talk( 'POST', 'templates/'+ templateID +'/template_records', rec, function( result, status ) {
 				if( status.label == 'success' ) {
-					callback( result.dns_template_record );
+					callback( result.dns_template_record )
 				} else {
-					callback( result );
+					callback( result )
 				}
-			});
+			})
 		},
 		
 		// Delete record from template
 		delete: function( templateID, recordID, callback ) {
 			app.talk( 'DELETE', 'templates/'+ templateID +'/template_records/'+ recordID, {}, function( result ) {
-				callback( result );
-			});
+				callback( result )
+			})
 		}
 		
 	}
 
+}
+
+//////////////
+// CONTACTS //
+//////////////
+
+app.contacts = {
+	
+	// list
+	list: function( callback ) {
+		app.talk( 'GET', 'contacts', {}, function( result ) {
+			callback( result )
+		})
+	},
+	
+	// get one
+	show: function( contactID, callback ) {
+		app.talk( 'GET', 'contacts/'+ contactID, {}, function( result ) {
+			callback( result )
+		})
+	},
+	
+	// create contact
+	add: function( contact, callback ) {
+		app.talk( 'POST', 'contacts', {contact: contact}, function( result ) {
+			callback( result )
+		})
+	}
+	
 }
 
 
@@ -492,20 +521,20 @@ app.templates = {
 app.talk = function( method, path, fields, callback ) {
 	
 	// prepare
-	var querystr = JSON.stringify(fields);
+	var querystr = JSON.stringify(fields)
 	var headers = {
-		'Accept':			'application/json',
-		'User-Agent':		'Nodejs-DNSimple/0.1.2'
+		'Accept':	'application/json',
+		'User-Agent':	'Nodejs-DNSimple'
 	}
 	
 	// token in headers
 	if( app.api.token != '' ) {
-		headers['X-DNSimple-Token'] = app.api.email +':'+ app.api.token;
+		headers['X-DNSimple-Token'] = app.api.email +':'+ app.api.token
 	}
 	
 	if( method.match( /(POST|PUT|DELETE)/ ) ) {
-		headers['Content-Type']		= 'application/json';
-		headers['Content-Length']	= querystr.length;
+		headers['Content-Type']		= 'application/json'
+		headers['Content-Length']	= querystr.length
 	}
 	
 	var options = {
@@ -519,21 +548,21 @@ app.talk = function( method, path, fields, callback ) {
 	
 	// password authentication
 	if( app.api.token == '' && app.api.password != '' ) {
-		options.auth = app.api.email +':'+ app.api.password;
+		options.auth = app.api.email +':'+ app.api.password
 	}
 	
 	// build request
 	var req = https.request( options, function( response ) {
 			
 			// prepare response
-			response.setEncoding('utf8');
-			var data = '';
-			var status = {};
+			response.setEncoding('utf8')
+			var data = ''
+			var status = {}
 			
 			// receiving data
 			response.on( 'data', function( chunk ) {
-				data += chunk;
-			});
+				data += chunk
+			})
 			
 			// request finished
 			response.on( 'end', function() {
@@ -541,29 +570,31 @@ app.talk = function( method, path, fields, callback ) {
 				// parse status
 				if( response.headers.status !== undefined ) {
 					// from header
-					status.code = parseInt( response.headers.status.substr(0,3) );
-					status.text = response.headers.status ? response.headers.status : '';
+					status.code = parseInt( response.headers.status.substr(0,3) )
+					status.text = response.headers.status ? response.headers.status : ''
 				} else {
 					// from body
 					data.replace( /<title>(([\d]{3}) ([^<]+))<\/title>/, function( m, text, code, t ) {
-						status.code = parseInt( code );
-						status.text = text;
-					});
+						status.code = parseInt( code )
+						status.text = text
+					})
 				}
 				
-				if( status.code > 100 && status.code < 300 ) {
-					status.label = 'success';
+				if( status.code >= 100 && status.code < 300 ) {
+					status.label = 'success'
 				} else if( status.code >= 300 && status.code < 400 ) {
-					status.label = 'redirection';
+					status.label = 'redirection'
 				} else if( status.code >= 400 && status.code < 500 ) {
-					status.label = 'error';
-				} else {
-					status.label = 'fatal';
+					status.label = 'error'
+				} else if( status.code >= 500 && status.code < 600 ) {
+					status.label = 'fail'
+				} else if( status.code < 100 || !status.code.match( /^[0-9]{3}$/ ) ) {
+					status.label = 'fatal'
 				}
 				
-				if( status.label == 'fatal' ) {
+				if( status.label.match( /^(fatal|fail)$/ ) {
 					
-					// Fatal Panda Alert
+					// Panda Alert
 					status.details = {
 						request: {
 							options: options,
@@ -575,34 +606,34 @@ app.talk = function( method, path, fields, callback ) {
 						}
 					}
 					
-					app.emit( 'fatal', status );
-					callback( {}, status );
+					app.emit( 'api-'+ status.label, status )
+					callback( {}, status )
 					
 				} else {
 					
 					// looks fine
-					data = data.match( /^[\[\{]/ ) ? JSON.parse( data ) : {};
-					callback( data, status );
+					data = data.match( /^[\[\{]/ ) ? JSON.parse( data ) : {}
+					callback( data, status )
 					
 				}
-			});
+			})
 			
 		}
 	)
 	
 	// error
 	req.on( 'error', function( error ) {
-		app.emit( 'error', error, options, fields );
-	});
+		app.emit( 'error', error, options, fields )
+	})
 	
 	// post and close
 	if( method.match( /(POST|PUT|DELETE)/ ) ) {
-		req.write( querystr );
+		req.write( querystr )
 	}
 	
-	req.end();
+	req.end()
 	
 }
 
 // all done
-module.exports = app;
+module.exports = app
