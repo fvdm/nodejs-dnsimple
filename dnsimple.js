@@ -26,6 +26,18 @@ app.api = {
 }
 
 
+/*
+	callback: function( result, error )
+	
+	error false           : all good
+	error 300-399         : API fail
+	error 400-499         : method error
+	error 500-699         : API server fail
+	error "invalid json"  : API response fail
+	error "request error" : can't connect to API
+*/
+
+
 /////////
 // DNS //
 /////////
