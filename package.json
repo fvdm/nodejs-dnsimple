@@ -1,27 +1,29 @@
 {
-  "author": "Franklin van de Meent <fr@nkl.in> (http://frankl.in)",
-  "name": "dnsimple",
-  "description": "Access the DNSimple API",
-  "version": "0.1.4",
-  "homepage": "https://github.com/fvdm/nodejs-dnsimple",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/fvdm/nodejs-dnsimple.git"
+  "author": {
+    "name":               "Franklin van de Meent",
+    "email":              "fr@nkl.in",
+    "url":                "http://frankl.in)"
   },
-  "main": "dnsimple.js",
-  "dependencies": {},
-  "devDependencies": {},
-  "optionalDependencies": {},
-  "engines": {
-    "node": "*"
+  "name":                  "dnsimple",
+  "description":           "Access the DNSimple API",
+  "version":               "0.1.4",
+  "repository": {
+      "type":              "git",
+      "url":               "git://github.com/fvdm/nodejs-dnsimple.git"
   },
   "bugs": {
-    "url": "https://github.com/fvdm/nodejs-dnsimple/issues"
+    "url":                 "https://github.com/fvdm/nodejs-dnsimple/issues"
   },
-  "tags": [
-    "dnsimple",
-    "domains",
-    "dns",
-    "api"
-  ]
+  "main":                  "dnsimple.js",
+  "dependencies":          {},
+  "devDependencies":       {},
+  "optionalDependencies":  {},
+  "engines": {
+    "node":                "*"
+  },
+  "keywords":              ["dnsimple", "domains", "dns", "api"],
+  "license": {
+    "type":                "Public Domain",
+    "url":                 "https://github.com/fvdm/nodejs-dnsimple/raw/master/UNLICENSE"
+  }
 }
