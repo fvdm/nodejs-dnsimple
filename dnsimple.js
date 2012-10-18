@@ -554,15 +554,11 @@ app.talk = function( method, path, fields, callback ) {
 	// build request
 	var req = https.request( options, function( response ) {
 			
-			// prepare response
-			response.setEncoding('utf8')
+			// process response
 			var data = ''
 			var status = {}
 			
-			// receiving data
-			response.on( 'data', function( chunk ) {
-				data += chunk
-			})
+			response.on( 'data', function( chunk ) { data += chunk })
 			
 			// request finished
 			response.on( 'end', function() {
@@ -572,6 +568,7 @@ app.talk = function( method, path, fields, callback ) {
 					// from header
 					status.code = parseInt( response.headers.status.substr(0,3) )
 					status.text = response.headers.status ? response.headers.status : ''
+				data = data.toString('utf8').trim()
 				} else {
 					// from body
 					data.replace( /<title>(([\d]{3}) ([^<]+))<\/title>/, function( m, text, code, t ) {
