@@ -515,6 +515,10 @@ app.contacts = {
 	update: function( contactID, contact, callback ) {
 		app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback )
 	},
+	
+	// delete
+	delete: function( contactID, callback ) {
+		app.talk( 'DELETE', 'contacts/'+ contactID, callback )
 	}
 	
 }
