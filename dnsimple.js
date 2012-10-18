@@ -519,6 +519,11 @@ app.contacts = {
 // communicate
 app.talk = function( method, path, fields, callback ) {
 	
+	if( !callback && typeof fields === 'function' ) {
+		var callback = fields
+		var fields = {}
+	}
+	
 	// prepare
 	var querystr = JSON.stringify(fields)
 	var headers = {
