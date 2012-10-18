@@ -60,7 +60,7 @@ app.api = {
 
 app.dns = {
 	
-	// List DNS records for domain
+	// !dns.list
 	list: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/records', function( records, error ) {
 			if( !error ) {
@@ -75,7 +75,7 @@ app.dns = {
 		})
 	},
 	
-	// Show DNS record
+	// !dns.show
 	show: function( domainname, recordID, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, function( record, error ) {
 			if( !error ) {
@@ -86,7 +86,7 @@ app.dns = {
 		})
 	},
 	
-	// Create DNS record
+	// !dns.add
 	// REQUIRED: name, record_type, content
 	// OPTIONAL: ttl, prio
 	add: function( domainname, record, callback ) {
@@ -100,7 +100,7 @@ app.dns = {
 		})
 	},
 	
-	// Update DNS record
+	// !dns.update
 	update: function( domainname, recordID, record, callback ) {
 		var post = { record: record }
 		app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( result, error ) {
@@ -112,7 +112,7 @@ app.dns = {
 		})
 	},
 	
-	// Delete DNS record
+	// !dns.delete
 	delete: function( domainname, recordID, callback ) {
 		app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, callback )
 	}
@@ -127,7 +127,8 @@ app.dns = {
 
 app.domains = {
 	
-	// List domains, simple returns only array with domainnames
+	// !domains.list
+	// Simple returns only array with domainnames
 	list: function( simple, callback ) {
 		if( !callback && typeof simple === 'function' ) {
 			var callback = simple
@@ -152,7 +153,7 @@ app.domains = {
 		})
 	},
 	
-	// Find domains by regex match
+	// !domains.findByRegex
 	findByRegex: function( regex, callback ) {
 		var result = {}
 		app.domains.list( false, function( domains, error ) {
@@ -171,7 +172,7 @@ app.domains = {
 		})
 	},
 	
-	// Show domain
+	// !domains.show
 	show: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname, function( domain, error ) {
 			if( !error ) {
@@ -182,11 +183,11 @@ app.domains = {
 		})
 	},
 	
-	// Add domain
+	// !domains.add
 	add: function( domainname, callback ) {
 		var dom = { domain: { name: domainname } }
 		app.talk( 'POST', 'domains', dom, function( domain, error ) {
-			if( status.label == 'success' ) {
+			if( !error ) {
 				callback( domain.domain )
 			} else {
 				callback( domain, error )
@@ -194,7 +195,7 @@ app.domains = {
 		})
 	},
 	
-	// Delete domain
+	// !domains.delete
 	delete: function( domainname, callback ) {
 		app.talk( 'DELETE', 'domains/'+ domainname, callback )
 	},
@@ -204,11 +205,13 @@ app.domains = {
 	// REGISTRATION //
 	//////////////////
 	
+	// !domains.check
 	// Check availability
 	check: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/check', {}, callback )
 	},
 	
+	// !domains.register
 	// Register domainname - auto-payment!
 	register: function( domainname, registrantID, extendedAttribute, callback ) {
 		var vars = {
@@ -229,6 +232,7 @@ app.domains = {
 		app.talk( 'POST', 'domain_registrations', vars, callback )
 	},
 	
+	// !domains.transfer
 	// Transfer domainname - auto-payment!
 	transfer: function( domainname, registrantID, authinfo, callback ) {
 		var vars = {
@@ -251,6 +255,7 @@ app.domains = {
 		app.talk( 'POST', 'domain_transfers', vars, callback )
 	},
 	
+	// !domains.renew
 	// Renew domainname registration - auto-payment!
 	renew: function( domainname, whoisPrivacy, callback ) {
 		var vars = {
@@ -276,6 +281,7 @@ app.domains = {
 		app.talk( 'POST', 'domain_renewal', vars, callback )
 	},
 	
+	// !domains.autorenew
 	// Set auto-renewal for domain
 	autorenew: function( domainname, status, callback ) {
 		var status = status +''
@@ -286,11 +292,13 @@ app.domains = {
 		}
 	},
 	
+	// !domains.transferout
 	// Prepare domain for transferring out
 	transferout: function( domainname, callback ) {
 		app.talk( 'POST', 'domains/'+ domainname +'/transfer_out', callback )
 	},
 	
+	// !domains.nameservers
 	// Set nameservers at registry
 	nameservers: function( domainname, nameservers, callback ) {
 		var ns = {
@@ -307,6 +315,7 @@ app.domains = {
 	// Services for domain
 	services: {
 		
+		// !domains.services.list
 		// already applied
 		list: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( result, error ) {
@@ -322,6 +331,7 @@ app.domains = {
 			})
 		},
 		
+		// !domains.services.available
 		// available
 		available: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( result, error ) {
@@ -337,12 +347,14 @@ app.domains = {
 			})
 		},
 		
+		// !domains.services.add
 		// apply one
 		add: function( domainname, serviceID, callback ) {
 			var service = { service: { id: serviceID } }
 			app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, callback )
 		},
 		
+		// !domains.services.delete
 		// delete one
 		delete: function( domainname, serviceID, callback ) {
 			app.talk( 'DELETE', 'domains/'+ domainname +'/applied_services/'+ serviceID, callback )
@@ -351,6 +363,7 @@ app.domains = {
 	},
 	
 	
+	// !domains.template
 	// apply template -- alias for templates.apply
 	template: function( domainname, templateID, callback ) {
 		app.templates.apply( domainname, templateID, callback )
@@ -365,6 +378,7 @@ app.domains = {
 
 app.services = {
 	
+	// !services.list
 	// List all supported services
 	list: function( callback ) {
 		app.talk( 'GET', 'services', function( list, error ) {
@@ -380,6 +394,7 @@ app.services = {
 		})
 	},
 	
+	// !services.show
 	// Get one service' details
 	show: function( serviceID, callback ) {
 		app.talk( 'GET', 'services/'+ serviceID, function( service, error ) {
@@ -400,6 +415,7 @@ app.services = {
 
 app.templates = {
 	
+	// !templates.list
 	// List all of the custom templates in the account
 	list: function( callback ) {
 		app.talk( 'GET', 'templates', function( list, error ) {
@@ -415,6 +431,7 @@ app.templates = {
 		})
 	},
 	
+	// !templates.show
 	// Get a specific template
 	show: function( templateID, callback ) {
 		app.talk( 'GET', 'templates/'+ templateID, function( template, error ) {
@@ -426,6 +443,7 @@ app.templates = {
 		})
 	},
 	
+	// !templates.add
 	// Create a custom template
 	// REQUIRED: name, shortname
 	// OPTIONAL: description
@@ -440,11 +458,13 @@ app.templates = {
 		})
 	},
 	
+	// !templates.delete
 	// Delete the given template
 	delete: function( templateID, callback ) {
 		app.talk( 'DELETE', 'templates/'+ templateID, callback )
 	},
 	
+	// !templates.apply
 	// Apply a template to a domain
 	apply: function( domainname, templateID, callback ) {
 		app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', function( result, error ) {
@@ -460,6 +480,7 @@ app.templates = {
 	// records
 	records: {
 		
+		// !templates.records.list
 		// list records in template
 		list: function( templateID, callback ) {
 			app.talk( 'GET', 'templates/'+ templateID +'/template_records', function( result, error ) {
@@ -475,6 +496,7 @@ app.templates = {
 			})
 		},
 		
+		// !templates.records.show
 		// Get one record for template
 		show: function( templateID, recordID, callback ) {
 			app.talk( 'GET', 'templates/'+ templateID +'/template_records/'+ recordID, function( result, error ) {
@@ -486,6 +508,7 @@ app.templates = {
 			})
 		},
 		
+		// !templates.records.add
 		// Add record to template
 		// REQUIRED: name, record_type, content
 		// OPTIONAL: ttl, prio
@@ -500,6 +523,7 @@ app.templates = {
 			})
 		},
 		
+		// !templates.records.delete
 		// Delete record from template
 		delete: function( templateID, recordID, callback ) {
 			app.talk( 'DELETE', 'templates/'+ templateID +'/template_records/'+ recordID, {}, callback )
@@ -515,29 +539,29 @@ app.templates = {
 
 app.contacts = {
 	
-	// list
+	// !contacts.list
 	list: function( callback ) {
 		app.talk( 'GET', 'contacts', callback )
 	},
 	
-	// get one
+	// !contacts.show
 	show: function( contactID, callback ) {
 		app.talk( 'GET', 'contacts/'+ contactID, callback )
 	},
 	
-	// create
+	// !contacts.create
 	// http://developer.dnsimple.com/contacts/#create-a-contact
 	add: function( contact, callback ) {
 		app.talk( 'POST', 'contacts', {contact: contact}, callback )
 	},
 	
-	// update
+	// !contacts.update
 	// http://developer.dnsimple.com/contacts/#update-a-contact
 	update: function( contactID, contact, callback ) {
 		app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback )
 	},
 	
-	// delete
+	// !contacts.delete
 	delete: function( contactID, callback ) {
 		app.talk( 'DELETE', 'contacts/'+ contactID, callback )
 	}
