@@ -593,6 +593,7 @@ app.talk = function( method, path, fields, callback ) {
 		headers['X-DNSimple-Token'] = app.api.email +':'+ app.api.token
 	}
 	
+	// build request
 	if( method.match( /(POST|PUT|DELETE)/ ) ) {
 		headers['Content-Type']		= 'application/json'
 		headers['Content-Length']	= querystr.length
@@ -612,10 +613,11 @@ app.talk = function( method, path, fields, callback ) {
 		options.auth = app.api.email +':'+ app.api.password
 	}
 	
-	// build request
-	var req = https.request( options, function( response ) {
-		
-		// process response
+	// start request
+	var request = https.request( options )
+	
+	// response
+	request.on( 'response', function( response ) {
 		var data = ''
 		var requestOK = [100, 200, 201, 202, 203, 204]
 		
@@ -659,16 +661,16 @@ app.talk = function( method, path, fields, callback ) {
 	})
 	
 	// error
-	req.on( 'error', function( error ) {
 		callback( error, 'request error' )
+	request.on( 'error', function( error ) {
 	})
 	
-	// post and close
+	// run it
 	if( method.match( /(POST|PUT|DELETE)/ ) ) {
-		req.write( querystr )
+		request.end( querystr )
+	} else {
+		request.end()
 	}
-	
-	req.end()
 	
 }
 
