@@ -18,14 +18,14 @@ The code on Github is the most recent version, but can be unstable:
 # Usage
 
 ```js
-var dnsimple = require('dnsimple');
+var dnsimple = require('dnsimple')
 
-dnsimple.api.email = 'your@email.tld';
-dnsimple.api.token = 'your API token';
+dnsimple.api.email = 'your@email.tld'
+dnsimple.api.token = 'your API token'
 
 dnsimple.domains.add( 'example.tld', function( domain ) {
-	console.log( domain.name +' created with ID '+ domain.id );
-});
+	console.log( domain.name +' created with ID '+ domain.id )
+})
 ```
 
 ## Authentication
@@ -35,15 +35,15 @@ The module supports both authentication by **email:token** and **email:password*
 ### Token
 
 ```js
-dnsimple.api.email = 'your@email.tld';
-dnsimple.api.token = '12345abcde';
+dnsimple.api.email = 'your@email.tld'
+dnsimple.api.token = '12345abcde'
 ```
 
 ### Password
 
 ```js
-dnsimple.api.email = 'your@email.tld';
-dnsimple.api.password = 'secret';
+dnsimple.api.email = 'your@email.tld'
+dnsimple.api.password = 'secret'
 ```
 
 # Functions
@@ -61,8 +61,8 @@ List domainnames in account.
 
 ```js
 dnsimple.domains.list( false, function( domains ) {
-	console.log( domains );
-});
+	console.log( domains )
+})
 ```
 
 **simpleBool** true
@@ -114,7 +114,7 @@ List only domains with names matching on regex.
 
 ```js
 // All .com domains
-dnsimple.domains.findByRegex( '\.com$', console.log );
+dnsimple.domains.findByRegex( '\.com$', console.log )
 ```
 
 ## domains.show
@@ -123,7 +123,7 @@ dnsimple.domains.findByRegex( '\.com$', console.log );
 Get details about one domainname
 
 ```js
-dnsimple.domains.show( 'one.com', console.log );
+dnsimple.domains.show( 'one.com', console.log )
 ```
 
 ## domains.add
@@ -132,7 +132,7 @@ dnsimple.domains.show( 'one.com', console.log );
 Add a domain to your account
 
 ```js
-dnsimple.domains.add( 'two.com', console.log );
+dnsimple.domains.add( 'two.com', console.log )
 ```
 
 ## domains.delete
@@ -141,7 +141,7 @@ dnsimple.domains.add( 'two.com', console.log );
 Delete a domains and its DNS records from your account
 
 ```js
-dnsimple.domains.delete( 'two.com', console.log );
+dnsimple.domains.delete( 'two.com', console.log )
 ```
 
 # Registration
@@ -260,7 +260,7 @@ dnsimple.domains.nameservers(
 List applied services (vendor presets) for a domain
 
 ```js
-dnsimple.domains.services.list( 'one.com', console.log );
+dnsimple.domains.services.list( 'one.com', console.log )
 ```
 
 ## domains.services.available
@@ -269,7 +269,7 @@ dnsimple.domains.services.list( 'one.com', console.log );
 List available services for a domain
 
 ```js
-dnsimple.domains.services.available( 'one.com', console.log );
+dnsimple.domains.services.available( 'one.com', console.log )
 ```
 
 ## domains.services.add
@@ -281,7 +281,7 @@ Apply a service to a domain
 
 ```js
 // Apply Heroku presets to one.com
-dnsimple.domains.services.add( 'one.com', 'heroku', console.log );
+dnsimple.domains.services.add( 'one.com', 'heroku', console.log )
 ```
 
 ## domains.services.delete
@@ -293,7 +293,7 @@ Remove a service from a domain
 
 ```js
 // Remove Heroku presets from one.com
-dnsimple.domains.services.delete( 'one.com', 'heroku', console.log );
+dnsimple.domains.services.delete( 'one.com', 'heroku', console.log )
 ```
 
 ## domains.template
@@ -305,7 +305,7 @@ Apply a template (custom presets) to a domain. This is an alias for *templates.a
 
 ```js
 // Apply your office records to one.com
-dnsimple.domains.template( 'one.com', 'office', console.log );
+dnsimple.domains.template( 'one.com', 'office', console.log )
 ```
 
 # DNS
@@ -316,7 +316,7 @@ dnsimple.domains.template( 'one.com', 'office', console.log );
 List DNS records for a domain
 
 ```js
-dnsimple.dns.list( 'one.com', console.log );
+dnsimple.dns.list( 'one.com', console.log )
 ```
 
 ## dns.show
@@ -325,7 +325,7 @@ dnsimple.dns.list( 'one.com', console.log );
 Get DNS record details for a *recordID* on *domainname*
 
 ```js
-dnsimple.dns.show( 'one.com', 1234, console.log );
+dnsimple.dns.show( 'one.com', 1234, console.log )
 ```
 
 Returns an object with the record details:
@@ -361,7 +361,7 @@ dnsimple.dns.add(
 		content:		'4.3.2.1'
 	},
 	console.log()
-);
+)
 ```
 
 ## dns.update
@@ -375,7 +375,7 @@ Replace a record's details, same syntax as **dns.add**.
 Delete a DNS record from a domain.
 
 ```js
-dnsimple.dns.delete( 'one.com', 1234 );
+dnsimple.dns.delete( 'one.com', 1234 )
 ```
 
 
