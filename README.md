@@ -3,13 +3,17 @@ nodejs-dnsimple
 
 This is an unofficial [DNSimple](http://dnsimple.com/) API module for [Node.js](http://nodejs.org/). You need a DNSimple account to use this.
 
-# Installation
 
-[![Build Status](https://secure.travis-ci.org/fvdm/nodejs-dnsimple.png?branch=master)](http://travis-ci.org/fvdm/nodejs-dnsimple)
+Installation
+------------
 
-```
-npm install dnsimple
-```
+The release on npm is the latest stable version:
+
+	npm install dnsimple
+
+The code on Github is the most recent version, but can be unstable:
+
+	npm install git+https://github.com/fvdm/nodejs-dnsimple
 
 # Usage
 
