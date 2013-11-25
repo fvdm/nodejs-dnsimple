@@ -36,9 +36,9 @@ var app = {}
 
 app.api = {
 	hostname:	'dnsimple.com',
-	email:		'',
-	token:		'',
-	password:	''
+	email:		null,
+	token:		null,
+	password:	null
 }
 
 
@@ -589,7 +589,7 @@ app.talk = function( method, path, fields, callback ) {
 	}
 	
 	// token in headers
-	if( app.api.token != '' ) {
+	if( app.api.token ) {
 		headers['X-DNSimple-Token'] = app.api.email +':'+ app.api.token
 	}
 	
@@ -608,7 +608,7 @@ app.talk = function( method, path, fields, callback ) {
 	}
 	
 	// password authentication
-	if( app.api.token == '' && app.api.password != '' ) {
+	if( ! app.api.token && app.api.password && app.api.email ) {
 		options.auth = app.api.email +':'+ app.api.password
 	}
 	
