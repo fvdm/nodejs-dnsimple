@@ -42,18 +42,6 @@ app.api = {
 }
 
 
-/*
-	callback: function( result, error )
-	
-	error false           : all good
-	error 300-399         : API fail
-	error 400-499         : method error
-	error 500-699         : API server fail
-	error "invalid json"  : API response fail
-	error "request error" : can't connect to API
-*/
-
-
 /////////
 // DNS //
 /////////
@@ -598,8 +586,8 @@ app.talk = function( method, path, fields, callback ) {
 	// prepare
 	var querystr = JSON.stringify(fields)
 	var headers = {
-		'Accept':	'application/json',
-		'User-Agent':	'Nodejs-DNSimple'
+		'Accept': 'application/json',
+		'User-Agent': 'Nodejs-DNSimple'
 	}
 	
 	// token in headers
@@ -633,9 +621,10 @@ app.talk = function( method, path, fields, callback ) {
 	// response
 	request.on( 'response', function( response ) {
 		var data = ''
-		var requestOK = [100, 200, 201, 202, 203, 204]
 		
-		response.on( 'data', function( chunk ) { data += chunk })
+		response.on( 'data', function( chunk ) {
+			data += chunk
+		})
 		
 		response.on( 'close', function() {
 			doCallback( new Error('connection dropped') )
@@ -643,7 +632,7 @@ app.talk = function( method, path, fields, callback ) {
 		
 		// request finished
 		response.on( 'end', function() {
-			
+
 			// parse JSON
 			data = data.toString('utf8').trim()
 			
