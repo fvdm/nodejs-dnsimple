@@ -581,6 +581,15 @@ app.talk = function( method, path, fields, callback ) {
 		var fields = {}
 	}
 	
+	// prevent multiple callbacks
+	var complete = false
+	function doCallback( err, res ) {
+		if( !complete ) {
+			complete = true
+			callback( err || null, res || null )
+		}
+	}
+	
 	// prepare
 	var querystr = JSON.stringify(fields)
 	var headers = {
@@ -628,41 +637,36 @@ app.talk = function( method, path, fields, callback ) {
 			
 			// parse JSON
 			data = data.toString('utf8').trim()
-			if( data.match(/^(\{.*\}|\[.*\])$/) ) {
+			
+			try {
 				data = JSON.parse( data )
-			} else {
-				// failed, no need to continue
-				callback( data, 'invalid json' )
+			} catch(e) {
+				doCallback( new Error('not json') )
 				return
 			}
 			
 			// check HTTP status code
-			if( response.statusCode !== undefined ) {
-				for( var c = 0; c < requestOK.length; c++ ) {
-					if( requestOK[c] == response.statusCode ) {
-						// method ok
-						callback( data )
-						return
-					}
-				}
-				
-				if( response.headers.status >= 400 && response.statusCode < 500 ) {
-					// method error
-					callback( data, response.statusCode )
-				} else {
-					// API fail
-					callback( {}, response.statusCode )
+			var requestOK = [100, 200, 201, 202, 203, 204]
+			for( var c = 0; c < requestOK.length; c++ ) {
+				if( requestOK[c] == response.statusCode ) {
+					// method ok
+					doCallback( null, data )
+					return
 				}
 			} else {
-				// API fail
-				callback( {}, 'api error' )
+				var error = new Error('HTTP error')
+				error.code = response.statusCode
+				error.data = data
+				doCallback( error )
 			}
 		})
 	})
 	
 	// error
-		callback( error, 'request error' )
 	request.on( 'error', function( error ) {
+		var er = new Error('request failed')
+		er.error = error
+		doCallback( er )
 	})
 	
 	// run it
