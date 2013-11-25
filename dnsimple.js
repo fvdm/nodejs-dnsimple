@@ -637,6 +637,10 @@ app.talk = function( method, path, fields, callback ) {
 		
 		response.on( 'data', function( chunk ) { data += chunk })
 		
+		response.on( 'close', function() {
+			doCallback( new Error('connection dropped') )
+		})
+		
 		// request finished
 		response.on( 'end', function() {
 			
