@@ -590,6 +590,11 @@ app.talk = function( method, path, fields, callback ) {
 		}
 	}
 	
+	// credentials set?
+	if( ! (app.api.email && app.api.token) || ! (app.api.email && app.api.password ) ) {
+		doCallback( new Error('credentials missing') )
+	}
+	
 	// prepare
 	var querystr = JSON.stringify(fields)
 	var headers = {
