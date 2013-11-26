@@ -1,7 +1,8 @@
 nodejs-dnsimple
 ===============
 
-This is an unofficial [DNSimple](http://dnsimple.com/) API module for [Node.js](http://nodejs.org/). You need a DNSimple account to use this.
+This is an unofficial [DNSimple](http://dnsimple.com/) API module for [Node.js](http://nodejs.org/).
+You need a DNSimple account to use this.
 
 
 Installation
@@ -15,7 +16,10 @@ The code on Github is the most recent version, but can be unstable:
 
 	npm install git+https://github.com/fvdm/nodejs-dnsimple
 
-# Usage
+
+Usage
+-----
+
 
 ```js
 var dnsimple = require('dnsimple')
@@ -28,9 +32,14 @@ dnsimple.domains.add( 'example.tld', function( domain ) {
 })
 ```
 
-## Authentication
 
-The module supports both authentication by **email:token** and **email:password**. The *token* is more secure as it can easily be reset in account at [dnsimple.com/account](https://dnsimple.com/account). The password uses HTTP Basic Authentication.
+Authentication
+--------------
+
+The module supports both authentication by **email:token** and **email:password**.
+The *token* is more secure as it can easily be reset in account at [dnsimple.com/account](https://dnsimple.com/account).
+The password uses HTTP Basic Authentication.
+
 
 ### Token
 
@@ -39,6 +48,7 @@ dnsimple.api.email = 'your@email.tld'
 dnsimple.api.token = '12345abcde'
 ```
 
+
 ### Password
 
 ```js
@@ -46,24 +56,28 @@ dnsimple.api.email = 'your@email.tld'
 dnsimple.api.password = 'secret'
 ```
 
-# Functions
 
 The functions all allow a callback parameter at the end. The first arguement is always the intended result object or array.
+Methods
+-------
 
 **cb = callback function()**
 
-# Domains
 
-## domains.list
-### ( simpleBool, cb )
 
-List domainnames in account.
 
 ```js
 dnsimple.domains.list( false, function( domains ) {
 	console.log( domains )
 })
 ```
+Domains
+-------
+
+### domains.list ( simpleBool, callback )
+
+List domainnames in your account.
+
 
 **simpleBool** true
 
@@ -107,8 +121,8 @@ An object with domainnames details, the keys are their IDs.
 }
 ```
 
-## domains.findByRegex
-### ( regexString, cb )
+
+### domains.findByRegex ( regexString, cb )
 
 List only domains with names matching on regex.
 
@@ -117,8 +131,8 @@ List only domains with names matching on regex.
 dnsimple.domains.findByRegex( '\.com$', console.log )
 ```
 
-## domains.show
-### ( domainname, cb )
+
+### domains.show ( domainname, cb )
 
 Get details about one domainname
 
@@ -126,8 +140,8 @@ Get details about one domainname
 dnsimple.domains.show( 'one.com', console.log )
 ```
 
-## domains.add
-### ( domainname, cb )
+
+### domains.add ( domainname, cb )
 
 Add a domain to your account
 
@@ -135,8 +149,7 @@ Add a domain to your account
 dnsimple.domains.add( 'two.com', console.log )
 ```
 
-## domains.delete
-### ( domainname, cb )
+### domains.delete ( domainname, cb )
 
 Delete a domains and its DNS records from your account
 
@@ -144,16 +157,18 @@ Delete a domains and its DNS records from your account
 dnsimple.domains.delete( 'two.com', console.log )
 ```
 
-# Registration
 
-## domains.check
-### ( domainname, cb )
+Registration
+------------
+
+### domains.check ( domainname, cb )
 
 Check domainname availability for registration or transfer to DNSimple.
 
 ```js
 dnsimple.domains.check( 'frankl.in', console.log )
 ```
+
 **Unavailable:**
 
 ```js
@@ -164,6 +179,7 @@ dnsimple.domains.check( 'frankl.in', console.log )
   currency_symbol: '$',
   minimum_number_of_years: 1 }
 ```
+
 
 **Available:**
 
@@ -176,8 +192,8 @@ dnsimple.domains.check( 'frankl.in', console.log )
   minimum_number_of_years: 1 }
 ```
 
-## domains.register
-### ( domainname, registrantID, [extendedAttribute], cb )
+
+### domains.register ( domainname, registrantID, [extendedAttribute], cb )
 
 Register a domainname at DNSimple. Your account will be charged on successful registration.
 
@@ -189,8 +205,8 @@ Register a domainname at DNSimple. Your account will be charged on successful re
 dnsimple.domains.register( 'example.tld', 1, console.log )
 ```
 
-## domains.transfer
-### ( domainname, registrantID, [authinfo], cb )
+
+### domains.transfer ( domainname, registrantID, [authinfo], cb )
 
 * **domainname** - *required* - the domain to transfer into your account
 * **registrantID** - *required* - the new owner of the domain
@@ -200,8 +216,8 @@ dnsimple.domains.register( 'example.tld', 1, console.log )
 dnsimple.domains.transfer( 'example.tld', 1, 'abcdefg', console.log )
 ```
 
-## domains.renew
-### ( domainname, [whoisPrivacy], cb )
+
+### domains.renew ( domainname, [whoisPrivacy], cb )
 
 Renew a domainname registration for a new period.
 
@@ -212,8 +228,8 @@ Renew a domainname registration for a new period.
 dnsimple.domains.renew( 'example.tld', true, console.log )
 ```
 
-## domains.autorenew
-### ( domainname, status, cb )
+
+### domains.autorenew ( domainname, status, cb )
 
 Enable or disable auto-renewal for a domainname.
 
@@ -224,8 +240,8 @@ Enable or disable auto-renewal for a domainname.
 dnsimple.domains.autorenew( 'example.tld', true, console.log )
 ```
 
-## domains.transferout
-### ( domainname, cb )
+
+### domains.transferout ( domainname, cb )
 
 Prepare a domain for transferring to another registrar.
 
@@ -233,8 +249,8 @@ Prepare a domain for transferring to another registrar.
 domains.transferout( 'example.tld', console.log )
 ```
 
-## domains.nameservers
-### ( domainname, nameservers, cb )
+
+### domains.nameservers ( domainname, nameservers, cb )
 
 Set nameservers for a domain at the registry.
 
@@ -252,10 +268,11 @@ dnsimple.domains.nameservers(
 )
 ```
 
-# Services
 
-## domains.services.list
-### ( domainname, cb )
+Services
+--------
+
+### domains.services.list ( domainname, cb )
 
 List applied services (vendor presets) for a domain
 
@@ -263,8 +280,8 @@ List applied services (vendor presets) for a domain
 dnsimple.domains.services.list( 'one.com', console.log )
 ```
 
-## domains.services.available
-### ( domainname, cb )
+
+### domains.services.available ( domainname, cb )
 
 List available services for a domain
 
@@ -272,8 +289,8 @@ List available services for a domain
 dnsimple.domains.services.available( 'one.com', console.log )
 ```
 
-## domains.services.add
-### ( domainname, serviceID, cb )
+
+### domains.services.add ( domainname, serviceID, cb )
 
 Apply a service to a domain
 
@@ -284,8 +301,8 @@ Apply a service to a domain
 dnsimple.domains.services.add( 'one.com', 'heroku', console.log )
 ```
 
-## domains.services.delete
-### ( domainname, serviceID, cb )
+
+### domains.services.delete ( domainname, serviceID, cb )
 
 Remove a service from a domain
 
@@ -296,8 +313,8 @@ Remove a service from a domain
 dnsimple.domains.services.delete( 'one.com', 'heroku', console.log )
 ```
 
-## domains.template
-### ( domainname, templateID, cb )
+
+### domains.template ( domainname, templateID, cb )
 
 Apply a template (custom presets) to a domain. This is an alias for *templates.apply*.
 
@@ -308,10 +325,11 @@ Apply a template (custom presets) to a domain. This is an alias for *templates.a
 dnsimple.domains.template( 'one.com', 'office', console.log )
 ```
 
-# DNS
 
-## dns.list
-### ( domainname, cb )
+DNS
+---
+
+### dns.list ( domainname, cb )
 
 List DNS records for a domain
 
@@ -319,8 +337,8 @@ List DNS records for a domain
 dnsimple.dns.list( 'one.com', console.log )
 ```
 
-## dns.show
-### ( domainname, recordID cb )
+
+### dns.show ( domainname, recordID cb )
 
 Get DNS record details for a *recordID* on *domainname*
 
@@ -345,8 +363,8 @@ Returns an object with the record details:
   updated_at: '2011-11-28T20:39:51Z' }
 ```
 
-## dns.add
-### ( domainname, recordObject, cb )
+
+### dns.add ( domainname, recordObject, cb )
 
 **Required:** name, record_type, content
 
@@ -364,13 +382,13 @@ dnsimple.dns.add(
 )
 ```
 
-## dns.update
-### ( domainname, recordID, cb )
+
+### dns.update ( domainname, recordID, cb )
 
 Replace a record's details, same syntax as **dns.add**.
 
-## dns.delete
-### ( domainname, recordID, cb )
+
+### dns.delete ( domainname, recordID, cb )
 
 Delete a DNS record from a domain.
 
@@ -380,8 +398,7 @@ dnsimple.dns.delete( 'one.com', 1234 )
 
 
 Unlicense
-=========
-
+---------
 
 This is free and unencumbered software released into the public domain.
 
