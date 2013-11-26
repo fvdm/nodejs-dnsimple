@@ -57,20 +57,17 @@ dnsimple.api.password = 'secret'
 ```
 
 
-The functions all allow a callback parameter at the end. The first arguement is always the intended result object or array.
 Methods
 -------
 
-**cb = callback function()**
+Each method takes a _callback function_ with two parameters: `err` and `data`.
+
+When an error occurs `err` is an instance of `Error` and `data` is `null`. It can get a `.code` property if a HTTP error happened and a `.data` property
+if the remote API returned something other than JSON data. It also has a `.stack` property to figure out where the error was triggered.
+
+When everything looks alright `err` will be `null` and `data` will be the parsed JSON `object`.
 
 
-
-
-```js
-dnsimple.domains.list( false, function( domains ) {
-	console.log( domains )
-})
-```
 Domains
 -------
 
@@ -83,13 +80,16 @@ List domainnames in your account.
 
 A simple *array* with domainnames.
 
-```ks
+```js
+dnsimple.domains.list( true, console.log )
+
 [ 'one.com',
   'two.net',
   'three.nl' ]
 ```
 
-**simpleBool** false
+
+**simpleBool** false (default)
 
 An object with domainnames details, the keys are their IDs.
 
