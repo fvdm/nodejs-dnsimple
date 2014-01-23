@@ -52,9 +52,9 @@ app.dns = {
 	list: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/records', function( records, error ) {
 			if( !error ) {
-				var result = {}
+				var result = []
 				for( var r in records ) {
-					result[ records[r].record.id ] = records[r].record
+					result.push( records[r].record )
 				}
 				callback( result )
 			} else {
