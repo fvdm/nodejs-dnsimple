@@ -624,8 +624,7 @@ app.talk = function( method, path, fields, callback ) {
 		port:		443,
 		path:		'/v1/'+ path,
 		method:		method,
-		headers:	headers,
-		agent:		false
+		headers:	headers
 	}
 	
 	// password authentication
