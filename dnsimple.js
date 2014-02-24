@@ -35,10 +35,11 @@ var https = require('https')
 var app = {}
 
 app.api = {
-	hostname:	'api.dnsimple.com',
-	email:		null,
-	token:		null,
-	password:	null
+	hostname:		'api.dnsimple.com',
+	email:			null,
+	token:			null,
+	domainToken:	null,
+	password:		null
 }
 
 
@@ -579,7 +580,7 @@ app.talk = function( method, path, fields, callback ) {
 	}
 	
 	// credentials set?
-	if( ! (app.api.email && app.api.token) && ! (app.api.email && app.api.password ) ) {
+	if( ! (app.api.email && app.api.token) && ! (app.api.email && app.api.password) && ! app.api.domainToken ) {
 		doCallback( new Error('credentials missing') )
 	}
 	
@@ -593,6 +594,10 @@ app.talk = function( method, path, fields, callback ) {
 	// token in headers
 	if( app.api.token ) {
 		headers['X-DNSimple-Token'] = app.api.email +':'+ app.api.token
+	}
+	
+	if( app.api.domainToken ) {
+		headers['X-DNSimple-Domain-Token'] = app.api.domainToken
 	}
 	
 	// build request
@@ -611,7 +616,7 @@ app.talk = function( method, path, fields, callback ) {
 	}
 	
 	// password authentication
-	if( ! app.api.token && app.api.password && app.api.email ) {
+	if( ! app.api.token && ! app.api.domainToken && app.api.password && app.api.email ) {
 		options.auth = app.api.email +':'+ app.api.password
 	}
 	
