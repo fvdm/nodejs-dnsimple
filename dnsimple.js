@@ -650,12 +650,12 @@ app.talk = function( method, path, fields, callback ) {
 					// method ok
 					doCallback( null, data )
 					return
+				} else {
+					var error = new Error('HTTP error')
+					error.code = response.statusCode
+					error.data = data
+					doCallback( error )
 				}
-			} else {
-				var error = new Error('HTTP error')
-				error.code = response.statusCode
-				error.data = data
-				doCallback( error )
 			}
 		})
 	})
