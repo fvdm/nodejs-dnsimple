@@ -194,6 +194,15 @@ app.domains = {
 		app.talk( 'POST', 'domains/'+ domainname +'/token', callback )
 	},
 	
+	// !domains.push
+	push: function( domainname, email, regId, callback ) {
+		var data = { push: {
+			new_user_email: email,
+			contact_id: regId
+		}}
+		app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback )
+	},
+	
 	
 	//////////////////
 	// REGISTRATION //
