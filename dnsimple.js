@@ -661,18 +661,15 @@ app.talk = function( method, path, fields, callback ) {
 			}
 			
 			// check HTTP status code
-			var requestOK = [100, 200, 201, 202, 203, 204]
-			for( var c = 0; c < requestOK.length; c++ ) {
-				if( requestOK[c] == response.statusCode ) {
-					// method ok
-					doCallback( null, data )
-					return
-				} else {
-					var error = new Error('HTTP error')
-					error.code = response.statusCode
-					error.data = data
-					doCallback( error )
-				}
+			if( response.statusCode < 300 ) {
+				// method ok
+				doCallback( null, data )
+				return
+			} else {
+				var error = new Error('HTTP error')
+				error.code = response.statusCode
+				error.data = data
+				doCallback( error )
 			}
 		})
 	})
