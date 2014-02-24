@@ -124,7 +124,7 @@ app.domains = {
 			var simple = false
 		}
 		
-		var result = simple ? [] : {}
+		var result = []
 		
 		app.talk( 'GET', 'domains', function( error, domains ) {
 			if( !error ) {
@@ -132,7 +132,7 @@ app.domains = {
 					if( simple ) {
 						result.push( domains[d].domain.name )
 					} else {
-						result[ domains[d].domain.id ] = domains[d].domain
+						result.push( domains[d].domain )
 					}
 				}
 				callback( null, result )
@@ -144,13 +144,13 @@ app.domains = {
 	
 	// !domains.findByRegex
 	findByRegex: function( regex, callback ) {
-		var result = {}
+		var result = []
 		app.domains.list( false, function( error, domains ) {
 			if( !error ) {
 				var regexp = new RegExp( regex )
 				for( var d in domains ) {
 					if( domains[d].name.match( regexp ) ) {
-						result[ domains[d].id ] = domains[d]
+						result.push( domains[d] )
 					}
 				}
 				
@@ -309,9 +309,9 @@ app.domains = {
 		list: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( error, result ) {
 				if( !error ) {
-					var services = {}
+					var services = []
 					for( var s in result ) {
-						services[ result[s].service.id ] = result[s].service
+						services.push( result[s].service )
 					}
 					callback( null, services )
 				} else {
@@ -325,9 +325,9 @@ app.domains = {
 		available: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( error, result ) {
 				if( !error ) {
-					var services = {}
+					var services = []
 					for( var s in result ) {
-						services[ result[s].service.id ] = result[s].service
+						services.push( result[s].service )
 					}
 					callback( null, services )
 				} else {
@@ -372,9 +372,9 @@ app.services = {
 	list: function( callback ) {
 		app.talk( 'GET', 'services', function( error, list ) {
 			if( !error ) {
-				var services = {}
+				var services = []
 				for( var s in list ) {
-					services[ list[s].service.id ] = list[s].service
+					services.push( list[s].service )
 				}
 				callback( null, services )
 			} else {
@@ -409,9 +409,9 @@ app.templates = {
 	list: function( callback ) {
 		app.talk( 'GET', 'templates', function( error, list ) {
 			if( !error ) {
-				var templates = {}
+				var templates = []
 				for( var t in list ) {
-					templates[ list[t].dns_template.id ] = list[t].dns_template
+					templates.push( list[t].dns_template )
 				}
 				callback( null, templates )
 			} else {
@@ -474,9 +474,9 @@ app.templates = {
 		list: function( templateID, callback ) {
 			app.talk( 'GET', 'templates/'+ templateID +'/template_records', function( error, result ) {
 				if( !error ) {
-					var records = {}
+					var records = []
 					for( var r in result ) {
-						records[ result[r].dns_template_record.id ] = result[r].dns_template_record
+						records.push( result[r].dns_template_record )
 					}
 					callback( null, records )
 				} else {
