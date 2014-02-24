@@ -35,11 +35,11 @@ var https = require('https')
 var app = {}
 
 app.api = {
-	hostname:		'api.dnsimple.com',
-	email:			null,
-	token:			null,
-	domainToken:	null,
-	password:		null
+	hostname: 'api.dnsimple.com',
+	email: null,
+	token: null,
+	domainToken: null,
+	password: null
 }
 
 
@@ -219,8 +219,8 @@ app.domains = {
 	register: function( domainname, registrantID, extendedAttribute, callback ) {
 		var vars = {
 			domain: {
-				name:		domainname,
-				registrant_id:	registrantID
+				name: domainname,
+				registrant_id: registrantID
 			}
 		}
 		
@@ -240,8 +240,8 @@ app.domains = {
 	transfer: function( domainname, registrantID, authinfo, callback ) {
 		var vars = {
 			domain: {
-				name:		domainname,
-				registrant_id:	registrantID
+				name: domainname,
+				registrant_id: registrantID
 			}
 		}
 		
@@ -629,16 +629,16 @@ app.talk = function( method, path, fields, callback ) {
 	
 	// build request
 	if( method.match( /(POST|PUT|DELETE)/ ) ) {
-		headers['Content-Type']		= 'application/json'
-		headers['Content-Length']	= querystr.length
+		headers['Content-Type'] = 'application/json'
+		headers['Content-Length'] = querystr.length
 	}
 	
 	var options = {
-		host:		app.api.hostname,
-		port:		443,
-		path:		'/v1/'+ path,
-		method:		method,
-		headers:	headers
+		host: app.api.hostname,
+		port: 443,
+		path: '/v1/'+ path,
+		method: method,
+		headers: headers
 	}
 	
 	// password authentication
