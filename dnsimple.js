@@ -557,6 +557,18 @@ app.contacts = {
 	
 }
 
+//////////////////
+// SUBSCRIPTION //
+//////////////////
+
+app.subscription = function( vars, callback ) {
+	if( ! callback ) {
+		app.talk( 'GET', 'subscription', vars )
+	} else {
+		app.talk( 'PUT', 'subscription', vars, callback )
+	}
+}
+
 
 ////////////
 // MODULE //
