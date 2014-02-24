@@ -35,7 +35,7 @@ var https = require('https')
 var app = {}
 
 app.api = {
-	hostname:	'dnsimple.com',
+	hostname:	'api.dnsimple.com',
 	email:		null,
 	token:		null,
 	password:	null
