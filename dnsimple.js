@@ -189,6 +189,11 @@ app.domains = {
 		app.talk( 'DELETE', 'domains/'+ domainname, callback )
 	},
 	
+	// !domains.resetToken
+	resetToken: function( domainname, callback ) {
+		app.talk( 'POST', 'domains/'+ domainname +'/token', callback )
+	},
+	
 	
 	//////////////////
 	// REGISTRATION //
