@@ -670,7 +670,13 @@ app.talk = function( method, path, fields, callback ) {
 			try {
 				data = JSON.parse( data )
 			} catch(e) {
-				doCallback( new Error('not json') )
+				if( typeof data === 'string' && data.indexOf('<h1>The Domain Already Exists</h1>') > -1 ) {
+					doCallback( new Error('domain exists') )
+				} else {
+					var err = new Error('not json')
+					err.data = data
+					doCallback( err )
+				}
 				return
 			}
 			
