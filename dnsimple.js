@@ -604,7 +604,7 @@ app.talk = function( method, path, fields, callback ) {
 	var options = {
 		host:		app.api.hostname,
 		port:		443,
-		path:		'/'+ path,
+		path:		'/v1/'+ path,
 		method:		method,
 		headers:	headers,
 		agent:		false
