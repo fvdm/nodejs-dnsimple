@@ -89,6 +89,17 @@ if the remote API returned something other than JSON data. It also has a `.stack
 When everything looks alright `err` will be _null_ and `data` will be the parsed JSON _object_ or _array_.
 
 
+### Errors
+
+	credentials missing   No authentication details set
+	connection dropped    Connection was closed too early
+	domain exists         You or another DNSimple user has this domain
+	not json              Invalid API response, see err.code and err.data
+	HTTP error            The API returned an error, see err.code and err.data
+	request timeout       The request took too long
+	request failed        The request failed, see err.error
+	
+
 Domains
 -------
 
