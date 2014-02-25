@@ -195,6 +195,15 @@ dnsimple.domains.push( 'two.com', 'other@user.tld', '123', console.log )
 ```
 
 
+### domains.vanitynameservers ( domainname, enable, cb )
+
+Toggle vanity nameservers on (`true`) or off (`false`) for a domain.
+
+```js
+dnsimple.domains.vanitynameservers( 'two.com', true, console.log )
+```
+
+
 Registration
 ------------
 
