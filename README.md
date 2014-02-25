@@ -62,6 +62,22 @@ require('dnsimple')({ domainToken: 'abc123' })
 ```
 
 
+Configuration
+-------------
+
+When loading the module into your code you need to provide a _setupObject_ for authentication as described above.
+This object can have a few more settings.
+
+	name          description                             default value
+	-----------   -------------------------------------   ----------------
+	email         Account email address.
+	token         Account access token.
+	password      Account password.
+	domainToken   Domain specific API access token.
+	timeout       End API call after this amount of ms.   5000
+	hostname      API endpoint.                           api.dnsimple.com
+
+
 Methods
 -------
 
