@@ -485,6 +485,84 @@ dnsimple.dns.delete( 'one.com', 1234 )
 ```
 
 
+Other methods
+-------------
+
+### subscription ( [createObject], cb )
+
+Get or create subscription details for your account.
+
+
+**Get details:**
+
+```js
+dnsimple.subscription( console.log )
+```
+
+
+**Create subscription:**
+
+```js
+dnsimple.subscription(
+	{
+		plan: 'Silver',
+		credit_card: {
+			number': '1',
+			first_name: 'John',
+			last_name: 'Smith',
+			billing_address: '111 SW 1st Street',
+			billing_zip: '12345',
+			month: '02',
+			year: '2015',
+			cvv: '111'
+		}
+	},
+	console.log
+)
+```
+
+
+### statements ( cb )
+
+Get account history statements.
+
+Note: the *_view properties are very large.
+
+```js
+[ { id: 123,
+    subscription_id: 111,
+    statement_identifier: '987',
+    text_view: '...',
+    basic_html_view: '...',
+    html_view: '...',
+    settled_at: null,
+    opened_at: '2014-02-06T05:42:55Z',
+    closed_at: null,
+    created_at: '2014-02-08T08:02:57Z',
+    updated_at: '2014-02-12T08:03:45Z' } ]
+```
+
+
+### prices ( cb )
+
+List all prices.
+
+```js
+dnsimple.prices( console.log )
+```
+
+```js
+[ { tld: 'com',
+    minimum_registration: 1,
+    registration_price: '14.00',
+    registration_enabled: true,
+    transfer_price: '14.00',
+    transfer_enabled: true,
+    renewal_price: '14.00',
+    renewal_enabled: true } ]
+```
+
+
 Unlicense
 ---------
 
