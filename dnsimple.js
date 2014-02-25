@@ -227,6 +227,11 @@ app.domains = {
 			var data = {membership: {email: email}}
 			app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback )
 		},
+		
+		// !domains.memberships.delete
+		delete: function( domainname, member, callback ) {
+			app.talk( 'DELETE', 'domains'+ domainname +'/memberships/'+ member, callback )
+		}
 	},
 	
 	//////////////////
