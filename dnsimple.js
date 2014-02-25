@@ -212,6 +212,12 @@ app.domains = {
 		}
 	},
 	
+	/////////////////
+	// MEMBERSHIPS //
+	/////////////////
+	
+	memberships: {
+	},
 	
 	//////////////////
 	// REGISTRATION //
