@@ -186,6 +186,15 @@ dnsimple.domains.resetToken( 'two.com', console.log )
 ```
 
 
+### domains.push ( domainname, email, contactId, cb )
+
+Give the domain to another DNSimple user.
+
+```js
+dnsimple.domains.push( 'two.com', 'other@user.tld', '123', console.log )
+```
+
+
 Registration
 ------------
 
