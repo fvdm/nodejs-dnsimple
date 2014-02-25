@@ -177,6 +177,15 @@ dnsimple.domains.delete( 'two.com', console.log )
 ```
 
 
+### domains.resetToken ( domainname, cb )
+
+Reset the domain specific API-token.
+
+```js
+dnsimple.domains.resetToken( 'two.com', console.log )
+```
+
+
 Registration
 ------------
 
