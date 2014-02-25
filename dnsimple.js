@@ -638,6 +638,28 @@ app.statements = function( callback ) {
 	})
 }
 
+
+///////////
+// OTHER //
+///////////
+
+app.prices = function( callback ) {
+	app.talk( 'GET', 'prices', function( err, data ) {
+		if( ! err ) {
+			var result = []
+			if( typeof data === 'object' ) {
+				for( var k in data ) {
+					result.push( data[k].price )
+				}
+			}
+			callback( null, result )
+		} else {
+			callback( err )
+		}
+	})
+}
+
+
 ////////////
 // MODULE //
 ////////////
