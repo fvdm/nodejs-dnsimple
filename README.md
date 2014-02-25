@@ -35,24 +35,30 @@ dnsimple.domains.add( 'example.tld', function( err, domain ) {
 Authentication
 --------------
 
-The module supports both authentication by **email:token** and **email:password**.
-The *token* is more secure as it can easily be reset in account at [dnsimple.com/account](https://dnsimple.com/account).
-The password uses HTTP Basic Authentication.
+The module supports authentication by **email + token**, **email + password** and **domain token**.
+The *token* is more secure as it can easily be reset in your account at [dnsimple.com/account](https://dnsimple.com/account).
+The *password* uses HTTP Basic Authentication.
+Use *domain token* if you can (or wish to) connect to only one specific domainname.
 
 
-### Token
+### Account token
 
 ```js
-dnsimple.api.email = 'your@email.tld'
-dnsimple.api.token = '12345abcde'
+require('dnsimple')({ email: 'your@email.tld', token: '12345abcde' })
 ```
 
 
 ### Password
 
 ```js
-dnsimple.api.email = 'your@email.tld'
-dnsimple.api.password = 'secret'
+require('dnsimple')({ email: your@email.tld', password: 'secret' })
+```
+
+
+### Domain token
+
+```js
+require('dnsimple')({ domainToken: 'abc123' })
 ```
 
 
