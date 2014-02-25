@@ -703,27 +703,23 @@ app.talk = function( method, path, fields, callback ) {
 
 			// parse JSON
 			data = data.toString('utf8').trim()
+			var failed = null
 			
 			try {
 				data = JSON.parse( data )
 			} catch(e) {
 				if( typeof data === 'string' && data.indexOf('<h1>The Domain Already Exists</h1>') > -1 ) {
-					doCallback( new Error('domain exists') )
+					failed = new Error('domain exists')
 				} else {
-					var err = new Error('not json')
-					err.data = data
-					doCallback( err )
+					failed = new Error('not json')
 				}
-				return
 			}
 			
 			// check HTTP status code
 			if( response.statusCode < 300 ) {
-				// method ok
 				doCallback( null, data )
-				return
 			} else {
-				var error = new Error('HTTP error')
+				var error = failed || new Error('HTTP error')
 				error.code = response.statusCode
 				error.data = data
 				doCallback( error )
