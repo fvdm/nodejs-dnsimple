@@ -302,10 +302,9 @@ app.domains = {
 			var callback = whoisPrivacy
 		} else {
 			// string matching
-			var whoisPrivacy = whoisPrivacy +''
-			if( whoisPrivacy.match( /^(true|yes|1)$/i ) ) {
+			if( whoisPrivacy ) {
 				vars.domain.renew_whois_privacy = 'true'
-			} else if( whoisPrivate.match( /^(false|no|0)$/i ) ) {
+			} else {
 				vars.domain.renew_whois_privacy = 'false'
 			}
 		}
@@ -316,11 +315,10 @@ app.domains = {
 	
 	// !domains.autorenew
 	// Set auto-renewal for domain
-	autorenew: function( domainname, status, callback ) {
-		var status = status +''
-		if( status.match( /^(true|yes|on|enable|enabled|1)$/i ) ) {
+	autorenew: function( domainname, enable, callback ) {
+		if( enable ) {
 			app.talk( 'POST', 'domains/'+ domainname +'/auto_renewal', {auto_renewal:{}}, callback )
-		} else if( status.match( /^(false|no|off|disable|disabled|0)$/i ) ) {
+		} else {
 			app.talk( 'DELETE', 'domains/'+ domainname +'/auto_renewal', callback )
 		}
 	},
