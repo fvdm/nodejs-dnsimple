@@ -338,6 +338,15 @@ app.domains = {
 		app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback )
 	},
 	
+	// !domains.whoisPrivacy
+	whoisPrivacy: function( domainname, enable, callback ) {
+		if( enable ) {
+			app.talk( 'POST', 'domains/'+ domainname +'/whois_privacy', callback )
+		} else {
+			app.talk( 'DELETE', 'domains/'+ domainname +'/whois_privacy', callback )
+		}
+	},
+	
 	
 	//////////////
 	// SERVICES //
