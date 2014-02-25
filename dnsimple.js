@@ -39,7 +39,8 @@ app.api = {
 	email: null,
 	token: null,
 	domainToken: null,
-	password: null
+	password: null,
+	timeout: 5000
 }
 
 
@@ -727,9 +728,23 @@ app.talk = function( method, path, fields, callback ) {
 		})
 	})
 	
+	// timeout
+	request.on( 'socket', function( socket ) {
+		if( app.api.timeout ) {
+			socket.setTimeout( app.api.timeout )
+			socket.on( 'timeout', function() {
+				request.abort()
+			})
+		}
+	})
+	
 	// error
 	request.on( 'error', function( error ) {
-		var er = new Error('request failed')
+		if( error.code === 'ECONNRESET' ) {
+			var er = new Error('request timeout')
+		} else {
+			var er = new Error('request failed')
+		}
 		er.error = error
 		doCallback( er )
 	})
