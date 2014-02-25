@@ -519,7 +519,7 @@ dnsimple.subscription(
 	{
 		plan: 'Silver',
 		credit_card: {
-			number': '1',
+			number: '1',
 			first_name: 'John',
 			last_name: 'Smith',
 			billing_address: '111 SW 1st Street',
