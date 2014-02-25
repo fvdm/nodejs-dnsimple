@@ -103,7 +103,7 @@ When everything looks alright `err` will be _null_ and `data` will be the parsed
 Domains
 -------
 
-### domains.list ( simpleBool, callback )
+### domains.list ( [simpleBool], callback )
 
 List domainnames in your account.
 
