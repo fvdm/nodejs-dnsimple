@@ -204,6 +204,39 @@ dnsimple.domains.vanitynameservers( 'two.com', true, console.log )
 ```
 
 
+Memberships
+-----------
+
+### domains.memberships.list ( domainname, cb )
+
+List memberships for a domain.
+
+```js
+dnsimple.domains.memberships.list( 'two.com', console.log )
+```
+
+
+### domains.memberships.add ( domainname, email, cb )
+
+Add a member to a domain.
+
+If the person already exists in DNSimple as a customer then he will immediately be added to the domain’s membership list.
+If the person does not yet have a DNSimple account then he will receive an invitation to join via email.
+
+```js
+dnsimple.domains.memberships.add( 'two.com', 'other@user.tld', console.log )
+```
+
+
+### domains.memberships.delete ( domainname, member, cb )
+
+Remove a member from a domain.
+
+```js
+dnsimple.domains.memberships.delete( 'two.com', 'other@user.tld', console.log )
+```
+
+
 Registration
 ------------
 
