@@ -622,6 +622,21 @@ app.subscription = function( vars, callback ) {
 	}
 }
 
+app.statements = function( callback ) {
+	app.talk( 'GET', 'statements', function( err, data ) {
+		if( ! err ) {
+			var result = []
+			if( typeof data === 'object' ) {
+				for( var k in data ) {
+					result.push( data[k].statement )
+				}
+			}
+			callback( null, result )
+		} else {
+			callback( err )
+		}
+	})
+}
 
 ////////////
 // MODULE //
