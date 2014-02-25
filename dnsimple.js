@@ -617,7 +617,8 @@ app.subscription = function( vars, callback ) {
 	if( ! callback ) {
 		app.talk( 'GET', 'subscription', vars )
 	} else {
-		app.talk( 'PUT', 'subscription', vars, callback )
+		var data = {subscription: vars}
+		app.talk( 'PUT', 'subscription', data, callback )
 	}
 }
 
