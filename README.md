@@ -348,6 +348,15 @@ dnsimple.domains.nameservers(
 ```
 
 
+### domains.whoisPrivacy ( domainname, enable, cb )
+
+Toggle whois privacy protection on a domain on (`true`) or off (`false`).
+
+```js
+dnsimple.domains.whoisPrivacy( 'two.com', true, console.log )
+```
+
+
 Services
 --------
 
