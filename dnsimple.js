@@ -221,6 +221,12 @@ app.domains = {
 		list: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback )
 		},
+		
+		// !domains.memberships.add
+		add: function( domainname, email, callback ) {
+			var data = {membership: {email: email}}
+			app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback )
+		},
 	},
 	
 	//////////////////
