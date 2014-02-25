@@ -203,6 +203,15 @@ app.domains = {
 		app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback )
 	},
 	
+	// !domains.vanitynameservers
+	vanitynameservers: function( domainname, enable, callback ) {
+		if( enable ) {
+			app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', {auto_renewal:{}}, callback )
+		} else {
+			app.talk( 'DELETE', 'domains/'+ domainname +'/vanity_name_servers', callback )
+		}
+	},
+	
 	
 	//////////////////
 	// REGISTRATION //
