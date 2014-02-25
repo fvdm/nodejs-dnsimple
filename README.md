@@ -115,31 +115,29 @@ dnsimple.domains.list( true, console.log )
 An object with domainnames details, the keys are their IDs.
 
 ```js
-{ '123': 
-   { auto_renew: null,
-     created_at: '2011-01-09T02:24:58Z',
-     expires_at: null,
-     id: 123,
-     language: null,
-     last_name_server_status_check: '2012-05-18T18:53:24Z',
-     lockable: null,
-     name: 'one.com',
-     name_server_status: 'inactive',
-     parsed_expiration_date: null,
-     real_time: null,
-     registrant_id: null,
-     registration_status: 'hosted',
-     state: 'hosted',
-     token: 'Zp1J...',
-     unicode_name: 'one.com',
-     updated_at: '2012-05-18T18:53:24Z',
-     use_route53: null,
-     user_id: 121,
-     uses_external_name_servers: null,
-     record_count: 1,
-     service_count: 0,
-     'private_whois?': false }
-}
+[ { auto_renew: null,
+    created_at: '2011-01-09T02:24:58Z',
+    expires_at: null,
+    id: 123,
+    language: null,
+    last_name_server_status_check: '2012-05-18T18:53:24Z',
+    lockable: null,
+    name: 'one.com',
+    name_server_status: 'inactive',
+    parsed_expiration_date: null,
+    real_time: null,
+    registrant_id: null,
+    registration_status: 'hosted',
+    state: 'hosted',
+    token: 'Zp1J...',
+    unicode_name: 'one.com',
+    updated_at: '2012-05-18T18:53:24Z',
+    use_route53: null,
+    user_id: 121,
+    uses_external_name_servers: null,
+    record_count: 1,
+    service_count: 0,
+    'private_whois?': false } ]
 ```
 
 
