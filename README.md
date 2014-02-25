@@ -123,7 +123,7 @@ dnsimple.domains.list( true, console.log )
 
 **simpleBool** false (default)
 
-An object with domainnames details, the keys are their IDs.
+An array with your domainnames.
 
 ```js
 [ { auto_renew: null,
