@@ -716,7 +716,7 @@ app.talk = function( method, path, fields, callback ) {
 			}
 			
 			// check HTTP status code
-			if( response.statusCode < 300 ) {
+			if( ! failed && response.statusCode < 300 ) {
 				doCallback( null, data )
 			} else {
 				var error = failed || new Error('HTTP error')
