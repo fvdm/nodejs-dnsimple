@@ -217,6 +217,10 @@ app.domains = {
 	/////////////////
 	
 	memberships: {
+		// !domains.memberships.list
+		list: function( domainname, callback ) {
+			app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback )
+		},
 	},
 	
 	//////////////////
