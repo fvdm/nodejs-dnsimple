@@ -609,9 +609,9 @@ app.contacts = {
 	
 }
 
-//////////////////
-// SUBSCRIPTION //
-//////////////////
+/////////////
+// ACCOUNT //
+/////////////
 
 app.subscription = function( vars, callback ) {
 	if( ! callback ) {
