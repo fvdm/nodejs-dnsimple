@@ -20,14 +20,13 @@ The code on Github is the most recent version, but can be unstable:
 Usage
 -----
 
+First you need to load and setup the module with `new require('dnsimple')( setupObject )`.
+See _Configuration_ below for details on _setupObject_.
 
 ```js
-var dnsimple = require('dnsimple')
+var dnsimple = new require('dnsimple')({ email: 'you@web.tld', token: 'abc123' })
 
-dnsimple.api.email = 'your@email.tld'
-dnsimple.api.token = 'your API token'
-
-dnsimple.domains.add( 'example.tld', function( domain ) {
+dnsimple.domains.add( 'example.tld', function( err, domain ) {
 	console.log( domain.name +' created with ID '+ domain.id )
 })
 ```
