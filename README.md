@@ -51,7 +51,7 @@ require('dnsimple')({ email: 'your@email.tld', token: '12345abcde' })
 ### Password
 
 ```js
-require('dnsimple')({ email: your@email.tld', password: 'secret' })
+require('dnsimple')({ email: 'your@email.tld', password: 'secret' })
 ```
 
 
