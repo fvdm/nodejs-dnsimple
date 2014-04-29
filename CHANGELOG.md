@@ -33,5 +33,7 @@ v1.0.0
 * Removed Travis CI
 * API version fixed in request path
 * Improved error handling
+* Changed array iterations to prevent issues with other modules
 * README.md updated
 * Other bug fixes
+* Code clean up
