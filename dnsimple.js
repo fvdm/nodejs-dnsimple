@@ -55,8 +55,8 @@ app.dns = {
 		app.talk( 'GET', 'domains/'+ domainname +'/records', function( error, records ) {
 			if( !error ) {
 				var result = []
-				for( var r in records ) {
-					result.push( records[r].record )
+				for( var i = 0; i < records.length; i++ ) {
+					result.push( records[i].record )
 				}
 				callback( null, result )
 			} else {
@@ -129,11 +129,11 @@ app.domains = {
 		
 		app.talk( 'GET', 'domains', function( error, domains ) {
 			if( !error ) {
-				for( var d in domains ) {
+				for( var i = 0; i < domains.length; i++ ) {
 					if( simple ) {
-						result.push( domains[d].domain.name )
+						result.push( domains[i].domain.name )
 					} else {
-						result.push( domains[d].domain )
+						result.push( domains[i].domain )
 					}
 				}
 				callback( null, result )
@@ -149,9 +149,9 @@ app.domains = {
 		app.domains.list( false, function( error, domains ) {
 			if( !error ) {
 				var regexp = new RegExp( regex )
-				for( var d in domains ) {
-					if( domains[d].name.match( regexp ) ) {
-						result.push( domains[d] )
+				for( var i = 0; i < domains.length; i++ ) {
+					if( domains[i].name.match( regexp ) ) {
+						result.push( domains[i] )
 					}
 				}
 				
@@ -362,8 +362,8 @@ app.domains = {
 			app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( error, result ) {
 				if( !error ) {
 					var services = []
-					for( var s in result ) {
-						services.push( result[s].service )
+					for( var i = 0; i < result.length; i++ ) {
+						services.push( result[i].service )
 					}
 					callback( null, services )
 				} else {
@@ -378,8 +378,8 @@ app.domains = {
 			app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( error, result ) {
 				if( !error ) {
 					var services = []
-					for( var s in result ) {
-						services.push( result[s].service )
+					for( var i = 0; i < result.length; i++ ) {
+						services.push( result[i].service )
 					}
 					callback( null, services )
 				} else {
@@ -425,8 +425,8 @@ app.services = {
 		app.talk( 'GET', 'services', function( error, list ) {
 			if( !error ) {
 				var services = []
-				for( var s in list ) {
-					services.push( list[s].service )
+				for( var i = 0; i < list.length; i++ ) {
+					services.push( list[i].service )
 				}
 				callback( null, services )
 			} else {
@@ -462,8 +462,8 @@ app.templates = {
 		app.talk( 'GET', 'templates', function( error, list ) {
 			if( !error ) {
 				var templates = []
-				for( var t in list ) {
-					templates.push( list[t].dns_template )
+				for( var i = 0; i < list.length; i++ ) {
+					templates.push( list[i].dns_template )
 				}
 				callback( null, templates )
 			} else {
@@ -527,8 +527,8 @@ app.templates = {
 			app.talk( 'GET', 'templates/'+ templateID +'/template_records', function( error, result ) {
 				if( !error ) {
 					var records = []
-					for( var r in result ) {
-						records.push( result[r].dns_template_record )
+					for( var i = 0; i < result.length; i++ ) {
+						records.push( result[i].dns_template_record )
 					}
 					callback( null, records )
 				} else {
@@ -627,8 +627,8 @@ app.statements = function( callback ) {
 		if( ! err ) {
 			var result = []
 			if( typeof data === 'object' ) {
-				for( var k in data ) {
-					result.push( data[k].statement )
+				for( var i = 0; i < data.length; i++ ) {
+					result.push( data[i].statement )
 				}
 			}
 			callback( null, result )
@@ -648,8 +648,8 @@ app.prices = function( callback ) {
 		if( ! err ) {
 			var result = []
 			if( typeof data === 'object' ) {
-				for( var k in data ) {
-					result.push( data[k].price )
+				for( var i = 0; i < data.length; i++ ) {
+					result.push( data[i].price )
 				}
 			}
 			callback( null, result )
@@ -798,8 +798,8 @@ app.talk = function( method, path, fields, callback ) {
 
 // wrap it up
 module.exports = function( setup ) {
-	for( var k in setup ) {
-		app.api[ k ] = setup[ k ]
+	for( var i = 0; i < setup.length; i++ ) {
+		app.api[i] = setup[i]
 	}
 	return app
 }
