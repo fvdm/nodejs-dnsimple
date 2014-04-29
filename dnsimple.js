@@ -25,13 +25,10 @@ app.api = {
 }
 
 
-/////////
-// DNS //
-/////////
+// DNS
 
 app.dns = {
-	
-	// !dns.list
+	// dns.list
 	list: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/records', function( error, records ) {
 			if( !error ) {
@@ -45,8 +42,8 @@ app.dns = {
 			}
 		})
 	},
-	
-	// !dns.show
+
+	// dns.show
 	show: function( domainname, recordID, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, function( error, record ) {
 			if( !error ) {
@@ -56,8 +53,8 @@ app.dns = {
 			}
 		})
 	},
-	
-	// !dns.add
+
+	// dns.add
 	// REQUIRED: name, record_type, content
 	// OPTIONAL: ttl, prio
 	add: function( domainname, record, callback ) {
@@ -70,8 +67,8 @@ app.dns = {
 			}
 		})
 	},
-	
-	// !dns.update
+
+	// dns.update
 	update: function( domainname, recordID, record, callback ) {
 		var post = { record: record }
 		app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( error, result ) {
@@ -82,32 +79,28 @@ app.dns = {
 			}
 		})
 	},
-	
-	// !dns.delete
+
+	// dns.delete
 	delete: function( domainname, recordID, callback ) {
 		app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, callback )
 	}
-
 }
 
 
-
-/////////////
-// DOMAINS //
-/////////////
+// DOMAINS
 
 app.domains = {
 	
-	// !domains.list
+	// domains.list
 	// Simple returns only array with domainnames
 	list: function( simple, callback ) {
 		if( !callback && typeof simple === 'function' ) {
 			var callback = simple
 			var simple = false
 		}
-		
+
 		var result = []
-		
+
 		app.talk( 'GET', 'domains', function( error, domains ) {
 			if( !error ) {
 				for( var i = 0; i < domains.length; i++ ) {
@@ -123,8 +116,8 @@ app.domains = {
 			}
 		})
 	},
-	
-	// !domains.findByRegex
+
+	// domains.findByRegex
 	findByRegex: function( regex, callback ) {
 		var result = []
 		app.domains.list( false, function( error, domains ) {
@@ -135,15 +128,15 @@ app.domains = {
 						result.push( domains[i] )
 					}
 				}
-				
+
 				callback( null, result )
 			} else {
 				callback( error )
 			}
 		})
 	},
-	
-	// !domains.show
+
+	// domains.show
 	show: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname, function( error, domain ) {
 			if( !error ) {
@@ -153,8 +146,8 @@ app.domains = {
 			}
 		})
 	},
-	
-	// !domains.add
+
+	// domains.add
 	add: function( domainname, callback ) {
 		var dom = { domain: { name: domainname } }
 		app.talk( 'POST', 'domains', dom, function( error, domain ) {
@@ -165,18 +158,18 @@ app.domains = {
 			}
 		})
 	},
-	
-	// !domains.delete
+
+	// domains.delete
 	delete: function( domainname, callback ) {
 		app.talk( 'DELETE', 'domains/'+ domainname, callback )
 	},
-	
-	// !domains.resetToken
+
+	// domains.resetToken
 	resetToken: function( domainname, callback ) {
 		app.talk( 'POST', 'domains/'+ domainname +'/token', callback )
 	},
-	
-	// !domains.push
+
+	// domains.push
 	push: function( domainname, email, regId, callback ) {
 		var data = { push: {
 			new_user_email: email,
@@ -184,8 +177,8 @@ app.domains = {
 		}}
 		app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback )
 	},
-	
-	// !domains.vanitynameservers
+
+	// domains.vanitynameservers
 	vanitynameservers: function( domainname, enable, callback ) {
 		if( enable ) {
 			app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', {auto_renewal:{}}, callback )
@@ -193,40 +186,38 @@ app.domains = {
 			app.talk( 'DELETE', 'domains/'+ domainname +'/vanity_name_servers', callback )
 		}
 	},
-	
-	/////////////////
-	// MEMBERSHIPS //
-	/////////////////
-	
+
+
+	// MEMBERSHIPS
+
 	memberships: {
-		// !domains.memberships.list
+		// domains.memberships.list
 		list: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback )
 		},
-		
-		// !domains.memberships.add
+
+		// domains.memberships.add
 		add: function( domainname, email, callback ) {
 			var data = {membership: {email: email}}
 			app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback )
 		},
-		
-		// !domains.memberships.delete
+
+		// domains.memberships.delete
 		delete: function( domainname, member, callback ) {
 			app.talk( 'DELETE', 'domains'+ domainname +'/memberships/'+ member, callback )
 		}
 	},
-	
-	//////////////////
-	// REGISTRATION //
-	//////////////////
-	
-	// !domains.check
+
+
+	// REGISTRATION
+
+	// domains.check
 	// Check availability
 	check: function( domainname, callback ) {
 		app.talk( 'GET', 'domains/'+ domainname +'/check', {}, callback )
 	},
-	
-	// !domains.register
+
+	// domains.register
 	// Register domainname - auto-payment!
 	register: function( domainname, registrantID, extendedAttribute, callback ) {
 		var vars = {
@@ -246,8 +237,8 @@ app.domains = {
 		// send
 		app.talk( 'POST', 'domain_registrations', vars, callback )
 	},
-	
-	// !domains.transfer
+
+	// domains.transfer
 	// Transfer domainname - auto-payment!
 	transfer: function( domainname, registrantID, authinfo, callback ) {
 		var vars = {
@@ -256,7 +247,7 @@ app.domains = {
 				registrant_id: registrantID
 			}
 		}
-		
+
 		// fix 3 & 4 params
 		if( !callback && typeof authinfo == 'function' ) {
 			var callback = authinfo
@@ -265,12 +256,12 @@ app.domains = {
 				authinfo: authinfo
 			}
 		}
-		
+
 		// send
 		app.talk( 'POST', 'domain_transfers', vars, callback )
 	},
-	
-	// !domains.renew
+
+	// domains.renew
 	// Renew domainname registration - auto-payment!
 	renew: function( domainname, whoisPrivacy, callback ) {
 		var vars = {
@@ -278,7 +269,7 @@ app.domains = {
 				name: domainname
 			}
 		}
-		
+
 		// fix 2 & 3 params
 		if( !callback && typeof whoisPrivacy == 'function' ) {
 			var callback = whoisPrivacy
@@ -290,12 +281,12 @@ app.domains = {
 				vars.domain.renew_whois_privacy = 'false'
 			}
 		}
-		
+
 		// send
 		app.talk( 'POST', 'domain_renewal', vars, callback )
 	},
-	
-	// !domains.autorenew
+
+	// domains.autorenew
 	// Set auto-renewal for domain
 	autorenew: function( domainname, enable, callback ) {
 		if( enable ) {
@@ -304,14 +295,14 @@ app.domains = {
 			app.talk( 'DELETE', 'domains/'+ domainname +'/auto_renewal', callback )
 		}
 	},
-	
-	// !domains.transferout
+
+	// domains.transferout
 	// Prepare domain for transferring out
 	transferout: function( domainname, callback ) {
 		app.talk( 'POST', 'domains/'+ domainname +'/transfer_out', callback )
 	},
-	
-	// !domains.nameservers
+
+	// domains.nameservers
 	// Set nameservers at registry
 	nameservers: function( domainname, nameservers, callback ) {
 		var ns = {
@@ -319,8 +310,8 @@ app.domains = {
 		}
 		app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback )
 	},
-	
-	// !domains.whoisPrivacy
+
+	// domains.whoisPrivacy
 	whoisPrivacy: function( domainname, enable, callback ) {
 		if( enable ) {
 			app.talk( 'POST', 'domains/'+ domainname +'/whois_privacy', callback )
@@ -328,16 +319,13 @@ app.domains = {
 			app.talk( 'DELETE', 'domains/'+ domainname +'/whois_privacy', callback )
 		}
 	},
-	
-	
-	//////////////
-	// SERVICES //
-	//////////////
-	
+
+
+	// SERVICES
+
 	// Services for domain
 	services: {
-		
-		// !domains.services.list
+		// domains.services.list
 		// already applied
 		list: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( error, result ) {
@@ -352,8 +340,8 @@ app.domains = {
 				}
 			})
 		},
-		
-		// !domains.services.available
+
+		// domains.services.available
 		// available
 		available: function( domainname, callback ) {
 			app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( error, result ) {
@@ -368,39 +356,33 @@ app.domains = {
 				}
 			})
 		},
-		
-		// !domains.services.add
+
+		// domains.services.add
 		// apply one
 		add: function( domainname, serviceID, callback ) {
 			var service = { service: { id: serviceID } }
 			app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, callback )
 		},
-		
-		// !domains.services.delete
+
+		// domains.services.delete
 		// delete one
 		delete: function( domainname, serviceID, callback ) {
 			app.talk( 'DELETE', 'domains/'+ domainname +'/applied_services/'+ serviceID, callback )
 		}
-	
 	},
-	
-	
-	// !domains.template
+
+	// domains.template
 	// apply template -- alias for templates.apply
 	template: function( domainname, templateID, callback ) {
 		app.templates.apply( domainname, templateID, callback )
 	}
-
 }
 
 
-//////////////
-// SERVICES //
-//////////////
+// SERVICES
 
 app.services = {
-	
-	// !services.list
+	// services.list
 	// List all supported services
 	list: function( callback ) {
 		app.talk( 'GET', 'services', function( error, list ) {
@@ -415,8 +397,8 @@ app.services = {
 			}
 		})
 	},
-	
-	// !services.show
+
+	// services.show
 	// Get one service' details
 	show: function( serviceID, callback ) {
 		app.talk( 'GET', 'services/'+ serviceID, function( error, service ) {
@@ -427,17 +409,13 @@ app.services = {
 			}
 		})
 	}
-	
 }
 
 
-///////////////
-// TEMPLATES //
-///////////////
+// TEMPLATES
 
 app.templates = {
-	
-	// !templates.list
+	// templates.list
 	// List all of the custom templates in the account
 	list: function( callback ) {
 		app.talk( 'GET', 'templates', function( error, list ) {
@@ -452,8 +430,8 @@ app.templates = {
 			}
 		})
 	},
-	
-	// !templates.show
+
+	// templates.show
 	// Get a specific template
 	show: function( templateID, callback ) {
 		app.talk( 'GET', 'templates/'+ templateID, function( error, template ) {
@@ -464,8 +442,8 @@ app.templates = {
 			}
 		})
 	},
-	
-	// !templates.add
+
+	// templates.add
 	// Create a custom template
 	// REQUIRED: name, shortname
 	// OPTIONAL: description
@@ -479,14 +457,14 @@ app.templates = {
 			}
 		})
 	},
-	
-	// !templates.delete
+
+	// templates.delete
 	// Delete the given template
 	delete: function( templateID, callback ) {
 		app.talk( 'DELETE', 'templates/'+ templateID, callback )
 	},
-	
-	// !templates.apply
+
+	// templates.apply
 	// Apply a template to a domain
 	apply: function( domainname, templateID, callback ) {
 		app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', function( error, result ) {
@@ -497,12 +475,10 @@ app.templates = {
 			}
 		})
 	},
-	
-	
+
 	// records
 	records: {
-		
-		// !templates.records.list
+		// templates.records.list
 		// list records in template
 		list: function( templateID, callback ) {
 			app.talk( 'GET', 'templates/'+ templateID +'/template_records', function( error, result ) {
@@ -517,8 +493,8 @@ app.templates = {
 				}
 			})
 		},
-		
-		// !templates.records.show
+
+		// templates.records.show
 		// Get one record for template
 		show: function( templateID, recordID, callback ) {
 			app.talk( 'GET', 'templates/'+ templateID +'/template_records/'+ recordID, function( error, result ) {
@@ -529,8 +505,8 @@ app.templates = {
 				}
 			})
 		},
-		
-		// !templates.records.add
+
+		// templates.records.add
 		// Add record to template
 		// REQUIRED: name, record_type, content
 		// OPTIONAL: ttl, prio
@@ -544,55 +520,49 @@ app.templates = {
 				}
 			})
 		},
-		
-		// !templates.records.delete
+
+		// templates.records.delete
 		// Delete record from template
 		delete: function( templateID, recordID, callback ) {
 			app.talk( 'DELETE', 'templates/'+ templateID +'/template_records/'+ recordID, {}, callback )
 		}
-		
 	}
-
 }
 
-//////////////
-// CONTACTS //
-//////////////
+
+// CONTACTS
 
 app.contacts = {
-	
-	// !contacts.list
+	// contacts.list
 	list: function( callback ) {
 		app.talk( 'GET', 'contacts', callback )
 	},
-	
-	// !contacts.show
+
+	// contacts.show
 	show: function( contactID, callback ) {
 		app.talk( 'GET', 'contacts/'+ contactID, callback )
 	},
-	
-	// !contacts.create
+
+	// contacts.create
 	// http://developer.dnsimple.com/contacts/#create-a-contact
 	add: function( contact, callback ) {
 		app.talk( 'POST', 'contacts', {contact: contact}, callback )
 	},
-	
-	// !contacts.update
+
+	// contacts.update
 	// http://developer.dnsimple.com/contacts/#update-a-contact
 	update: function( contactID, contact, callback ) {
 		app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback )
 	},
-	
-	// !contacts.delete
+
+	// contacts.delete
 	delete: function( contactID, callback ) {
 		app.talk( 'DELETE', 'contacts/'+ contactID, callback )
 	}
-	
 }
 
-/////////////
-// ACCOUNT //
-/////////////
+
+// ACCOUNT
 
 app.subscription = function( vars, callback ) {
 	if( ! callback ) {
@@ -620,9 +590,7 @@ app.statements = function( callback ) {
 }
 
 
-///////////
-// OTHER //
-///////////
+// OTHER
 
 app.prices = function( callback ) {
 	app.talk( 'GET', 'prices', function( err, data ) {
@@ -641,18 +609,15 @@ app.prices = function( callback ) {
 }
 
 
-////////////
-// MODULE //
-////////////
+// MODULE
 
 // communicate
 app.talk = function( method, path, fields, callback ) {
-	
 	if( !callback && typeof fields === 'function' ) {
 		var callback = fields
 		var fields = {}
 	}
-	
+
 	// prevent multiple callbacks
 	var complete = false
 	function doCallback( err, res ) {
@@ -661,35 +626,35 @@ app.talk = function( method, path, fields, callback ) {
 			callback( err || null, res || null )
 		}
 	}
-	
+
 	// credentials set?
 	if( ! (app.api.email && app.api.token) && ! (app.api.email && app.api.password) && ! app.api.domainToken ) {
 		doCallback( new Error('credentials missing') )
 		return
 	}
-	
+
 	// prepare
 	var querystr = JSON.stringify(fields)
 	var headers = {
 		'Accept': 'application/json',
 		'User-Agent': 'Nodejs-DNSimple'
 	}
-	
+
 	// token in headers
 	if( app.api.token ) {
 		headers['X-DNSimple-Token'] = app.api.email +':'+ app.api.token
 	}
-	
+
 	if( app.api.domainToken ) {
 		headers['X-DNSimple-Domain-Token'] = app.api.domainToken
 	}
-	
+
 	// build request
 	if( method.match( /(POST|PUT|DELETE)/ ) ) {
 		headers['Content-Type'] = 'application/json'
 		headers['Content-Length'] = querystr.length
 	}
-	
+
 	var options = {
 		host: app.api.hostname,
 		port: 443,
@@ -697,34 +662,32 @@ app.talk = function( method, path, fields, callback ) {
 		method: method,
 		headers: headers
 	}
-	
+
 	// password authentication
 	if( ! app.api.token && ! app.api.domainToken && app.api.password && app.api.email ) {
 		options.auth = app.api.email +':'+ app.api.password
 	}
-	
+
 	// start request
 	var request = https.request( options )
-	
+
 	// response
 	request.on( 'response', function( response ) {
 		var data = ''
-		
+
 		response.on( 'data', function( chunk ) {
 			data += chunk
 		})
-		
+
 		response.on( 'close', function() {
 			doCallback( new Error('connection dropped') )
 		})
-		
+
 		// request finished
 		response.on( 'end', function() {
-
-			// parse JSON
 			data = data.toString('utf8').trim()
 			var failed = null
-			
+
 			try {
 				data = JSON.parse( data )
 			} catch(e) {
@@ -734,7 +697,7 @@ app.talk = function( method, path, fields, callback ) {
 					failed = new Error('not json')
 				}
 			}
-			
+
 			// check HTTP status code
 			if( ! failed && response.statusCode < 300 ) {
 				doCallback( null, data )
@@ -746,7 +709,7 @@ app.talk = function( method, path, fields, callback ) {
 			}
 		})
 	})
-	
+
 	// timeout
 	request.on( 'socket', function( socket ) {
 		if( app.api.timeout ) {
@@ -756,7 +719,7 @@ app.talk = function( method, path, fields, callback ) {
 			})
 		}
 	})
-	
+
 	// error
 	request.on( 'error', function( error ) {
 		if( error.code === 'ECONNRESET' ) {
@@ -767,14 +730,13 @@ app.talk = function( method, path, fields, callback ) {
 		er.error = error
 		doCallback( er )
 	})
-	
+
 	// run it
 	if( method.match( /(POST|PUT|DELETE)/ ) ) {
 		request.end( querystr )
 	} else {
 		request.end()
 	}
-	
 }
 
 // wrap it up
