@@ -221,7 +221,8 @@ Error
 
 ### domains.delete ( domainname, cb )
 
-Delete a domains and its DNS records from your account
+Delete a domains and its DNS records from your account.
+Either use the domainname or its ID.
 
 ```js
 dnsimple.domains.delete( 'two.com', console.log )
@@ -231,6 +232,7 @@ dnsimple.domains.delete( 'two.com', console.log )
 ### domains.resetToken ( domainname, cb )
 
 Reset the domain specific API-token.
+Either use the domainname or its ID.
 
 ```js
 dnsimple.domains.resetToken( 'two.com', console.log )
@@ -240,6 +242,7 @@ dnsimple.domains.resetToken( 'two.com', console.log )
 ### domains.push ( domainname, email, contactId, cb )
 
 Give the domain to another DNSimple user.
+Either use the domainname or its ID.
 
 ```js
 dnsimple.domains.push( 'two.com', 'other@user.tld', '123', console.log )
