@@ -637,6 +637,10 @@ app.talk = function( method, path, fields, callback ) {
 			// check HTTP status code
 			if( ! failed && response.statusCode < 300 ) {
 				doCallback( null, data )
+			} else if( data.error || data.errors || (response.statusCode >= 400 && data.message) ) {
+				var error = new Error('API error')
+				error.error = data.message || data.error || data.errors.name[0] || null
+				doCallback( error )
 			} else {
 				var error = failed || new Error('HTTP error')
 				error.code = response.statusCode
