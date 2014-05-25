@@ -6,7 +6,6 @@ You need a DNSimple account to use this.
 
 * [Documentation](https://github.com/fvdm/nodejs-dnsimple/blob/master/README.md)
 * [Changelog](https://github.com/fvdm/nodejs-dnsimple/blob/master/CHANGELOG.md)
-* [Examples](https://github.com/fvdm/nodejs-dnsimple/wiki)
 
 * [node](http://nodejs.org/)
 * [DNSimple](https://dnsimple.com/)
