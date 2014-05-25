@@ -25,5 +25,8 @@
   "license": {
     "type":                "Public Domain",
     "url":                 "https://github.com/fvdm/nodejs-dnsimple/raw/master/UNLICENSE"
+  },
+  "scripts": {
+    "test":                "test.js"
   }
 }
