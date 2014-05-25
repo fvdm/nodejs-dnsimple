@@ -111,6 +111,35 @@ When everything looks alright `err` will be _null_ and `data` will be the parsed
 Domains
 -------
 
+### DomainObject
+
+When below `DomainObject` is mentioned, it looks like the one below.
+It is passed through directly from the API.
+
+```js
+{ id: 1111,
+  user_id: 432,
+  registrant_id: null,
+  name: 'example.net',
+  unicode_name: 'example.net',
+  token: 'uwakVhw4AB4ibbn4_gv',
+  state: 'hosted',
+  language: null,
+  lockable: true,
+  auto_renew: false,
+  whois_protected: false,
+  record_count: 13,
+  service_count: 0,
+  expires_on: null,
+  created_at: '2012-08-04T14:31:10.058Z',
+  updated_at: '2013-12-23T15:24:50.250Z',
+  parsed_expiration_date: null,
+  expires_at: null,
+  name_server_status: null,
+  'private_whois?': false }
+```
+
+
 ### domains.list ( [simpleBool], callback )
 
 List domainnames in your account.
@@ -134,29 +163,8 @@ dnsimple.domains.list( true, console.log )
 An array with your domainnames.
 
 ```js
-[ { auto_renew: null,
-    created_at: '2011-01-09T02:24:58Z',
-    expires_at: null,
-    id: 123,
-    language: null,
-    last_name_server_status_check: '2012-05-18T18:53:24Z',
-    lockable: null,
-    name: 'one.com',
-    name_server_status: 'inactive',
-    parsed_expiration_date: null,
-    real_time: null,
-    registrant_id: null,
-    registration_status: 'hosted',
-    state: 'hosted',
-    token: 'Zp1J...',
-    unicode_name: 'one.com',
-    updated_at: '2012-05-18T18:53:24Z',
-    use_route53: null,
-    user_id: 121,
-    uses_external_name_servers: null,
-    record_count: 1,
-    service_count: 0,
-    'private_whois?': false } ]
+[ DomainObject,
+  DomainObject ]
 ```
 
 
@@ -169,14 +177,19 @@ List only domains with names matching on regex.
 dnsimple.domains.findByRegex( '\.com$', console.log )
 ```
 
+Same output format as `domains.list`.
+
 
 ### domains.show ( domainname, cb )
 
-Get details about one domainname
+Get details about one domainname.
+Either use the domainname or its ID.
 
 ```js
 dnsimple.domains.show( 'one.com', console.log )
 ```
+
+Output: `DomainObject`
 
 
 ### domains.add ( domainname, cb )
@@ -184,7 +197,25 @@ dnsimple.domains.show( 'one.com', console.log )
 Add a domain to your account
 
 ```js
-dnsimple.domains.add( 'two.com', console.log )
+dnsimple.domains.add( 'mydomain.net', console.log )
+```
+
+Success
+
+`DomainObject`
+
+Error
+
+```js
+{ [Error: HTTP error]
+  code: 400,
+  data: { errors: { name: [ 'has already been taken' ] } } }
+```
+
+```js
+{ [Error: HTTP error]
+  code: 400,
+  data: { errors: { name: [ 'is an invalid domain' ] } } }
 ```
 
 
