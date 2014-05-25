@@ -677,8 +677,8 @@ app.talk = function( method, path, fields, callback ) {
 
 // wrap it up
 module.exports = function( setup ) {
-	for( var i = 0; i < setup.length; i++ ) {
-		app.api[i] = setup[i]
+	for( var i in setup ) {
+		app.api[ i ] = setup[ i ]
 	}
 	return app
 }
