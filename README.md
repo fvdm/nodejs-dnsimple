@@ -4,12 +4,12 @@ nodejs-dnsimple
 This is an unofficial DNSimple API module for node.js.
 You need a DNSimple account to use this.
 
-* [Documentation](https://github.com/fvdm/nodejs-dnsimple/blob/master/README.md)
-* [Changelog](https://github.com/fvdm/nodejs-dnsimple/blob/master/CHANGELOG.md)
+[Documentation](https://github.com/fvdm/nodejs-dnsimple/blob/master/README.md) -
+[Changelog](https://github.com/fvdm/nodejs-dnsimple/blob/master/CHANGELOG.md)
 
-* [node](http://nodejs.org/)
-* [DNSimple](https://dnsimple.com/)
-* [DNSimple API documentation](http://developer.dnsimple.com/)
+[node.js](http://nodejs.org/) -
+[DNSimple](https://dnsimple.com/) -
+[API documentation](http://developer.dnsimple.com/)
 
 
 Installation
