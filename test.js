@@ -18,6 +18,17 @@ process.on( 'exit', function() {
 	}
 })
 
+// Queue to prevent flooding
+var queue = []
+var next = 0
+
+function doNext() {
+	next++
+	if( queue[next] ) {
+		queue[next]()
+	}
+}
+
 // doTest( passErr, 'methods', [
 //   ['feeds', typeof feeds === 'object']
 // ])
@@ -42,10 +53,12 @@ function doTest( err, label, tests ) {
 			console.log( label +': failed ('+ testErrors.join(', ') +')' )
 		}
 	}
+	
+	doNext()
 }
 
 // METHODS
-doTest( null, 'methods', [
+queue.push( function() { doTest( null, 'methods', [
 	['dns.list', typeof ds.dns.list === 'function'],
 	['dns.show', typeof ds.dns.show === 'function'],
 	['dns.add', typeof ds.dns.add === 'function'],
@@ -110,16 +123,21 @@ doTest( null, 'methods', [
 	['statements', typeof ds.statements === 'function'],
 	['prices', typeof ds.prices === 'function'],
 	['talk', typeof ds.talk === 'function']
-])
+])})
 
 // First check API access
-ds.talk('GET', 'prices', function(err, data) {
-	if(err) {
-		console.log('API access: failed ('+ err.message +')\n')
-		console.log(err.stack)
-		errors++
-		process.exit(1)
-	}
+queue.push( function() {
+	ds.talk('GET', 'prices', function(err, data) {
+		if(err) {
+			console.log('API access: failed ('+ err.message +')')
+			console.log(err.stack)
+			errors++
+			process.exit(1)
+		} else {
+			doNext()
+			console.log('API access: ok')
+		}
+	})
 })
 
 // Real world tests
@@ -131,5 +149,15 @@ function testArrObj( src ) {
 	]
 }
 
-ds.prices( function( err, data ) { doTest( err, 'prices', testArrObj(data) )})
-ds.statements( function( err, data ) { doTest( err, 'statements', testArrObj(data) )})
+// Account
+queue.push( function() {
+	ds.prices( function( err, data ) { doTest( err, 'prices', testArrObj(data) )})
+})
+
+queue.push( function() {
+	ds.statements( function( err, data ) { doTest( err, 'statements', testArrObj(data) )})
+})
+
+
+// Start the tests
+queue[0]()
