@@ -111,3 +111,13 @@ doTest( null, 'methods', [
 	['prices', typeof ds.prices === 'function'],
 	['talk', typeof ds.talk === 'function']
 ])
+
+// First check API access
+ds.talk('GET', 'prices', function(err, data) {
+	if(err) {
+		console.log('API access: failed ('+ err.message +')')
+		console.log(err.stack)
+		errors++
+		process.exit(1)
+	}
+})
