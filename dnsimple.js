@@ -508,10 +508,16 @@ app.contacts = {
 
 app.subscription = function( vars, callback ) {
 	if( ! callback ) {
-		app.talk( 'GET', 'subscription', vars )
+		app.talk( 'GET', 'subscription', function( err, data ) {
+			if( err ) { callback( err ); return }
+			callback( null, data.subscription )
+		})
 	} else {
 		var data = {subscription: vars}
-		app.talk( 'PUT', 'subscription', data, callback )
+		app.talk( 'PUT', 'subscription', data, function( err, res ) {
+			if( err ) { callback( err ); return }
+			callback( null, res.subscription )
+		})
 	}
 }
 
