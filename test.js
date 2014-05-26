@@ -2,8 +2,8 @@
 // set env API_EMAIL and API_TOKEN (Travis CI)
 // or use cli arguments: npm test --email=me@some.where --token=abc123
 var ds = require('./')({
-	email: process.env.API_EMAIL || process.env.npm_config_email || null,
-	token: process.env.API_TOKEN || process.env.npm_config_token || null
+	email: process.env.npm_config_email || process.env.API_EMAIL || null,
+	token: process.env.npm_config_token || process.env.API_TOKEN || null
 })
 
 // handle exits
