@@ -510,7 +510,7 @@ app.subscription = function( vars, callback ) {
 	if( ! callback ) {
 		app.talk( 'GET', 'subscription', function( err, data ) {
 			if( err ) { callback( err ); return }
-			callback( null, data.subscription )
+			vars( null, data.subscription )
 		})
 	} else {
 		var data = {subscription: vars}
