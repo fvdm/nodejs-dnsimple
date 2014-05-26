@@ -27,6 +27,6 @@
     "url":                 "https://github.com/fvdm/nodejs-dnsimple/raw/master/UNLICENSE"
   },
   "scripts": {
-    "test":                "test.js"
+    "test":                "node test.js"
   }
 }
