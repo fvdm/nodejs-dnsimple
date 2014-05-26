@@ -121,3 +121,5 @@ ds.talk('GET', 'prices', function(err, data) {
 		process.exit(1)
 	}
 })
+
+// Real world tests
