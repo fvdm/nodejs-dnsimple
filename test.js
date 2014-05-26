@@ -132,3 +132,4 @@ function listArrObj( name, src ) {
 }
 
 ds.prices( function( err, data ) { doTest( err, 'prices', listArrObj( 'data', data )) })
+ds.statements( function( err, data ) { doTest( err, 'statements', listArrObj( 'data', data )) })
