@@ -123,3 +123,10 @@ ds.talk('GET', 'prices', function(err, data) {
 })
 
 // Real world tests
+ds.prices( function( err, data ) {
+	doTest( err, 'prices', [
+		['data type', data && data instanceof Array],
+		['data size', data && data.length >= 1],
+		['data item type', data && data[0] instanceof Object]
+	])
+})
