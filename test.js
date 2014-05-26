@@ -123,13 +123,13 @@ ds.talk('GET', 'prices', function(err, data) {
 })
 
 // Real world tests
-function listArrObj( name, src ) {
+function testArrObj( src ) {
 	return [
-		[name +' type', src && src instanceof Array],
-		[name +' size', src && src.length >= 1],
-		[name +' item type', src && src[0] instanceof Object]
+		['data type', src && src instanceof Array],
+		['data size', src && src.length >= 1],
+		['item type', src && src[0] instanceof Object]
 	]
 }
 
-ds.prices( function( err, data ) { doTest( err, 'prices', listArrObj( 'data', data )) })
-ds.statements( function( err, data ) { doTest( err, 'statements', listArrObj( 'data', data )) })
+ds.prices( function( err, data ) { doTest( err, 'prices', testArrObj(data) )})
+ds.statements( function( err, data ) { doTest( err, 'statements', testArrObj(data) )})
