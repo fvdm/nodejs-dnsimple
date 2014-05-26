@@ -24,7 +24,8 @@ process.on( 'exit', function() {
 function doTest( err, label, tests ) {
 	if( err instanceof Error ) {
 		console.log( label +': ERROR' )
-		console.log( err, err.stack )
+		console.log( err )
+		console.log( err.stack )
 		errors++
 	} else {
 		var testErrors = []
