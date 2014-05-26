@@ -149,6 +149,12 @@ function testArrObj( src ) {
 	]
 }
 
+function testObj( src ) {
+	return [
+		['data type', src && typeof src === 'object']
+	]
+}
+
 // Account
 queue.push( function() {
 	ds.prices( function( err, data ) { doTest( err, 'prices', testArrObj(data) )})
@@ -156,6 +162,10 @@ queue.push( function() {
 
 queue.push( function() {
 	ds.statements( function( err, data ) { doTest( err, 'statements', testArrObj(data) )})
+})
+
+queue.push( function() {
+	ds.subscription( function( err, data ) { doTest( err, 'subscription', testObj(data) )})
 })
 
 
