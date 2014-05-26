@@ -168,6 +168,11 @@ queue.push( function() {
 	ds.subscription( function( err, data ) { doTest( err, 'subscription', testObj(data) )})
 })
 
+// Domains
+queue.push( function() {
+	ds.domains.list( function( err, data ) { doTest( err, 'domains', testArrObj(data) )})
+})
+
 
 // Start the tests
 queue[0]()
