@@ -23,7 +23,7 @@ process.on( 'exit', function() {
 // ])
 function doTest( err, label, tests ) {
 	if( err instanceof Error ) {
-		console.log( label +': ERROR' )
+		console.log( label +': ERROR\n' )
 		console.log( err )
 		console.log( err.stack )
 		errors++
@@ -115,7 +115,7 @@ doTest( null, 'methods', [
 // First check API access
 ds.talk('GET', 'prices', function(err, data) {
 	if(err) {
-		console.log('API access: failed ('+ err.message +')')
+		console.log('API access: failed ('+ err.message +')\n')
 		console.log(err.stack)
 		errors++
 		process.exit(1)
