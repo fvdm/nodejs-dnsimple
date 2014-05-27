@@ -152,8 +152,7 @@ queue.push( function() {
 function testArrObj( src ) {
 	return [
 		['data type', src && src instanceof Array],
-		['data size', src && src.length >= 1],
-		['item type', src && src[0] instanceof Object]
+		['item type', src && src[0] && src[0] instanceof Object]
 	]
 }
 
