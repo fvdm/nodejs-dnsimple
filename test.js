@@ -162,6 +162,42 @@ function testObj( src ) {
 	]
 }
 
+// bogus material to use
+var bogus = {
+	domain: 'test-'+ Date.now() +'-delete.me',
+	dns: [
+		{ name: 'testing',
+		  record_type: 'A',
+		  content: '127.0.0.1',
+		  ttl: 86400
+		},
+		{ name: 'testing',
+		  record_type: 'MX',
+		  content: 'localhost',
+		  prio: 10
+		}
+	],
+	contact: {
+		first_name: 'John',
+		last_name: 'Smith',
+		address1: '1000 SW 1st Street',
+		city: 'Miami',
+		state_province: 'FL',
+		postal_code: '33143',
+		country: 'US',
+		email_address: 'john.smith@example.com',
+		phone: '505 111 2222',
+		organization_name: 'Little Co Inc.',
+		job_title: 'President',
+		label: 'Office'
+	},
+	template: {
+		name: 'Test dnsimple.js',
+		short_name: 'test',
+		description: 'Add fake DNS records.'
+	}
+}
+
 queue.push( function() {
 	ds.prices( function( err, data ) { doTest( err, 'prices', testArrObj(data) )})
 })
