@@ -509,7 +509,7 @@ app.contacts = {
 app.subscription = function( vars, callback ) {
 	if( ! callback ) {
 		app.talk( 'GET', 'subscription', function( err, data ) {
-			if( err ) { callback( err ); return }
+			if( err ) { vars( err ); return }
 			vars( null, data.subscription )
 		})
 	} else {
