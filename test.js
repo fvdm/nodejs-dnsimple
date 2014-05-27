@@ -40,6 +40,7 @@ function doTest( err, label, tests ) {
 		console.log( label +': ERROR\n' )
 		console.log( err )
 		console.log( err.stack )
+		console.log()
 		errors++
 	} else {
 		var testErrors = []
