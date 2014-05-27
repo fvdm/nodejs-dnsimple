@@ -1,3 +1,5 @@
+var util = require('util')
+
 // Setup
 // set env DNSIMPLE_EMAIL and DNSIMPLE_TOKEN (Travis CI)
 // or use cli arguments: npm test --email=me@some.where --token=abc123
@@ -37,8 +39,8 @@ function doNext() {
 // ])
 function doTest( err, label, tests ) {
 	if( err instanceof Error ) {
-		console.error( label +': ERROR\n' )
-		console.error( err )
+		console.error( label +': \033[31mERROR\033[0m\n' )
+		console.error( util.inspect(err, false, 10, true) )
 		console.log()
 		console.error( err.stack )
 		console.log()
@@ -55,7 +57,7 @@ function doTest( err, label, tests ) {
 		if( testErrors.length == 0 ) {
 			console.log( label +': ok' )
 		} else {
-			console.error( label +': failed ('+ testErrors.join(', ') +')' )
+			console.error( label +': \033[31mfailed\033[0m ('+ testErrors.join(', ') +')' )
 		}
 	}
 	
