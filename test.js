@@ -134,8 +134,8 @@ queue.push( function() {
 			errors++
 			process.exit(1)
 		} else {
-			doNext()
 			console.log('API access: ok')
+			doNext()
 		}
 	})
 })
