@@ -37,9 +37,10 @@ function doNext() {
 // ])
 function doTest( err, label, tests ) {
 	if( err instanceof Error ) {
-		console.log( label +': ERROR\n' )
-		console.log( err )
-		console.log( err.stack )
+		console.error( label +': ERROR\n' )
+		console.error( err )
+		console.log()
+		console.error( err.stack )
 		console.log()
 		errors++
 	} else {
@@ -54,7 +55,7 @@ function doTest( err, label, tests ) {
 		if( testErrors.length == 0 ) {
 			console.log( label +': ok' )
 		} else {
-			console.log( label +': failed ('+ testErrors.join(', ') +')' )
+			console.error( label +': failed ('+ testErrors.join(', ') +')' )
 		}
 	}
 	
