@@ -159,11 +159,11 @@ function testObj( src ) {
 	]
 }
 
-// Account
 queue.push( function() {
 	ds.prices( function( err, data ) { doTest( err, 'prices', testArrObj(data) )})
 })
 
+// Account
 queue.push( function() {
 	ds.statements( function( err, data ) { doTest( err, 'statements', testArrObj(data) )})
 })
