@@ -5,7 +5,8 @@ var util = require('util')
 // or use cli arguments: npm test --email=me@some.where --token=abc123
 var ds = require('./')({
 	email: process.env.DNSIMPLE_EMAIL || process.env.npm_config_email || null,
-	token: process.env.DNSIMPLE_TOKEN || process.env.npm_config_token || null
+	token: process.env.DNSIMPLE_TOKEN || process.env.npm_config_token || null,
+	hostname: 'api.sandbox.dnsimple.com'
 })
 
 // handle exits
