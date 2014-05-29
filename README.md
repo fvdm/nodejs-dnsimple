@@ -15,6 +15,8 @@ You need a DNSimple account to use this.
 Installation
 ------------
 
+[![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=Tests)](https://travis-ci.org/fvdm/nodejs-dnsimple)
+
 The release on npm is the latest stable version:
 
 	npm install dnsimple
