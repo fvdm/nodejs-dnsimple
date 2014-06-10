@@ -4,8 +4,8 @@ var util = require('util')
 // set env DNSIMPLE_EMAIL and DNSIMPLE_TOKEN (Travis CI)
 // or use cli arguments: npm test --dnsemail=me@some.where --dnstoken=abc123
 var ds = require('./')({
-	email: process.env.DNSIMPLE_EMAIL || process.env.npm_config_dnsemail || null,
-	token: process.env.DNSIMPLE_TOKEN || process.env.npm_config_dnstoken || null,
+	email: process.env.npm_config_dnsemail || process.env.DNSIMPLE_EMAIL || null,
+	token: process.env.npm_config_dnstoken || process.env.DNSIMPLE_TOKEN || null,
 	hostname: 'api.sandbox.dnsimple.com'
 })
 
