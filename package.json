@@ -21,7 +21,7 @@
   "engines": {
     "node":                "*"
   },
-  "keywords":              ["dnsimple", "domains", "dns", "api"],
+  "keywords":              ["dnsimple", "domains", "dns", "api", "unlicense"],
   "license": {
     "type":                "Public Domain",
     "url":                 "https://github.com/fvdm/nodejs-dnsimple/raw/master/UNLICENSE"
