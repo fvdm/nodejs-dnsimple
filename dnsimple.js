@@ -78,137 +78,137 @@ app.dns = {
 // DOMAINS
 
 app.domains = {
-	
-	// domains.list
-	// Simple returns only array with domainnames
-	list: function( simple, callback ) {
-		if( !callback && typeof simple === 'function' ) {
-			var callback = simple
-			var simple = false
-		}
 
-		var result = []
+  // domains.list
+  // Simple returns only array with domainnames
+  list: function( simple, callback ) {
+    if( !callback && typeof simple === 'function' ) {
+      var callback = simple
+      var simple = false
+    }
 
-		app.talk( 'GET', 'domains', function( error, domains ) {
-			if( error ) { callback( error ); return }
-			for( var i = 0; i < domains.length; i++ ) {
-				if( simple ) {
-					result.push( domains[i].domain.name )
-				} else {
-					result.push( domains[i].domain )
-				}
-			}
-			callback( null, result )
-		})
-	},
+    var result = []
 
-	// domains.findByRegex
-	findByRegex: function( regex, callback ) {
-		var result = []
-		app.domains.list( false, function( error, domains ) {
-			if( error ) { callback( error ); return }
-			var regexp = new RegExp( regex )
-			for( var i = 0; i < domains.length; i++ ) {
-				if( domains[i].name.match( regexp ) ) {
-					result.push( domains[i] )
-				}
-			}
-			callback( null, result )
-		})
-	},
+    app.talk( 'GET', 'domains', function( error, domains ) {
+      if( error ) { callback( error ); return }
+      for( var i = 0; i < domains.length; i++ ) {
+        if( simple ) {
+          result.push( domains[i].domain.name )
+        } else {
+          result.push( domains[i].domain )
+        }
+      }
+      callback( null, result )
+    })
+  },
 
-	// domains.show
-	show: function( domainname, callback ) {
-		app.talk( 'GET', 'domains/'+ domainname, function( error, domain ) {
-			if( error ) { callback( error ); return }
-			callback( null, domain.domain )
-		})
-	},
+  // domains.findByRegex
+  findByRegex: function( regex, callback ) {
+    var result = []
+    app.domains.list( false, function( error, domains ) {
+      if( error ) { callback( error ); return }
+      var regexp = new RegExp( regex )
+      for( var i = 0; i < domains.length; i++ ) {
+        if( domains[i].name.match( regexp ) ) {
+          result.push( domains[i] )
+        }
+      }
+      callback( null, result )
+    })
+  },
 
-	// domains.add
-	add: function( domainname, callback ) {
-		var dom = { domain: { name: domainname } }
-		app.talk( 'POST', 'domains', dom, function( error, domain ) {
-			if( error ) { callback( error ); return }
-			callback( null, domain.domain )
-		})
-	},
+  // domains.show
+  show: function( domainname, callback ) {
+    app.talk( 'GET', 'domains/'+ domainname, function( error, domain ) {
+      if( error ) { callback( error ); return }
+      callback( null, domain.domain )
+    })
+  },
 
-	// domains.delete
-	delete: function( domainname, callback ) {
-		app.talk( 'DELETE', 'domains/'+ domainname, callback )
-	},
+  // domains.add
+  add: function( domainname, callback ) {
+    var dom = { domain: { name: domainname } }
+    app.talk( 'POST', 'domains', dom, function( error, domain ) {
+      if( error ) { callback( error ); return }
+      callback( null, domain.domain )
+    })
+  },
 
-	// domains.resetToken
-	resetToken: function( domainname, callback ) {
-		app.talk( 'POST', 'domains/'+ domainname +'/token', callback )
-	},
+  // domains.delete
+  delete: function( domainname, callback ) {
+    app.talk( 'DELETE', 'domains/'+ domainname, callback )
+  },
 
-	// domains.push
-	push: function( domainname, email, regId, callback ) {
-		var data = { push: {
-			new_user_email: email,
-			contact_id: regId
-		}}
-		app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback )
-	},
+  // domains.resetToken
+  resetToken: function( domainname, callback ) {
+    app.talk( 'POST', 'domains/'+ domainname +'/token', callback )
+  },
 
-	// domains.vanitynameservers
-	vanitynameservers: function( domainname, enable, callback ) {
-		if( enable ) {
-			app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', {auto_renewal:{}}, callback )
-		} else {
-			app.talk( 'DELETE', 'domains/'+ domainname +'/vanity_name_servers', callback )
-		}
-	},
+  // domains.push
+  push: function( domainname, email, regId, callback ) {
+    var data = { push: {
+      new_user_email: email,
+      contact_id: regId
+    }}
+    app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback )
+  },
 
-
-	// MEMBERSHIPS
-
-	memberships: {
-		// domains.memberships.list
-		list: function( domainname, callback ) {
-			app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback )
-		},
-
-		// domains.memberships.add
-		add: function( domainname, email, callback ) {
-			var data = {membership: {email: email}}
-			app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback )
-		},
-
-		// domains.memberships.delete
-		delete: function( domainname, member, callback ) {
-			app.talk( 'DELETE', 'domains'+ domainname +'/memberships/'+ member, callback )
-		}
-	},
+  // domains.vanitynameservers
+  vanitynameservers: function( domainname, enable, callback ) {
+    if( enable ) {
+      app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', {auto_renewal:{}}, callback )
+    } else {
+      app.talk( 'DELETE', 'domains/'+ domainname +'/vanity_name_servers', callback )
+    }
+  },
 
 
-	// REGISTRATION
+  // MEMBERSHIPS
 
-	// domains.check
-	// Check availability
-	check: function( domainname, callback ) {
-		app.talk( 'GET', 'domains/'+ domainname +'/check', {}, callback )
-	},
+  memberships: {
+    // domains.memberships.list
+    list: function( domainname, callback ) {
+      app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback )
+    },
 
-	// domains.register
-	// Register domainname - auto-payment!
-	register: function( domainname, registrantID, extendedAttribute, callback ) {
-		var vars = {
-			domain: {
-				name: domainname,
-				registrant_id: registrantID
-			}
-		}
-		
-		// fix 3 & 4 params
-		if( !callback && typeof extendedAttribute == 'function' ) {
-			var callback = extendedAttribute
-		} else if( typeof extendedAttribute == 'object' ) {
-			vars.domain.extended_attribute = extendedAttribute
-		}
-		
+    // domains.memberships.add
+    add: function( domainname, email, callback ) {
+      var data = {membership: {email: email}}
+      app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback )
+    },
+
+    // domains.memberships.delete
+    delete: function( domainname, member, callback ) {
+      app.talk( 'DELETE', 'domains'+ domainname +'/memberships/'+ member, callback )
+    }
+  },
+
+
+  // REGISTRATION
+
+  // domains.check
+  // Check availability
+  check: function( domainname, callback ) {
+    app.talk( 'GET', 'domains/'+ domainname +'/check', {}, callback )
+  },
+
+  // domains.register
+  // Register domainname - auto-payment!
+  register: function( domainname, registrantID, extendedAttribute, callback ) {
+    var vars = {
+      domain: {
+        name: domainname,
+        registrant_id: registrantID
+      }
+    }
+
+    // fix 3 & 4 params
+    if( !callback && typeof extendedAttribute == 'function' ) {
+      var callback = extendedAttribute
+    } else if( typeof extendedAttribute == 'object' ) {
+      vars.domain.extended_attribute = extendedAttribute
+    }
+
 		// send
 		app.talk( 'POST', 'domain_registrations', vars, callback )
 	},
