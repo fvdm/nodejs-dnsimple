@@ -632,6 +632,8 @@ app.talk = function( method, path, fields, callback ) {
       var failed = null
 
       meta.statusCode = response.statusCode
+      meta.request_id = response.headers['x-request-id']
+      meta.runtime = response.headers['x-runtime']
 
       try {
         data = JSON.parse( data )
