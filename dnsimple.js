@@ -646,6 +646,10 @@ app.talk = function( method, path, fields, callback ) {
 
       meta.statusCode = response.statusCode
 
+      if( typeof response.headers['x-dnsimple-otp-token'] === 'string' ) {
+        meta.twoFactorToken = response.headers['x-dnsimple-otp-token']
+      }
+
       try {
         data = JSON.parse( data )
       } catch(e) {
