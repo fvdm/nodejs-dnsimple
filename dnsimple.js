@@ -657,7 +657,11 @@ app.talk = function( method, path, fields, callback ) {
       if( ! failed && response.statusCode < 300 ) {
         doCallback( null, data )
       } else {
-        var error = failed || new Error('API error')
+        if( response.statusCode == 401 && response.headers['x-dnsimple-otp'] == 'required' ) {
+          var error = new Error('twoFactorOTP required')
+        } else {
+          var error = failed || new Error('API error')
+        }
         error.code = response.statusCode
         error.error = data.message || data.error || data.errors.name[0] || null
         error.data = data
