@@ -20,6 +20,8 @@ app.api = {
   email: null,
   token: null,
   domainToken: null,
+  twoFactorOTP: null,   // one time password (ie. Authy)
+  twoFactorToken: null, // OTP exchange token
   password: null,
   timeout: 5000
 }
@@ -570,7 +572,7 @@ app.talk = function( method, path, fields, callback ) {
   }
 
   // credentials set?
-  if( ! (app.api.email && app.api.token) && ! (app.api.email && app.api.password) && ! app.api.domainToken ) {
+  if( ! (app.api.email && app.api.token) && ! (app.api.email && app.api.password) && ! app.api.domainToken && ! app.api.twoFactorToken ) {
     doCallback( new Error('credentials missing') )
     return
   }
@@ -606,8 +608,19 @@ app.talk = function( method, path, fields, callback ) {
   }
 
   // password authentication
-  if( ! app.api.token && ! app.api.domainToken && app.api.password && app.api.email ) {
+  if( ! app.api.twoFactorToken && ! app.api.token && ! app.api.domainToken && app.api.password && app.api.email ) {
     options.auth = app.api.email +':'+ app.api.password
+
+    // two-factor authentication (2FA)
+    if( app.api.twoFactorOTP ) {
+      headers['X-DNSimple-2FA-Strict'] = 1
+      headers['X-DNSimple-OTP'] = app.api.twoFactorOTP
+    }
+  }
+
+  if( app.api.twoFactorToken ) {
+    options.auth = app.api.twoFactorToken +':x-2fa-basic'
+    headers['X-DNSimple-2FA-Strict'] = 1
   }
 
   // start request
