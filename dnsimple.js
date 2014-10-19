@@ -20,6 +20,8 @@ app.api = {
   email: null,
   token: null,
   domainToken: null,
+  twoFactorOTP: null,   // one time password (ie. Authy)
+  twoFactorToken: null, // OTP exchange token
   password: null,
   timeout: 5000
 }
@@ -570,7 +572,7 @@ app.talk = function( method, path, fields, callback ) {
   }
 
   // credentials set?
-  if( ! (app.api.email && app.api.token) && ! (app.api.email && app.api.password) && ! app.api.domainToken ) {
+  if( ! (app.api.email && app.api.token) && ! (app.api.email && app.api.password) && ! app.api.domainToken && ! app.api.twoFactorToken ) {
     doCallback( new Error('credentials missing') )
     return
   }
@@ -606,8 +608,19 @@ app.talk = function( method, path, fields, callback ) {
   }
 
   // password authentication
-  if( ! app.api.token && ! app.api.domainToken && app.api.password && app.api.email ) {
+  if( ! app.api.twoFactorToken && ! app.api.token && ! app.api.domainToken && app.api.password && app.api.email ) {
     options.auth = app.api.email +':'+ app.api.password
+
+    // two-factor authentication (2FA)
+    if( app.api.twoFactorOTP ) {
+      headers['X-DNSimple-2FA-Strict'] = 1
+      headers['X-DNSimple-OTP'] = app.api.twoFactorOTP
+    }
+  }
+
+  if( app.api.twoFactorToken ) {
+    options.auth = app.api.twoFactorToken +':x-2fa-basic'
+    headers['X-DNSimple-2FA-Strict'] = 1
   }
 
   // start request
@@ -635,6 +648,10 @@ app.talk = function( method, path, fields, callback ) {
       meta.request_id = response.headers['x-request-id']
       meta.runtime = response.headers['x-runtime']
 
+      if( typeof response.headers['x-dnsimple-otp-token'] === 'string' ) {
+        meta.twoFactorToken = response.headers['x-dnsimple-otp-token']
+      }
+
       try {
         data = JSON.parse( data )
       } catch(e) {
@@ -649,7 +666,11 @@ app.talk = function( method, path, fields, callback ) {
       if( ! failed && response.statusCode < 300 ) {
         doCallback( null, data, meta )
       } else {
-        var error = failed || new Error('API error')
+        if( response.statusCode == 401 && response.headers['x-dnsimple-otp'] == 'required' ) {
+          var error = new Error('twoFactorOTP required')
+        } else {
+          var error = failed || new Error('API error')
+        }
         error.code = response.statusCode
         error.error = data.message || data.error || data.errors.name[0] || null
         error.data = data
