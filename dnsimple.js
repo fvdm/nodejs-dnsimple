@@ -32,21 +32,21 @@ app.api = {
 app.dns = {
   // dns.list
   list: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/records', function( error, records ) {
-      if( error ) { callback( error ); return }
+    app.talk( 'GET', 'domains/'+ domainname +'/records', function( error, records, meta ) {
+      if( error ) { callback( error, null, meta ); return }
       var result = []
       for( var i = 0; i < records.length; i++ ) {
         result.push( records[i].record )
       }
-      callback( null, result )
+      callback( null, result, meta )
     })
   },
 
   // dns.show
   show: function( domainname, recordID, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, function( error, record ) {
-      if( error ) { callback( error ); return }
-      callback( null, record.record )
+    app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, function( error, record, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, record.record, meta )
     })
   },
 
@@ -55,18 +55,18 @@ app.dns = {
   // OPTIONAL: ttl, prio
   add: function( domainname, record, callback ) {
     var post = { record: record }
-    app.talk( 'POST', 'domains/'+ domainname +'/records', post, function( error, result ) {
-      if( error ) { callback( error ); return }
-      callback( null, result.record )
+    app.talk( 'POST', 'domains/'+ domainname +'/records', post, function( error, result, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, result.record, meta )
     })
   },
 
   // dns.update
   update: function( domainname, recordID, record, callback ) {
     var post = { record: record }
-    app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( error, result ) {
-      if( error ) { callback( error ); return }
-      callback( null, result.record )
+    app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( error, result, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, result.record, meta )
     })
   },
 
@@ -91,8 +91,8 @@ app.domains = {
 
     var result = []
 
-    app.talk( 'GET', 'domains', function( error, domains ) {
-      if( error ) { callback( error ); return }
+    app.talk( 'GET', 'domains', function( error, domains, meta ) {
+      if( error ) { callback( error, null, meta ); return }
       for( var i = 0; i < domains.length; i++ ) {
         if( simple ) {
           result.push( domains[i].domain.name )
@@ -100,39 +100,39 @@ app.domains = {
           result.push( domains[i].domain )
         }
       }
-      callback( null, result )
+      callback( null, result, meta )
     })
   },
 
   // domains.findByRegex
   findByRegex: function( regex, callback ) {
     var result = []
-    app.domains.list( false, function( error, domains ) {
-      if( error ) { callback( error ); return }
+    app.domains.list( false, function( error, domains, meta ) {
+      if( error ) { callback( error, null, meta ); return }
       var regexp = new RegExp( regex )
       for( var i = 0; i < domains.length; i++ ) {
         if( domains[i].name.match( regexp ) ) {
           result.push( domains[i] )
         }
       }
-      callback( null, result )
+      callback( null, result, meta )
     })
   },
 
   // domains.show
   show: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname, function( error, domain ) {
-      if( error ) { callback( error ); return }
-      callback( null, domain.domain )
+    app.talk( 'GET', 'domains/'+ domainname, function( error, domain, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, domain.domain, meta )
     })
   },
 
   // domains.add
   add: function( domainname, callback ) {
     var dom = { domain: { name: domainname } }
-    app.talk( 'POST', 'domains', dom, function( error, domain ) {
-      if( error ) { callback( error ); return }
-      callback( null, domain.domain )
+    app.talk( 'POST', 'domains', dom, function( error, domain, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, domain.domain, meta )
     })
   },
 
@@ -305,26 +305,26 @@ app.domains = {
     // domains.services.list
     // already applied
     list: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( error, result ) {
-        if( error ) { callback( error ); return }
+      app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( error, result, meta ) {
+        if( error ) { callback( error, null, meta ); return }
         var services = []
         for( var i = 0; i < result.length; i++ ) {
           services.push( result[i].service )
         }
-        callback( null, services )
+        callback( null, services, meta )
       })
     },
 
     // domains.services.available
     // available
     available: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( error, result ) {
-        if( error ) { callback( error ); return }
+      app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( error, result, meta ) {
+        if( error ) { callback( error, null, meta ); return }
         var services = []
         for( var i = 0; i < result.length; i++ ) {
           services.push( result[i].service )
         }
-        callback( null, services )
+        callback( null, services, meta )
       })
     },
 
@@ -356,22 +356,22 @@ app.services = {
   // services.list
   // List all supported services
   list: function( callback ) {
-    app.talk( 'GET', 'services', function( error, list ) {
-      if( error ) { callback( error ); return }
+    app.talk( 'GET', 'services', function( error, list, meta ) {
+      if( error ) { callback( error, null, meta ); return }
       var services = []
       for( var i = 0; i < list.length; i++ ) {
         services.push( list[i].service )
       }
-      callback( null, services )
+      callback( null, services, meta )
     })
   },
 
   // services.show
   // Get one service' details
   show: function( serviceID, callback ) {
-    app.talk( 'GET', 'services/'+ serviceID, function( error, service ) {
-      if( error ) { callback( error ); return }
-      callback( null, service.service )
+    app.talk( 'GET', 'services/'+ serviceID, function( error, service, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, service.service, meta )
     })
   }
 }
@@ -383,22 +383,22 @@ app.templates = {
   // templates.list
   // List all of the custom templates in the account
   list: function( callback ) {
-    app.talk( 'GET', 'templates', function( error, list ) {
-      if( error ) { callback( error ); return }
+    app.talk( 'GET', 'templates', function( error, list, meta ) {
+      if( error ) { callback( error, null, meta ); return }
       var templates = []
       for( var i = 0; i < list.length; i++ ) {
         templates.push( list[i].dns_template )
       }
-      callback( null, templates )
+      callback( null, templates, meta )
     })
   },
 
   // templates.show
   // Get a specific template
   show: function( templateID, callback ) {
-    app.talk( 'GET', 'templates/'+ templateID, function( error, template ) {
-      if( error ) { callback( error ); return }
-      callback( null, template.dns_template )
+    app.talk( 'GET', 'templates/'+ templateID, function( error, template, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, template.dns_template, meta )
     })
   },
 
@@ -408,9 +408,9 @@ app.templates = {
   // OPTIONAL: description
   add: function( template, callback ) {
     var set = { dns_template: template }
-    app.talk( 'POST', 'templates', set, function( error, result ) {
-      if( error ) { callback( error ); return }
-      callback( null, result.dns_template )
+    app.talk( 'POST', 'templates', set, function( error, result, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, result.dns_template, meta )
     })
   },
 
@@ -423,9 +423,9 @@ app.templates = {
   // templates.apply
   // Apply a template to a domain
   apply: function( domainname, templateID, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', function( error, result ) {
-      if( error ) { callback( error ); return }
-      callback( null, result )
+    app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', function( error, result, meta ) {
+      if( error ) { callback( error, null, meta ); return }
+      callback( null, result, meta )
     })
   },
 
@@ -434,22 +434,22 @@ app.templates = {
     // templates.records.list
     // list records in template
     list: function( templateID, callback ) {
-      app.talk( 'GET', 'templates/'+ templateID +'/template_records', function( error, result ) {
-        if( error ) { callback( error ); return }
+      app.talk( 'GET', 'templates/'+ templateID +'/template_records', function( error, result, meta ) {
+        if( error ) { callback( error, null, meta ); return }
         var records = []
         for( var i = 0; i < result.length; i++ ) {
           records.push( result[i].dns_template_record )
         }
-        callback( null, records )
+        callback( null, records, meta )
       })
     },
 
     // templates.records.show
     // Get one record for template
     show: function( templateID, recordID, callback ) {
-      app.talk( 'GET', 'templates/'+ templateID +'/template_records/'+ recordID, function( error, result ) {
-        if( error ) { callback( error ); return }
-        callback( null, result.dns_template_record )
+      app.talk( 'GET', 'templates/'+ templateID +'/template_records/'+ recordID, function( error, result, meta ) {
+        if( error ) { callback( error, null, meta ); return }
+        callback( null, result.dns_template_record, meta )
       })
     },
 
@@ -459,9 +459,9 @@ app.templates = {
     // OPTIONAL: ttl, prio
     add: function( templateID, record, callback ) {
       var rec = { dns_template_record: record }
-      app.talk( 'POST', 'templates/'+ templateID +'/template_records', rec, function( error, result ) {
-        if( error ) { callback( error ); return }
-        callback( null, result.dns_template_record )
+      app.talk( 'POST', 'templates/'+ templateID +'/template_records', rec, function( error, result, meta ) {
+        if( error ) { callback( error, null, meta ); return }
+        callback( null, result.dns_template_record, meta )
       })
     },
 
@@ -510,29 +510,29 @@ app.contacts = {
 
 app.subscription = function( vars, callback ) {
   if( ! callback ) {
-    app.talk( 'GET', 'subscription', function( err, data ) {
-      if( err ) { vars( err ); return }
-      vars( null, data.subscription )
+    app.talk( 'GET', 'subscription', function( err, data, meta ) {
+      if( err ) { vars( err, null, meta ); return }
+      vars( null, data.subscription, meta )
     })
   } else {
     var data = {subscription: vars}
-    app.talk( 'PUT', 'subscription', data, function( err, res ) {
-      if( err ) { callback( err ); return }
-      callback( null, res.subscription )
+    app.talk( 'PUT', 'subscription', data, function( err, res, meta ) {
+      if( err ) { callback( err, null, meta ); return }
+      callback( null, res.subscription, meta )
     })
   }
 }
 
 app.statements = function( callback ) {
-  app.talk( 'GET', 'statements', function( err, data ) {
-    if( err ) { callback( err ); return }
+  app.talk( 'GET', 'statements', function( err, data, meta ) {
+    if( err ) { callback( err, null, meta ); return }
     var result = []
     if( typeof data === 'object' ) {
       for( var i = 0; i < data.length; i++ ) {
         result.push( data[i].statement )
       }
     }
-    callback( null, result )
+    callback( null, result, meta )
   })
 }
 
@@ -540,15 +540,15 @@ app.statements = function( callback ) {
 // OTHER
 
 app.prices = function( callback ) {
-  app.talk( 'GET', 'prices', function( err, data ) {
-    if( err ) { callback( err ); return }
+  app.talk( 'GET', 'prices', function( err, data, meta ) {
+    if( err ) { callback( err, null, meta ); return }
     var result = []
     if( typeof data === 'object' ) {
       for( var i = 0; i < data.length; i++ ) {
         result.push( data[i].price )
       }
     }
-    callback( null, result )
+    callback( null, result, meta )
   })
 }
 
@@ -564,10 +564,10 @@ app.talk = function( method, path, fields, callback ) {
 
   // prevent multiple callbacks
   var complete = false
-  function doCallback( err, res ) {
+  function doCallback( err, res, meta ) {
     if( !complete ) {
       complete = true
-      callback( err || null, res || null )
+      callback( err || null, res || null, meta )
     }
   }
 
@@ -628,6 +628,7 @@ app.talk = function( method, path, fields, callback ) {
 
   // response
   request.on( 'response', function( response ) {
+    var meta = {statusCode: null}
     var data = ''
 
     response.on( 'data', function( chunk ) {
@@ -643,6 +644,8 @@ app.talk = function( method, path, fields, callback ) {
       data = data.toString('utf8').trim()
       var failed = null
 
+      meta.statusCode = response.statusCode
+
       try {
         data = JSON.parse( data )
       } catch(e) {
@@ -655,7 +658,7 @@ app.talk = function( method, path, fields, callback ) {
 
       // check HTTP status code
       if( ! failed && response.statusCode < 300 ) {
-        doCallback( null, data )
+        doCallback( null, data, meta )
       } else {
         if( response.statusCode == 401 && response.headers['x-dnsimple-otp'] == 'required' ) {
           var error = new Error('twoFactorOTP required')
@@ -665,7 +668,7 @@ app.talk = function( method, path, fields, callback ) {
         error.code = response.statusCode
         error.error = data.message || data.error || data.errors.name[0] || null
         error.data = data
-        doCallback( error )
+        doCallback( error, null, meta )
       }
     })
   })
