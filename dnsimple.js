@@ -523,19 +523,6 @@ app.subscription = function( vars, callback ) {
   }
 }
 
-app.statements = function( callback ) {
-  app.talk( 'GET', 'statements', function( err, data, meta ) {
-    if( err ) { callback( err, null, meta ); return }
-    var result = []
-    if( typeof data === 'object' ) {
-      for( var i = 0; i < data.length; i++ ) {
-        result.push( data[i].statement )
-      }
-    }
-    callback( null, result, meta )
-  })
-}
-
 
 // OTHER
 
