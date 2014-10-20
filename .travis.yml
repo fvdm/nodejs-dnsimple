@@ -3,6 +3,3 @@ node_js:
 - '0.11'
 - '0.10'
 - '0.8'
-env:
-  global:
-    secure: mVL8G/1SJFlQ2IJ0zZKPguX8OSTm9eYe3Qqs+Xx+C43BC1wj+fORa15Nqq59EMCkF0lSkHl5FSYYf7JegYKp25Xdas94jKkwZYpViij8qm6IFeFqaDZE8XYrcvVhGt1a5YpGUvzozrJp+Y9qAEDjWSnhxYDuXYUEszzRDD8eKvU=
