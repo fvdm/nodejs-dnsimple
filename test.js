@@ -219,7 +219,7 @@ queue.push( function() {
 
 // Domains
 queue.push( function() {
-  ds.domains.list( function( err, data ) { doTest( err, 'domains', testArrObj(data) )})
+  ds.domains.list( function( err, data ) { doTest( err, 'domains.list full', testArrObj(data) )})
 })
 
 
