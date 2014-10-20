@@ -90,6 +90,8 @@ var dnsimple = require('dnsimple')({
 
 ### Domain token
 
+For access to only one domainname, login with your `domainToken`.
+
 ```js
 require('dnsimple')({ domainToken: 'abc123' })
 ```
