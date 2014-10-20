@@ -523,19 +523,6 @@ app.subscription = function( vars, callback ) {
   }
 }
 
-app.statements = function( callback ) {
-  app.talk( 'GET', 'statements', function( err, data, meta ) {
-    if( err ) { callback( err, null, meta ); return }
-    var result = []
-    if( typeof data === 'object' ) {
-      for( var i = 0; i < data.length; i++ ) {
-        result.push( data[i].statement )
-      }
-    }
-    callback( null, result, meta )
-  })
-}
-
 
 // OTHER
 
@@ -672,7 +659,7 @@ app.talk = function( method, path, fields, callback ) {
           var error = failed || new Error('API error')
         }
         error.code = response.statusCode
-        error.error = data.message || data.error || data.errors.name[0] || null
+        error.error = data.message || data.error || (data.errors && data.errors.name && data.errors.name[0] ? data.errors.name[0] : null) || null
         error.data = data
         doCallback( error, null, meta )
       }
