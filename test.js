@@ -134,7 +134,6 @@ queue.push( function() { doTest( null, 'methods', [
   ['contacts.delete', typeof ds.contacts.delete === 'function'],
 
   ['subscription', typeof ds.subscription === 'function'],
-  ['statements', typeof ds.statements === 'function'],
   ['prices', typeof ds.prices === 'function'],
   ['talk', typeof ds.talk === 'function']
 ])})
@@ -209,10 +208,6 @@ queue.push( function() {
 })
 
 // Account
-queue.push( function() {
-  ds.statements( function( err, data ) { doTest( err, 'statements', testArrObj(data) )})
-})
-
 queue.push( function() {
   ds.subscription( function( err, data ) { doTest( err, 'subscription', testObj(data) )})
 })
