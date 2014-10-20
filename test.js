@@ -231,8 +231,7 @@ queue.push( function() {
 
 queue.push( function() {
   ds.domains.list( true, function( err, data ) { doTest( err, 'domains.list simple', [
-    ['array', data instanceof Array],
-    ['item type', typeof data[0] === 'string']
+    ['data type', data instanceof Array]
   ])})
 })
 
