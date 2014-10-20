@@ -659,7 +659,7 @@ app.talk = function( method, path, fields, callback ) {
           var error = failed || new Error('API error')
         }
         error.code = response.statusCode
-        error.error = data.message || data.error || data.errors.name[0] || null
+        error.error = data.message || data.error || (data.errors && data.errors.name && data.errors.name[0] ? data.errors.name[0] : null) || null
         error.data = data
         doCallback( error, null, meta )
       }
