@@ -222,6 +222,13 @@ queue.push( function() {
   ds.domains.list( function( err, data ) { doTest( err, 'domains.list full', testArrObj(data) )})
 })
 
+queue.push( function() {
+  ds.domains.list( true, function( err, data ) { doTest( err, 'domains.list simple', [
+    ['array', data instanceof Array],
+    ['item type', typeof data[0] === 'string']
+  ])})
+})
+
 
 // Start the tests
 queue[0]()
