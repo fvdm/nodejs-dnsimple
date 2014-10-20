@@ -61,6 +61,32 @@ require('dnsimple')({ email: 'your@email.tld', token: '12345abcde' })
 require('dnsimple')({ email: 'your@email.tld', password: 'secret' })
 ```
 
+### Two-factor authentication (2FA / OTP)
+
+When you have set up two-factor authentication for your account the module returns error `twoFactorOTP missing` when you did not provide your one-time password.
+
+First your need to tell the API _once_ your one-time code from Authy or SMS, by defining it during setup along with your email and password and calling a random method. Then the API returns a token which you can use instead of your email and password.
+
+```js
+// Set the OTP code on load
+var dnsimple = require('dnsimple')({
+  email: 'my@mail.tld',
+  password: 'my-secret',
+  twoFactorOTP: '0123456'
+})
+
+// Now call a random method to trade the OTP for a longterm token
+dnsimple.subscription( function( err, data, meta ) {
+  if( err ) { console.log(err); return }
+  console.log( 'Two-factor token: '+ meta.twoFactorToken )
+})
+
+// From now one only use this token - no email/password
+var dnsimple = require('dnsimple')({
+  twoFactorToken: '22596363b3de40b06f981fb85d82312e'
+})
+```
+
 
 ### Domain token
 
