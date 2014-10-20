@@ -235,6 +235,10 @@ queue.push( function() {
   ])})
 })
 
+queue.push( function() {
+  ds.domains.add( bogus.domain, function( err, data ) { doTest( err, 'domains.add', testObj(data) )})
+})
+
 
 // Start the tests
 queue[0]()
