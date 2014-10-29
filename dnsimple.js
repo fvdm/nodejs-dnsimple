@@ -296,6 +296,15 @@ app.domains = {
       app.talk( 'DELETE', 'domains/'+ domainname +'/whois_privacy', callback )
     }
   },
+  
+  // domains.nameserver_register
+  nameserver_register: function( domainname, name, ip, callback ) {
+    var vars = {
+      name: name,
+      ip: ip
+    }
+    app.talk( 'POST', 'domains/'+ domainname +'/registry_name_servers', vars, callback )
+  },
 
 
   // SERVICES
