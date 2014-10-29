@@ -305,6 +305,11 @@ app.domains = {
     }
     app.talk( 'POST', 'domains/'+ domainname +'/registry_name_servers', vars, callback )
   },
+  
+  // domains.nameserver_deregister
+  nameserver_deregister: function( domainname, name, callback ) {
+    app.talk( 'DELETE', 'domains/'+ domainname +'/registry_name_servers/'+ name, vars, callback )
+  },
 
 
   // SERVICES
