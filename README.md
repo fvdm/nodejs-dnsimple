@@ -118,12 +118,14 @@ This object can have a few more settings.
 Methods
 -------
 
-Each method takes a _callback function_ with two parameters: `err` and `data`.
+Each method takes a _callback_ function with three parameters: `err`, `data` and `meta`.
 
 When an error occurs `err` is an instance of `Error` and `data` is `null`. It can get a `.code` property if a HTTP error happened and a `.data` property
 if the remote API returned something other than JSON data. It also has a `.stack` property to figure out where the error was triggered.
 
 When everything looks alright `err` will be _null_ and `data` will be the parsed JSON _object_ or _array_.
+
+The `meta` parameter is always available and contains extra information from the API, such as statusCode, request_id, runtime and twoFactorToken.
 
 
 ### Errors
