@@ -263,6 +263,13 @@ queue.push( function() {
   ])})
 })
 
+// ! domains.findByRegex
+queue.push( function() {
+  ds.domains.findByRegex( /\.me$/, function( err, data ) {
+    doTest( err, 'domains.findByRegex', testArrObj(data) )
+  })
+})
+
 // ! dns.list
 queue.push( function() {
   ds.dns.list( bogus.domain, function( err, data ) {
