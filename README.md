@@ -607,27 +607,6 @@ dnsimple.subscription(
 ```
 
 
-### statements ( cb )
-
-Get account history statements.
-
-Note: the *_view properties are very large.
-
-```js
-[ { id: 123,
-    subscription_id: 111,
-    statement_identifier: '987',
-    text_view: '...',
-    basic_html_view: '...',
-    html_view: '...',
-    settled_at: null,
-    opened_at: '2014-02-06T05:42:55Z',
-    closed_at: null,
-    created_at: '2014-02-08T08:02:57Z',
-    updated_at: '2014-02-12T08:03:45Z' } ]
-```
-
-
 ### prices ( cb )
 
 List all prices.
