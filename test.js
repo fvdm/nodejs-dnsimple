@@ -262,6 +262,13 @@ queue.push( function() {
     ['data type', data instanceof Array]
   ])})
 })
+
+// ! dns.list
+queue.push( function() {
+  ds.dns.list( bogus.domain, function( err, data ) {
+    doTest( err, 'dns.list', testArrObj(data))
+  })
+})
 })
 
 // ! domains.delete
