@@ -270,13 +270,6 @@ queue.push( function() {
   })
 })
 
-// ! dns.list
-queue.push( function() {
-  ds.dns.list( bogus.domain, function( err, data ) {
-    doTest( err, 'dns.list', testArrObj(data))
-  })
-})
-
 // ! dns.add
 queue.push( function() {
   ds.dns.add( bogus.domain, bogus.dns[0], function( err, data ) {
@@ -323,6 +316,13 @@ queue.push( function() {
       ['data type', data instanceof Object],
       ['record', data.imported_records && data.imported_records[0].ttl === 1000]
     ])
+  })
+})
+
+// ! dns.list
+queue.push( function() {
+  ds.dns.list( bogus.domain, function( err, data ) {
+    doTest( err, 'dns.list', testArrObj(data))
   })
 })
 
