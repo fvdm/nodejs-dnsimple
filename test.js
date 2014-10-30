@@ -220,26 +220,29 @@ queue.push( function() {
   ds.prices( function( err, data ) { doTest( err, 'prices', testArrObj(data) )})
 })
 
-// Account
+// ! account
 queue.push( function() {
   ds.subscription( function( err, data ) { doTest( err, 'subscription', testObj(data) )})
 })
 
-// Domains
+// ! domains.list full
 queue.push( function() {
   ds.domains.list( function( err, data ) { doTest( err, 'domains.list full', testArrObj(data) )})
 })
 
+// ! domains.list simple
 queue.push( function() {
   ds.domains.list( true, function( err, data ) { doTest( err, 'domains.list simple', [
     ['data type', data instanceof Array]
   ])})
 })
 
+// ! domains.add
 queue.push( function() {
   ds.domains.add( bogus.domain, function( err, data ) { doTest( err, 'domains.add', testObj(data) )})
 })
 
+// ! domains.show
 queue.push( function() {
   ds.domains.show( bogus.domain, function( err, data ) { doTest( err, 'domains.show', testObj(data) )})
 })
