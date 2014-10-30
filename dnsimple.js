@@ -140,7 +140,9 @@ app.domains = {
 
   // domains.delete
   delete: function( domainname, callback ) {
-    app.talk( 'DELETE', 'domains/'+ domainname, callback )
+    app.talk( 'DELETE', 'domains/'+ domainname, function( err, data, meta ) {
+      callback( err, meta.statusCode === 200, meta )
+    })
   },
 
   // domains.resetToken
