@@ -648,6 +648,35 @@ dnsimple.prices( console.log )
 ```
 
 
+### user ( object, cb )
+
+Create a user account at DNSimple.com
+
+```js
+var details = {
+  email: 'john.smith@example.net',
+  password: 'abc123',
+  password_confirmation: 'abc123'
+}
+dnsimple.user( details, console.log )
+```
+
+```js
+{ id: 104,
+  email: 'john.smith@example.net',
+  referral_token: 'd1a416add1d12a',
+  single_access_token: '2aLdAc71vg1aIM1wLaTh',
+  domain_count: 0,
+  domain_limit: 10,
+  login_count: 0,
+  failed_login_count: 0,
+  created_at: '2014-10-30T18:55:40.819Z',
+  updated_at: '2014-10-30T18:55:40.848Z',
+  first_name: null,
+  last_name: null,
+  default_contact_id: null }
+```
+
 Unlicense
 ---------
 
