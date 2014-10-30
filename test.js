@@ -273,7 +273,18 @@ queue.push( function() {
 // ! dns.add
 queue.push( function() {
   ds.dns.add( bogus.domain, bogus.dns[0], function( err, data ) {
+    bogus.dns[0].id = data.id
     doTest( err, 'dns.add', testObj(data))
+  })
+})
+
+// ! dns.show
+queue.push( function() {
+  ds.dns.show( bogus.domain, bogus.dns[0].id, function( err, data ) {
+    doTest( err, 'dns.show', [
+      ['type', data instanceof Object],
+      ['property', data.id === bogus.dns[0].id]
+    ])
   })
 })
 
