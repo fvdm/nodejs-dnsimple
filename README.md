@@ -42,10 +42,10 @@ dnsimple.domains.add( 'example.tld', function( err, domain ) {
 Authentication
 --------------
 
-The module supports authentication by **email + token**, **email + password** and **domain token**.
+The module supports authentication by **email + token**, **email + password**, **domain token** and **2FA/Authy** (two-factor authentication).
 The *token* is more secure as it can easily be reset in your account at [dnsimple.com/account](https://dnsimple.com/account).
 The *password* uses HTTP Basic Authentication.
-Use *domain token* if you can (or wish to) connect to only one specific domainname.
+Use *domain token* to connect to only one specific domainname.
 
 
 ### Account token
