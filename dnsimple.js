@@ -327,7 +327,7 @@ app.domains = {
     } else {
       var zone = {zone_import: {zone_data: zone}}
       app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, function( err, data, meta ) {
-        data = zone ? (data.zone_import || false) : data
+        data = data.zone_import || false
         if( err ) { return callback( err, null, meta )}
         callback( null, data, meta )
       })
