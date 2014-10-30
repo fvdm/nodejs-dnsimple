@@ -288,6 +288,15 @@ queue.push( function() {
   })
 })
 
+// ! dns.update
+queue.push( function() {
+  ds.dns.update( bogus.domain, bogus.dns[0].id, {ttl:1000}, function( err, data, meta ) {
+    doTest( err, 'dns.update', [
+      ['result', meta.statusCode === 200]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain, function( err, data, meta ) {
