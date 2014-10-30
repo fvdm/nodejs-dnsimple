@@ -143,7 +143,9 @@ app.domains = {
 
   // domains.resetToken
   resetToken: function( domainname, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/token', callback )
+    app.talk( 'POST', 'domains/'+ domainname +'/token', function( err, data, meta ) {
+      callback( err, data.domain || null, meta )
+    })
   },
 
   // domains.push
