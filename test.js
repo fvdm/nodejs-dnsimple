@@ -225,18 +225,6 @@ queue.push( function() {
   ds.subscription( function( err, data ) { doTest( err, 'subscription', testObj(data) )})
 })
 
-// ! domains.list full
-queue.push( function() {
-  ds.domains.list( function( err, data ) { doTest( err, 'domains.list full', testArrObj(data) )})
-})
-
-// ! domains.list simple
-queue.push( function() {
-  ds.domains.list( true, function( err, data ) { doTest( err, 'domains.list simple', [
-    ['data type', data instanceof Array]
-  ])})
-})
-
 // ! domains.add
 queue.push( function() {
   ds.domains.add( bogus.domain, function( err, data ) { doTest( err, 'domains.add', testObj(data) )})
@@ -259,6 +247,20 @@ queue.push( function() {
       ['token', data.token != bogus.domain.token]
     ])
   })
+})
+
+// ! domains.list full
+queue.push( function() {
+  ds.domains.list( function( err, data ) {
+    doTest( err, 'domains.list full', testArrObj(data) )
+  })
+})
+
+// ! domains.list simple
+queue.push( function() {
+  ds.domains.list( true, function( err, data ) { doTest( err, 'domains.list simple', [
+    ['data type', data instanceof Array]
+  ])})
 })
 })
 
