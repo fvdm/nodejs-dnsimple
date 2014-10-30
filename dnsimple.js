@@ -683,6 +683,7 @@ app.talk = function( method, path, fields, callback ) {
           || data.error
           || (data.errors && data.errors.name && data.errors.name[0] ? data.errors.name[0] : null)
           || (data.errors && data.errors.content && data.errors.content[0] ? data.errors.content[0] : null)
+          || (data.errors && data.errors.base && data.errors.base[0] ? data.errors.base[0] : null)
           || null
         error.data = data
         doCallback( error, null, meta )
