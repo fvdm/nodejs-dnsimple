@@ -287,6 +287,25 @@ dnsimple.domains.vanitynameservers( 'two.com', true, console.log )
 ```
 
 
+### domains.zone ( domainname, [import], cb )
+
+Get or import a plain text zone for the specified domainname.
+
+#### Get zone
+
+```js
+dnsimple.domains.zone( 'two.com', console.log )
+```
+
+#### Import zone
+
+```js
+var text = '$ORIGIN two.com.$TTL 1htwo.com. IN  SOA ns1.dnsimple.com admin.dnsimple.com 2011092001 86400 7200 604800 300two.com. IN NS  ns1.dnsimple.com.\ntwo.com. IN NS  ns2.dnsimple.com.\ntwo.com. IN NS  ns3.dnsimple.com.\ntwo.com. IN NS  ns4.dnsimple.com.\nds1.two.com. 3600 IN  A 184.106.215.134\n; two.com. 3600 IN  URL http://dnsimple.com\n; www.two.com. 3600 IN  URL https://dnsimple.com'
+
+dnsimple.domains.zone( 'two.com', text, console.log )
+```
+
+
 Memberships
 -----------
 
