@@ -297,6 +297,16 @@ queue.push( function() {
   })
 })
 
+// ! dns.delete
+queue.push( function() {
+  ds.dns.delete( bogus.domain, bogus.dns[0].id, function( err, data, meta ) {
+    doTest( err, 'dns.delete', [
+      ['data type', typeof data === 'boolean'],
+      ['data value', data === true]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain, function( err, data, meta ) {
