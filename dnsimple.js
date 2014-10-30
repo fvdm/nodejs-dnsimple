@@ -316,6 +316,23 @@ app.domains = {
   nameserver_deregister: function( domainname, name, callback ) {
     app.talk( 'DELETE', 'domains/'+ domainname +'/registry_name_servers/'+ name, vars, callback )
   },
+  
+  // domains.zone
+  zone: function( domainname, zone, callback ) {
+    if( typeof zone === 'function' ) {
+      app.talk( 'GET', 'domains/'+ domainname +'/zone', function( err, data, meta ) {
+        if( err ) { return zone( err, null, meta )}
+        zone( null, data, meta )
+      })
+    } else {
+      var zone = {zone_import: {zone_data: zone}}
+      app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, function( err, data, meta ) {
+        data = zone ? (data.zone_import || false) : data
+        if( err ) { return callback( err, null, meta )}
+        callback( null, data, meta )
+      })
+    }
+  },
 
 
   // SERVICES
