@@ -244,7 +244,22 @@ queue.push( function() {
 
 // ! domains.show
 queue.push( function() {
-  ds.domains.show( bogus.domain, function( err, data ) { doTest( err, 'domains.show', testObj(data) )})
+  ds.domains.show( bogus.domain, function( err, data ) {
+    bogus.domain.token = data.token
+    doTest( err, 'domains.show', testObj(data) )
+  })
+})
+
+// ! domains.resetToken
+queue.push( function() {
+  ds.domains.resetToken( bogus.domain, function( err, data ) {
+    doTest( err, 'domains.resetToken', [
+      ['type', data instanceof Object],
+      ['property', typeof data.token === 'string'],
+      ['token', data.token != bogus.domain.token]
+    ])
+  })
+})
 })
 
 
