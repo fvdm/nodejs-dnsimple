@@ -72,7 +72,9 @@ app.dns = {
 
   // dns.delete
   delete: function( domainname, recordID, callback ) {
-    app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, callback )
+    app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, function( err, data, meta ) {
+      callback( err, meta.statusCode === 200, meta )
+    })
   }
 }
 
