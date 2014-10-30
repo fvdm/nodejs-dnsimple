@@ -262,6 +262,15 @@ queue.push( function() {
 })
 })
 
+// ! domains.delete
+queue.push( function() {
+  ds.domains.delete( bogus.domain, function( err, data, meta ) {
+    doTest( err, 'domains.delete', [
+      ['result', meta.statusCode === 200]
+    ])
+  })
+})
+
 
 // Start the tests
 queue[0]()
