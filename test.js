@@ -304,6 +304,28 @@ queue.push( function() {
   })
 })
 
+// ! domains.zone - get
+queue.push( function() {
+  ds.domains.zone( bogus.domain, function( err, data, meta ) {
+    bogus.domain_zone = data
+    doTest( err, 'domains.zone get', [
+      ['data type', typeof data === 'string'],
+      ['data match', !!~data.indexOf('\$ORIGIN '+ bogus.domain +'\.')]
+    ])
+  })
+})
+
+// ! domains.zone - import
+queue.push( function() {
+  ds.domains.zone( bogus.domain, bogus.domain_zone, function( err, data, meta ) {
+    doTest( err, 'domains.zone import', [
+      ['result', meta.statusCode === 201],
+      ['data type', data instanceof Object],
+      ['record', data.imported_records && data.imported_records[0].ttl === 1000]
+    ])
+  })
+})
+
 // ! dns.delete
 queue.push( function() {
   ds.dns.delete( bogus.domain, bogus.dns[0].id, function( err, data, meta ) {
