@@ -226,7 +226,11 @@ app.domains = {
     }
 
     // send
-    app.talk( 'POST', 'domain_registrations', vars, callback )
+    app.talk( 'POST', 'domain_registrations', vars, function( err, data, meta ) {
+      if( err ) { return callback( err, null, data )}
+      data = data.domain || false
+      callback( null, data, meta )
+    })
   },
 
   // domains.transfer
@@ -274,17 +278,21 @@ app.domains = {
     }
 
     // send
-    app.talk( 'POST', 'domain_renewal', vars, callback )
+    app.talk( 'POST', 'domain_renewals', vars, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = data.domain || false
+      callback( null, data, meta )
+    })
   },
 
   // domains.autorenew
   // Set auto-renewal for domain
   autorenew: function( domainname, enable, callback ) {
-    if( enable ) {
-      app.talk( 'POST', 'domains/'+ domainname +'/auto_renewal', {auto_renewal:{}}, callback )
-    } else {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/auto_renewal', callback )
-    }
+    var method = enable ? 'POST' : 'DELETE'
+    app.talk( method, 'domains/'+ domainname +'/auto_renewal', function( err, data, meta ) {
+      data = data.domain || null
+      callback( err, data, meta )
+    })
   },
 
   // domains.transferout
@@ -735,17 +743,27 @@ app.talk = function( method, path, fields, callback ) {
       } catch(e) {
         if( typeof data === 'string' && data.indexOf('<h1>The Domain Already Exists</h1>') > -1 ) {
           failed = new Error('domain exists')
-        } else if( typeof data === 'string' && headers.Accept == 'text/plain' ) {
-          // data = data
-        } else if( data == '' && meta.statusCode < 300 ) {
-          // status ok, no data
         } else {
           failed = new Error('not json')
         }
       }
+      
+      // overrides
+      var noError = false
+      if( typeof data === 'string' && headers.Accept == 'text/plain' ) {
+        noError = true
+      }
+      // status ok, no data
+      if( data == '' && meta.statusCode < 300 ) {
+        noError = true
+      }
+      // domain check 404 = free
+      if( path.match(/^domains\/.+\/check$/) && meta.statusCode === 404 ) {
+        noError = true
+      }
 
       // check HTTP status code
-      if( ! failed && response.statusCode < 300 ) {
+      if( noError || (!failed && response.statusCode < 300) ) {
         doCallback( null, data, meta )
       } else {
         if( response.statusCode == 401 && response.headers['x-dnsimple-otp'] == 'required' ) {
