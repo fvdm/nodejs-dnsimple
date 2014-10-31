@@ -442,6 +442,13 @@ queue.push( function() {
   })
 })
 
+// ! templates.list
+queue.push( function() {
+  ds.templates.list( function( err, data, meta ) {
+    doTest( err, 'templates.list', testArrObj(data))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
