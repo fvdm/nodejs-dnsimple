@@ -278,7 +278,11 @@ app.domains = {
     }
 
     // send
-    app.talk( 'POST', 'domain_renewal', vars, callback )
+    app.talk( 'POST', 'domain_renewals', vars, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = data.domain || false
+      callback( null, data, meta )
+    })
   },
 
   // domains.autorenew
