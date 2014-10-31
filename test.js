@@ -517,6 +517,17 @@ queue.push( function() {
   })
 })
 
+// ! domains.autorenew
+queue.push( function() {
+  ds.domains.autorenew( bogus.domain.name, true, function( err, data, meta ) {
+    doTest( err, 'domains.autorenew', [
+      ['result', meta.statusCode === 200],
+      ['data', data instanceof Object],
+      ['value', data.id === bogus.domain.id]
+    ])
+  })
+})
+
 // ! contacts.delete
 queue.push( function() {
   ds.contacts.delete( bogus.contact.id, function( err, data, meta ) {
