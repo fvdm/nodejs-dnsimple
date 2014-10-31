@@ -574,7 +574,11 @@ app.contacts = {
 
   // contacts.delete
   delete: function( contactID, callback ) {
-    app.talk( 'DELETE', 'contacts/'+ contactID, callback )
+    app.talk( 'DELETE', 'contacts/'+ contactID, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = meta.statusCode === 204 ? true : false
+      callback( null, data, meta )
+    })
   }
 }
 
