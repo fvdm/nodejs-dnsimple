@@ -336,11 +336,14 @@ app.domains = {
 
   // domains.whoisPrivacy
   whoisPrivacy: function( domainname, enable, callback ) {
-    if( enable ) {
-      app.talk( 'POST', 'domains/'+ domainname +'/whois_privacy', callback )
-    } else {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/whois_privacy', callback )
-    }
+    var method = enable ? 'POST' : 'DELETE'
+    app.talk( method, 'domains/'+ domainname +'/whois_privacy', function( err, data, meta ) {
+      data = data.whois_privacy || data
+      if( method === 'DELETE' ) {
+        data = meta.statusCode === 200 || meta.statusCode === 204 ? true : false
+      }
+      callback( err, data, meta )
+    })
   },
   
   // domains.nameserver_register
