@@ -298,7 +298,7 @@ app.domains = {
   // domains.transferout
   // Prepare domain for transferring out
   transferout: function( domainname, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/transfer_out', callback )
+    app.talk( 'POST', 'domains/'+ domainname +'/transfer_outs', callback )
   },
 
   // domains.nameservers
@@ -787,6 +787,7 @@ app.talk = function( method, path, fields, callback ) {
     if( app.api.timeout ) {
       socket.setTimeout( app.api.timeout )
       socket.on( 'timeout', function() {
+        doCallback( new Error('request timeout') )
         request.abort()
       })
     }
