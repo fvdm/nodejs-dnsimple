@@ -529,7 +529,11 @@ app.templates = {
     // templates.records.delete
     // Delete record from template
     delete: function( templateID, recordID, callback ) {
-      app.talk( 'DELETE', 'templates/'+ templateID +'/records/'+ recordID, {}, callback )
+      app.talk( 'DELETE', 'templates/'+ templateID +'/records/'+ recordID, {}, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data = meta.statusCode === 200 ? true : false
+        callback( null, data, meta )
+      })
     }
   }
 }
