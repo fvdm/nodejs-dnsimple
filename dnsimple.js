@@ -256,6 +256,30 @@ app.domains = {
     app.talk( 'POST', 'domain_transfers', vars, callback )
   },
 
+  // domains.transferAttribute
+  // Transfer domainname with Extended Attributes - auto-payment!
+  transferAttribute: function( domainname, registrantID, attr, authinfo, callback ) {
+    var vars = {
+      domain: {
+        name: domainname,
+        registrant_id: registrantID
+      },
+      extended_attribute: attr
+    }
+
+    // fix 3 & 4 params
+    if( !callback && typeof authinfo == 'function' ) {
+      var callback = authinfo
+    } else if( typeof authinfo == 'string' ) {
+      vars.transfer_order = {
+        authinfo: authinfo
+      }
+    }
+
+    // send
+    app.talk( 'POST', 'domain_transfers', vars, callback )
+  },
+
   // domains.renew
   // Renew domainname registration - auto-payment!
   renew: function( domainname, whoisPrivacy, callback ) {
