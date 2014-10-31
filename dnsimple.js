@@ -191,7 +191,11 @@ app.domains = {
 
     // domains.memberships.delete
     delete: function( domainname, member, callback ) {
-      app.talk( 'DELETE', 'domains'+ domainname +'/memberships/'+ member, callback )
+      app.talk( 'DELETE', 'domains/'+ domainname +'/memberships/'+ member, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data = meta.statusCode === 204 ? true : false
+        callback( null, data, meta )
+      })
     }
   },
 
