@@ -522,6 +522,13 @@ queue.push( function() {
   })
 })
 
+// ! contacts.show
+queue.push( function() {
+  ds.contacts.show( bogus.contact.id, function( err, data, meta ) {
+    doTest( err, 'contacts.show', testObj(data))
+  })
+})
+
 
 // Start the tests
 queue[0]()
