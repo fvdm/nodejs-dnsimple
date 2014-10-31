@@ -756,9 +756,7 @@ app.talk = function( method, path, fields, callback ) {
         error.code = response.statusCode
         error.error = data.message
           || data.error
-          || (data.errors && data.errors.name && data.errors.name[0] ? data.errors.name[0] : null)
-          || (data.errors && data.errors.content && data.errors.content[0] ? data.errors.content[0] : null)
-          || (data.errors && data.errors.base && data.errors.base[0] ? data.errors.base[0] : null)
+          || (data.errors && data instanceof Object && Object.keys(data.errors)[0] ? data.errors[Object.keys(data.errors)[0]] : null)
           || null
         error.data = data
         doCallback( error, null, meta )
