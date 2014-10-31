@@ -555,18 +555,30 @@ app.contacts = {
   // contacts.create
   // http://developer.dnsimple.com/contacts/#create-a-contact
   add: function( contact, callback ) {
-    app.talk( 'POST', 'contacts', {contact: contact}, callback )
+    app.talk( 'POST', 'contacts', {contact: contact}, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = data.contact || false
+      callback( null, data, meta )
+    })
   },
 
   // contacts.update
   // http://developer.dnsimple.com/contacts/#update-a-contact
   update: function( contactID, contact, callback ) {
-    app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback )
+    app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = data.contact || false
+      callback( null, data, meta )
+    })
   },
 
   // contacts.delete
   delete: function( contactID, callback ) {
-    app.talk( 'DELETE', 'contacts/'+ contactID, callback )
+    app.talk( 'DELETE', 'contacts/'+ contactID, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = meta.statusCode === 204 ? true : false
+      callback( null, data, meta )
+    })
   }
 }
 
@@ -744,9 +756,7 @@ app.talk = function( method, path, fields, callback ) {
         error.code = response.statusCode
         error.error = data.message
           || data.error
-          || (data.errors && data.errors.name && data.errors.name[0] ? data.errors.name[0] : null)
-          || (data.errors && data.errors.content && data.errors.content[0] ? data.errors.content[0] : null)
-          || (data.errors && data.errors.base && data.errors.base[0] ? data.errors.base[0] : null)
+          || (data.errors && data instanceof Object && Object.keys(data.errors)[0] ? data.errors[Object.keys(data.errors)[0]] : null)
           || null
         error.data = data
         doCallback( error, null, meta )
