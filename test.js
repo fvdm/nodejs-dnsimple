@@ -566,6 +566,22 @@ queue.push( function() {
   })
 })
 
+// ! domains.whoisPrivacy on
+queue.push( function() {
+  ds.domains.whoisPrivacy( bogus.domain.name, true, function( err, data, meta ) {
+    doTest( err, 'domains.whoisPrivacy on', testObj( data ))
+  })
+})
+
+// ! domains.whoisPrivacy off
+queue.push( function() {
+  ds.domains.whoisPrivacy( bogus.domain.name, false, function( err, data, meta ) {
+    doTest( err, 'domains.whoisPrivacy off', [
+      ['result', data === true]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
