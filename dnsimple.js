@@ -485,6 +485,7 @@ app.templates = {
   apply: function( domainname, templateID, callback ) {
     app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', function( error, result, meta ) {
       if( error ) { callback( error, null, meta ); return }
+      var result = result.domain ? result.domain : result
       callback( null, result, meta )
     })
   },
