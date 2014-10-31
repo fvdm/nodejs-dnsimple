@@ -298,7 +298,7 @@ app.domains = {
   // domains.transferout
   // Prepare domain for transferring out
   transferout: function( domainname, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/transfer_out', callback )
+    app.talk( 'POST', 'domains/'+ domainname +'/transfer_outs', callback )
   },
 
   // domains.nameservers
