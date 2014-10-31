@@ -473,7 +473,11 @@ app.templates = {
   // templates.delete
   // Delete the given template
   delete: function( templateID, callback ) {
-    app.talk( 'DELETE', 'templates/'+ templateID, callback )
+    app.talk( 'DELETE', 'templates/'+ templateID, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = meta.statusCode === 200 ? true : false
+      callback( null, data, meta )
+    })
   },
 
   // templates.apply
@@ -481,6 +485,7 @@ app.templates = {
   apply: function( domainname, templateID, callback ) {
     app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', function( error, result, meta ) {
       if( error ) { callback( error, null, meta ); return }
+      var result = result.domain ? result.domain : result
       callback( null, result, meta )
     })
   },
@@ -490,7 +495,7 @@ app.templates = {
     // templates.records.list
     // list records in template
     list: function( templateID, callback ) {
-      app.talk( 'GET', 'templates/'+ templateID +'/template_records', function( error, result, meta ) {
+      app.talk( 'GET', 'templates/'+ templateID +'/records', function( error, result, meta ) {
         if( error ) { callback( error, null, meta ); return }
         var records = []
         for( var i = 0; i < result.length; i++ ) {
@@ -503,7 +508,7 @@ app.templates = {
     // templates.records.show
     // Get one record for template
     show: function( templateID, recordID, callback ) {
-      app.talk( 'GET', 'templates/'+ templateID +'/template_records/'+ recordID, function( error, result, meta ) {
+      app.talk( 'GET', 'templates/'+ templateID +'/records/'+ recordID, function( error, result, meta ) {
         if( error ) { callback( error, null, meta ); return }
         callback( null, result.dns_template_record, meta )
       })
@@ -515,7 +520,7 @@ app.templates = {
     // OPTIONAL: ttl, prio
     add: function( templateID, record, callback ) {
       var rec = { dns_template_record: record }
-      app.talk( 'POST', 'templates/'+ templateID +'/template_records', rec, function( error, result, meta ) {
+      app.talk( 'POST', 'templates/'+ templateID +'/records', rec, function( error, result, meta ) {
         if( error ) { callback( error, null, meta ); return }
         callback( null, result.dns_template_record, meta )
       })
@@ -524,7 +529,11 @@ app.templates = {
     // templates.records.delete
     // Delete record from template
     delete: function( templateID, recordID, callback ) {
-      app.talk( 'DELETE', 'templates/'+ templateID +'/template_records/'+ recordID, {}, callback )
+      app.talk( 'DELETE', 'templates/'+ templateID +'/records/'+ recordID, {}, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data = meta.statusCode === 200 ? true : false
+        callback( null, data, meta )
+      })
     }
   }
 }
