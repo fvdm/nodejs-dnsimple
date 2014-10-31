@@ -182,12 +182,20 @@ app.domains = {
     // domains.memberships.add
     add: function( domainname, email, callback ) {
       var data = {membership: {email: email}}
-      app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback )
+      app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data = data.membership || false
+        callback( null, data, meta )
+      })
     },
 
     // domains.memberships.delete
     delete: function( domainname, member, callback ) {
-      app.talk( 'DELETE', 'domains'+ domainname +'/memberships/'+ member, callback )
+      app.talk( 'DELETE', 'domains/'+ domainname +'/memberships/'+ member, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data = meta.statusCode === 204 ? true : false
+        callback( null, data, meta )
+      })
     }
   },
 
@@ -697,6 +705,8 @@ app.talk = function( method, path, fields, callback ) {
           failed = new Error('domain exists')
         } else if( typeof data === 'string' && headers.Accept == 'text/plain' ) {
           // data = data
+        } else if( data == '' && meta.statusCode < 300 ) {
+          // status ok, no data
         } else {
           failed = new Error('not json')
         }
