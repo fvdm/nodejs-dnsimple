@@ -343,6 +343,18 @@ queue.push( function() {
   })
 })
 
+// ! domains.memberships.add
+queue.push( function() {
+  ds.domains.memberships.add( bogus.domain.name, 'nodejs.test.account@frankl.in', function( err, data, meta ) {
+    bogus.domain_membership = data
+    doTest( err, 'domains.memberships.add', [
+      ['result', meta.statusCode === 201],
+      ['data type', data instanceof Object],
+      ['value', data.domain_id === bogus.domain.id]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
