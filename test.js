@@ -237,8 +237,11 @@ queue.push( function() {
 
 // ! domains.show
 queue.push( function() {
-    doTest( err, 'domains.show', testObj(data) )
   ds.domains.show( bogus.domain.name, function( err, data ) {
+    doTest( err, 'domains.show', [
+      ['type', data instanceof Object],
+      ['value', data.name === bogus.domain.name]
+    ])
   })
 })
 
