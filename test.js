@@ -380,6 +380,17 @@ queue.push( function() {
   })
 })
 
+// ! domains.services.add
+queue.push( function() {
+  ds.domains.services.add( bogus.domain.name, 31, {url:'http://npmjs.org/'}, function( err, data, meta ) {
+    doTest( err, 'domains.services.add', [
+      ['result', meta.statusCode === 200],
+      ['type', data instanceof Object],
+      ['value', data.short_name === 'urlforward']
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
