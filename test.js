@@ -542,6 +542,15 @@ queue.push( function() {
   })
 })
 
+// ! domains.transfer
+queue.push( function() {
+  ds.domains.transfer( bogus.domain.name, bogus.contact.id, 'abc', function( err, data, meta ) {
+    doTest( null, 'domains.transfer', [
+      ['exists', meta.statusCode === 400]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
