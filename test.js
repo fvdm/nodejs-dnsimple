@@ -474,6 +474,15 @@ queue.push( function() {
   })
 })
 
+// ! templates.records.delete
+queue.push( function() {
+  ds.templates.records.delete( bogus.template.id, bogus.template_record.id, function( err, data, meta ) {
+    doTest( err, 'templates.records.delete', [
+      ['result', data === true]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
