@@ -508,6 +508,15 @@ queue.push( function() {
   })
 })
 
+// ! domains.renew
+queue.push( function() {
+  ds.domains.renew( bogus.domain.name, function( err, data, meta ) {
+    doTest( null, 'domains.renew', [
+      ['too soon', err && meta.statusCode === 422]
+    ])
+  })
+})
+
 // ! contacts.delete
 queue.push( function() {
   ds.contacts.delete( bogus.contact.id, function( err, data, meta ) {
