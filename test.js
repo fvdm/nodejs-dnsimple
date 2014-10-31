@@ -206,7 +206,7 @@ var bogus = {
     postal_code: '33143',
     country: 'US',
     email_address: 'john.smith@example.com',
-    phone: '505 111 2222',
+    phone: '+15051112222',
     organization_name: 'Little Co Inc.',
     job_title: 'President',
     label: 'Office'
