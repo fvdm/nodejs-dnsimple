@@ -473,7 +473,11 @@ app.templates = {
   // templates.delete
   // Delete the given template
   delete: function( templateID, callback ) {
-    app.talk( 'DELETE', 'templates/'+ templateID, callback )
+    app.talk( 'DELETE', 'templates/'+ templateID, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = meta.statusCode === 200 ? true : false
+      callback( null, data, meta )
+    })
   },
 
   // templates.apply
