@@ -212,8 +212,8 @@ var bogus = {
     label: 'Office'
   },
   template: {
-    name: 'Test dnsimple.js',
-    short_name: 'test',
+    name: 'Test dnsimple.js - '+ Date.now(),
+    short_name: 'test_'+ Date.now(),
     description: 'Add fake DNS records.'
   }
 }
