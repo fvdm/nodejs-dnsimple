@@ -743,17 +743,23 @@ app.talk = function( method, path, fields, callback ) {
       } catch(e) {
         if( typeof data === 'string' && data.indexOf('<h1>The Domain Already Exists</h1>') > -1 ) {
           failed = new Error('domain exists')
-        } else if( typeof data === 'string' && headers.Accept == 'text/plain' ) {
-          // data = data
-        } else if( data == '' && meta.statusCode < 300 ) {
-          // status ok, no data
         } else {
           failed = new Error('not json')
         }
       }
+      
+      // overrides
+      var noError = false
+      if( typeof data === 'string' && headers.Accept == 'text/plain' ) {
+        noError = true
+      }
+      // status ok, no data
+      if( data == '' && meta.statusCode < 300 ) {
+        noError = true
+      }
 
       // check HTTP status code
-      if( ! failed && response.statusCode < 300 ) {
+      if( noError || (!failed && response.statusCode < 300) ) {
         doCallback( null, data, meta )
       } else {
         if( response.statusCode == 401 && response.headers['x-dnsimple-otp'] == 'required' ) {
