@@ -182,7 +182,9 @@ function testObj( src ) {
 
 // bogus material to use
 var bogus = {
-  domain: 'test-'+ Date.now() +'-delete.me',
+  domain: {
+    name: 'test-'+ Date.now() +'-delete.me'
+  },
   dns: [
     { name: 'testing',
       record_type: 'A',
@@ -227,24 +229,26 @@ queue.push( function() {
 
 // ! domains.add
 queue.push( function() {
-  ds.domains.add( bogus.domain, function( err, data ) { doTest( err, 'domains.add', testObj(data) )})
+  ds.domains.add( bogus.domain.name, function( err, data ) {
+    bogus.domain = data
+    doTest( err, 'domains.add', testObj(data) )
+  })
 })
 
 // ! domains.show
 queue.push( function() {
-  ds.domains.show( bogus.domain, function( err, data ) {
-    bogus.domain.token = data.token
     doTest( err, 'domains.show', testObj(data) )
+  ds.domains.show( bogus.domain.name, function( err, data ) {
   })
 })
 
 // ! domains.resetToken
 queue.push( function() {
-  ds.domains.resetToken( bogus.domain, function( err, data ) {
+  ds.domains.resetToken( bogus.domain.name, function( err, data ) {
     doTest( err, 'domains.resetToken', [
       ['type', data instanceof Object],
       ['property', typeof data.token === 'string'],
-      ['token', data.token != bogus.domain.token]
+      ['token', data.token != bogus.domain.name.token]
     ])
   })
 })
@@ -272,7 +276,7 @@ queue.push( function() {
 
 // ! dns.add
 queue.push( function() {
-  ds.dns.add( bogus.domain, bogus.dns[0], function( err, data ) {
+  ds.dns.add( bogus.domain.name, bogus.dns[0], function( err, data ) {
     bogus.dns[0].id = data.id
     doTest( err, 'dns.add', testObj(data))
   })
@@ -280,7 +284,7 @@ queue.push( function() {
 
 // ! dns.show
 queue.push( function() {
-  ds.dns.show( bogus.domain, bogus.dns[0].id, function( err, data ) {
+  ds.dns.show( bogus.domain.name, bogus.dns[0].id, function( err, data ) {
     doTest( err, 'dns.show', [
       ['type', data instanceof Object],
       ['property', data.id === bogus.dns[0].id]
@@ -290,7 +294,7 @@ queue.push( function() {
 
 // ! dns.update
 queue.push( function() {
-  ds.dns.update( bogus.domain, bogus.dns[0].id, {ttl:1000}, function( err, data, meta ) {
+  ds.dns.update( bogus.domain.name, bogus.dns[0].id, {ttl:1000}, function( err, data, meta ) {
     doTest( err, 'dns.update', [
       ['result', meta.statusCode === 200]
     ])
@@ -299,18 +303,18 @@ queue.push( function() {
 
 // ! domains.zone - get
 queue.push( function() {
-  ds.domains.zone( bogus.domain, function( err, data, meta ) {
+  ds.domains.zone( bogus.domain.name, function( err, data, meta ) {
     bogus.domain_zone = data
     doTest( err, 'domains.zone get', [
       ['data type', typeof data === 'string'],
-      ['data match', !!~data.indexOf('\$ORIGIN '+ bogus.domain +'\.')]
+      ['data match', !!~data.indexOf('\$ORIGIN '+ bogus.domain.name +'\.')]
     ])
   })
 })
 
 // ! domains.zone - import
 queue.push( function() {
-  ds.domains.zone( bogus.domain, bogus.domain_zone, function( err, data, meta ) {
+  ds.domains.zone( bogus.domain.name, bogus.domain_zone, function( err, data, meta ) {
     doTest( err, 'domains.zone import', [
       ['result', meta.statusCode === 201],
       ['data type', data instanceof Object],
@@ -321,14 +325,14 @@ queue.push( function() {
 
 // ! dns.list
 queue.push( function() {
-  ds.dns.list( bogus.domain, function( err, data ) {
+  ds.dns.list( bogus.domain.name, function( err, data ) {
     doTest( err, 'dns.list', testArrObj(data))
   })
 })
 
 // ! dns.delete
 queue.push( function() {
-  ds.dns.delete( bogus.domain, bogus.dns[0].id, function( err, data, meta ) {
+  ds.dns.delete( bogus.domain.name, bogus.dns[0].id, function( err, data, meta ) {
     doTest( err, 'dns.delete', [
       ['data type', typeof data === 'boolean'],
       ['data value', data === true]
@@ -338,7 +342,7 @@ queue.push( function() {
 
 // ! domains.delete
 queue.push( function() {
-  ds.domains.delete( bogus.domain, function( err, data, meta ) {
+  ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
     doTest( err, 'domains.delete', [
       ['data type', typeof data === 'boolean'],
       ['data value', data === true]
