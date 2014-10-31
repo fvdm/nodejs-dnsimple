@@ -555,7 +555,11 @@ app.contacts = {
   // contacts.create
   // http://developer.dnsimple.com/contacts/#create-a-contact
   add: function( contact, callback ) {
-    app.talk( 'POST', 'contacts', {contact: contact}, callback )
+    app.talk( 'POST', 'contacts', {contact: contact}, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = data.contact || false
+      callback( null, data, meta )
+    })
   },
 
   // contacts.update
