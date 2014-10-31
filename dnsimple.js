@@ -787,6 +787,7 @@ app.talk = function( method, path, fields, callback ) {
     if( app.api.timeout ) {
       socket.setTimeout( app.api.timeout )
       socket.on( 'timeout', function() {
+        doCallback( new Error('request timeout') )
         request.abort()
       })
     }
