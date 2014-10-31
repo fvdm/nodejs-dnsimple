@@ -355,6 +355,15 @@ queue.push( function() {
   })
 })
 
+// ! domains.memberships.list
+queue.push( function() {
+  ds.domains.memberships.list( bogus.domain.name, function( err, data, meta ) {
+    doTest( err, 'domains.memberships.list', [
+      ['data type', meta.statusCode === 200 && data instanceof Array]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
