@@ -464,10 +464,10 @@ queue.push( function() {
 
 // ! contacts.update
 queue.push( function() {
-  ds.contacts.update( bogus.contact.id, {country:'NL'}, function( err, data, meta ) {
+  ds.contacts.update( bogus.contact.id, {last_name:'Wayne'}, function( err, data, meta ) {
     doTest( err, 'contacts.update', [
       ['result', data instanceof Object],
-      ['content', data.country === 'NL']
+      ['content', data.last_name === 'Wayne']
     ])
   })
 })
