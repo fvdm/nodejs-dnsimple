@@ -512,6 +512,16 @@ queue.push( function() {
   })
 })
 
+// ! contacts.add
+queue.push( function() {
+  ds.contacts.add( bogus.contact, function( err, data, meta ) {
+    bogus.contact = data
+    doTest( err, 'contacts.add', [
+      ['type', data instanceof Object]
+    ])
+  })
+})
+
 
 // Start the tests
 queue[0]()
