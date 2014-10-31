@@ -421,6 +421,17 @@ queue.push( function() {
   })
 })
 
+// ! templates.add
+queue.push( function() {
+  ds.templates.add( bogus.template, function( err, data, meta ) {
+    bogus.template = data
+    doTest( err, 'templates.add', [
+      ['result', meta.statusCode === 201],
+      ['type', data instanceof Object]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
