@@ -565,7 +565,11 @@ app.contacts = {
   // contacts.update
   // http://developer.dnsimple.com/contacts/#update-a-contact
   update: function( contactID, contact, callback ) {
-    app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback )
+    app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data = data.contact || false
+      callback( null, data, meta )
+    })
   },
 
   // contacts.delete
