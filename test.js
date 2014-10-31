@@ -364,6 +364,15 @@ queue.push( function() {
   })
 })
 
+// ! domains.memberships.delete
+queue.push( function() {
+  ds.domains.memberships.delete( bogus.domain.name, bogus.domain_membership.id, function( err, data, meta ) {
+    doTest( err, 'domains.memberships.delete', [
+      ['result', data === true]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
