@@ -546,6 +546,15 @@ queue.push( function() {
   })
 })
 
+// ! contacts.delete
+queue.push( function() {
+  ds.contacts.delete( bogus.contact.id, function( err, data, meta ) {
+    doTest( err, 'contacts.delete', [
+      ['result', data === true]
+    ])
+  })
+})
+
 
 // Start the tests
 queue[0]()
