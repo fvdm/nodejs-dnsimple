@@ -705,6 +705,8 @@ app.talk = function( method, path, fields, callback ) {
           failed = new Error('domain exists')
         } else if( typeof data === 'string' && headers.Accept == 'text/plain' ) {
           // data = data
+        } else if( data == '' && meta.statusCode < 300 ) {
+          // status ok, no data
         } else {
           failed = new Error('not json')
         }
