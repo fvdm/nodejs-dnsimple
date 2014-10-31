@@ -551,6 +551,21 @@ queue.push( function() {
   })
 })
 
+// ! domains.nameservers
+queue.push( function() {
+  var ns = {
+    ns1: 'ns1.example.net',
+    ns2: 'ns2.example.net'
+  }
+  ds.domains.nameservers( bogus.domain.name, ns, function( err, data, meta ) {
+    doTest( err, 'domains.nameservers', [
+      ['result', meta.statusCode === 200],
+      ['type', data instanceof Array],
+      ['content', data[0] === ns.ns1 && data[1] === ns.ns2]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
