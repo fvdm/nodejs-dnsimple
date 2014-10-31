@@ -182,7 +182,11 @@ app.domains = {
     // domains.memberships.add
     add: function( domainname, email, callback ) {
       var data = {membership: {email: email}}
-      app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback )
+      app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data = data.membership || false
+        callback( null, data, meta )
+      })
     },
 
     // domains.memberships.delete
