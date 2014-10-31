@@ -381,10 +381,14 @@ app.domains = {
         var settings = null
       }
       var service = { service: { id: serviceID } }
-      app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, callback )
       if( settings ) {
         service.settings = settings
       }
+      app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data = data[0] && data[0].service ? data[0].service : false
+        callback( null, data, meta )
+      })
     },
 
     // domains.services.delete
