@@ -414,6 +414,13 @@ queue.push( function() {
   })
 })
 
+// ! services.show
+queue.push( function() {
+  ds.services.show( 31, function( err, data, meta ) {
+    doTest( err, 'services.show', testObj(data))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
