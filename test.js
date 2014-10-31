@@ -479,6 +479,16 @@ queue.push( function() {
   })
 })
 
+// ! domains.check
+queue.push( function() {
+  ds.domains.check( 'example.net', function( err, data, meta ) {
+    doTest( err, 'domains.check', [
+      ['result', meta.statusCode === 200],
+      ['type', data instanceof Object]
+    ])
+  })
+})
+
 // ! contacts.delete
 queue.push( function() {
   ds.contacts.delete( bogus.contact.id, function( err, data, meta ) {
