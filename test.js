@@ -373,6 +373,13 @@ queue.push( function() {
   })
 })
 
+// ! domains.services.available
+queue.push( function() {
+  ds.domains.services.available( bogus.domain.name, function( err, data, meta ) {
+    doTest( err, 'domains.services.available', testArrObj(data))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
