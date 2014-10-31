@@ -391,6 +391,13 @@ queue.push( function() {
   })
 })
 
+// ! domains.services.list
+queue.push( function() {
+  ds.domains.services.list( bogus.domain.name, function( err, data, meta ) {
+    doTest( err, 'domains.services.list', testArrObj(data))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
