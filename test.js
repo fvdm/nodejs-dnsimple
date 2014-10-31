@@ -529,6 +529,16 @@ queue.push( function() {
   })
 })
 
+// ! contacts.update
+queue.push( function() {
+  ds.contacts.update( bogus.contact.id, {country:'NL'}, function( err, data, meta ) {
+    doTest( err, 'contacts.update', [
+      ['result', data instanceof Object],
+      ['content', data.country === 'NL']
+    ])
+  })
+})
+
 
 // Start the tests
 queue[0]()
