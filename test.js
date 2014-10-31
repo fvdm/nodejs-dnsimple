@@ -432,6 +432,16 @@ queue.push( function() {
   })
 })
 
+// ! templates.show
+queue.push( function() {
+  ds.templates.show( bogus.template.short_name, function( err, data, meta ) {
+    doTest( err, 'templates.show', [
+      ['type', data instanceof Object],
+      ['value', data.id === bogus.template.id]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
