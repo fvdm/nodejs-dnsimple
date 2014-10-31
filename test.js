@@ -398,6 +398,15 @@ queue.push( function() {
   })
 })
 
+// ! domains.services.delete
+queue.push( function() {
+  ds.domains.services.delete( bogus.domain.name, 31, function( err, data, meta ) {
+    doTest( err, 'domains.services.delete', [
+      ['result', meta.statusCode === 200]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
