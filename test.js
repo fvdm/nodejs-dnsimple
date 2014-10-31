@@ -160,6 +160,13 @@ queue.push( function() {
   ds.subscription( function( err, data ) { doTest( err, 'subscription', testObj(data) )})
 })
 
+// ! extendedAttributes
+queue.push( function() {
+  ds.extendedAttributes( 'uk', function( err, data, meta ) {
+    doTest( err, 'extendedAttributes', testArrObj( data ))
+  })
+})
+
 // ! domains.add
 queue.push( function() {
   ds.domains.add( bogus.domain.name, function( err, data ) {
