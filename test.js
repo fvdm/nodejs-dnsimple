@@ -474,6 +474,16 @@ queue.push( function() {
   })
 })
 
+// ! templates.apply
+queue.push( function() {
+  ds.templates.apply( bogus.domain.name, bogus.template.id, function( err, data, meta ) {
+    doTest( err, 'templates.apply', [
+      ['result', meta.statusCode === 200],
+      ['data', data.id === bogus.domain.id]
+    ])
+  })
+})
+
 // ! templates.records.delete
 queue.push( function() {
   ds.templates.records.delete( bogus.template.id, bogus.template_record.id, function( err, data, meta ) {
