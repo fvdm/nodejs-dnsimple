@@ -256,6 +256,30 @@ app.domains = {
     app.talk( 'POST', 'domain_transfers', vars, callback )
   },
 
+  // domains.transferAttribute
+  // Transfer domainname with Extended Attributes - auto-payment!
+  transferAttribute: function( domainname, registrantID, attr, authinfo, callback ) {
+    var vars = {
+      domain: {
+        name: domainname,
+        registrant_id: registrantID
+      },
+      extended_attribute: attr
+    }
+
+    // fix 3 & 4 params
+    if( !callback && typeof authinfo == 'function' ) {
+      var callback = authinfo
+    } else if( typeof authinfo == 'string' ) {
+      vars.transfer_order = {
+        authinfo: authinfo
+      }
+    }
+
+    // send
+    app.talk( 'POST', 'domain_transfers', vars, callback )
+  },
+
   // domains.renew
   // Renew domainname registration - auto-payment!
   renew: function( domainname, whoisPrivacy, callback ) {
@@ -312,11 +336,14 @@ app.domains = {
 
   // domains.whoisPrivacy
   whoisPrivacy: function( domainname, enable, callback ) {
-    if( enable ) {
-      app.talk( 'POST', 'domains/'+ domainname +'/whois_privacy', callback )
-    } else {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/whois_privacy', callback )
-    }
+    var method = enable ? 'POST' : 'DELETE'
+    app.talk( method, 'domains/'+ domainname +'/whois_privacy', function( err, data, meta ) {
+      data = data.whois_privacy || data
+      if( method === 'DELETE' ) {
+        data = meta.statusCode === 200 || meta.statusCode === 204 ? true : false
+      }
+      callback( err, data, meta )
+    })
   },
   
   // domains.nameserver_register
@@ -631,6 +658,10 @@ app.user = function( user, callback ) {
     var data = data.user || false
     callback( null, data, meta )
   })
+}
+
+app.extendedAttributes = function( tld, callback ) {
+  app.talk( 'GET', 'extended_attributes/'+ tld, callback )
 }
 
 
