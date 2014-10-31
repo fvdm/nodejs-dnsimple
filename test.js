@@ -528,21 +528,21 @@ queue.push( function() {
   })
 })
 
-// ! contacts.delete
-queue.push( function() {
-  ds.contacts.delete( bogus.contact.id, function( err, data, meta ) {
-    doTest( err, 'contacts.delete', [
-      ['result', data === true]
-    ])
-  })
-})
-
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
     doTest( err, 'domains.delete (2/2)', [
       ['data type', typeof data === 'boolean'],
       ['data value', data === true]
+    ])
+  })
+})
+
+// ! contacts.delete
+queue.push( function() {
+  ds.contacts.delete( bogus.contact.id, function( err, data, meta ) {
+    doTest( err, 'contacts.delete', [
+      ['result', data === true]
     ])
   })
 })
