@@ -288,11 +288,11 @@ app.domains = {
   // domains.autorenew
   // Set auto-renewal for domain
   autorenew: function( domainname, enable, callback ) {
-    if( enable ) {
-      app.talk( 'POST', 'domains/'+ domainname +'/auto_renewal', {auto_renewal:{}}, callback )
-    } else {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/auto_renewal', callback )
-    }
+    var method = enable ? 'POST' : 'DELETE'
+    app.talk( method, 'domains/'+ domainname +'/auto_renewal', function( err, data, meta ) {
+      data = data.domain || null
+      callback( err, data, meta )
+    })
   },
 
   // domains.transferout
