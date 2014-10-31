@@ -757,6 +757,10 @@ app.talk = function( method, path, fields, callback ) {
       if( data == '' && meta.statusCode < 300 ) {
         noError = true
       }
+      // domain check 404 = free
+      if( path.match(/^domains\/.+\/check$/) && meta.statusCode === 404 ) {
+        noError = true
+      }
 
       // check HTTP status code
       if( noError || (!failed && response.statusCode < 300) ) {
