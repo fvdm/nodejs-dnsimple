@@ -528,6 +528,13 @@ queue.push( function() {
   })
 })
 
+// ! domains.transferout
+queue.push( function() {
+  ds.domains.transferout( bogus.domain.name, function( err, data, meta ) {
+    doTest( err, 'domains.transferout', testObj(data))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
