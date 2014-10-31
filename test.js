@@ -489,6 +489,15 @@ queue.push( function() {
   })
 })
 
+// ! domains.register
+queue.push( function() {
+  ds.domains.register( 'example.net', bogus.contact.id, function( err, data, meta ) {
+    doTest( null, 'domains.register taken', [
+      ['result', err && err.code === 400]
+    ])
+  })
+})
+
 // ! contacts.delete
 queue.push( function() {
   ds.contacts.delete( bogus.contact.id, function( err, data, meta ) {
