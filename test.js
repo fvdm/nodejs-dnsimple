@@ -457,6 +457,16 @@ queue.push( function() {
   })
 })
 
+// ! templates.records.show
+queue.push( function() {
+  ds.templates.records.show( bogus.template.id, bogus.template_record.id, function( err, data, meta ) {
+    doTest( err, 'templates.records.show', [
+      ['result', meta.statusCode === 200],
+      ['content', data.content === bogus.template_record.content]
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
