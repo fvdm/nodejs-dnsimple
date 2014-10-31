@@ -660,6 +660,10 @@ app.user = function( user, callback ) {
   })
 }
 
+app.extendedAttributes = function( tld, callback ) {
+  app.talk( 'GET', 'extended_attributes/'+ tld, callback )
+}
+
 
 // MODULE
 
