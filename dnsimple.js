@@ -375,9 +375,16 @@ app.domains = {
 
     // domains.services.add
     // apply one
-    add: function( domainname, serviceID, callback ) {
+    add: function( domainname, serviceID, settings, callback ) {
+      if( typeof settings === 'function' ) {
+        var callback = settings
+        var settings = null
+      }
       var service = { service: { id: serviceID } }
       app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, callback )
+      if( settings ) {
+        service.settings = settings
+      }
     },
 
     // domains.services.delete
