@@ -539,6 +539,13 @@ queue.push( function() {
   })
 })
 
+// ! contacts.list
+queue.push( function() {
+  ds.contacts.list( function( err, data, meta ) {
+    doTest( err, 'contacts.list', testArrObj(data))
+  })
+})
+
 
 // Start the tests
 queue[0]()
