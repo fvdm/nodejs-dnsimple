@@ -438,7 +438,7 @@ queue.push( function() {
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
-    doTest( err, 'domains.delete', [
+    doTest( err, 'domains.delete (1/2)', [
       ['data type', typeof data === 'boolean'],
       ['data value', data === true]
     ])
@@ -489,11 +489,21 @@ queue.push( function() {
   })
 })
 
-// ! domains.register
+// ! domains.register taken
 queue.push( function() {
   ds.domains.register( 'example.net', bogus.contact.id, function( err, data, meta ) {
     doTest( null, 'domains.register taken', [
       ['result', err && err.code === 400]
+    ])
+  })
+})
+
+// ! domains.register available
+queue.push( function() {
+  ds.domains.register( bogus.domain.name, bogus.contact.id, function( err, data, meta ) {
+    bogus.domain = data
+    doTest( err, 'domains.register available', [
+      ['result', meta.statusCode === 201]
     ])
   })
 })
@@ -503,6 +513,16 @@ queue.push( function() {
   ds.contacts.delete( bogus.contact.id, function( err, data, meta ) {
     doTest( err, 'contacts.delete', [
       ['result', data === true]
+    ])
+  })
+})
+
+// ! domains.delete
+queue.push( function() {
+  ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
+    doTest( err, 'domains.delete (2/2)', [
+      ['data type', typeof data === 'boolean'],
+      ['data value', data === true]
     ])
   })
 })
