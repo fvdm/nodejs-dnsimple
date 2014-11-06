@@ -176,7 +176,14 @@ app.domains = {
   memberships: {
     // domains.memberships.list
     list: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback )
+      app.talk( 'GET', 'domains/'+ domainname +'/memberships', function( error, memberships, meta ) {
+        if( error ) { callback( error, null, meta ); return }
+        var result = []
+        for( var i = 0; i < memberships.length; i++ ) {
+          result.push( memberships[i].membership )
+        }
+        callback( null, result, meta )
+      })
     },
 
     // domains.memberships.add
