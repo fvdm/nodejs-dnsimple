@@ -148,6 +148,9 @@ var bogus = {
     name: 'Test dnsimple.js - '+ Date.now(),
     short_name: 'test_'+ Date.now(),
     description: 'Add fake DNS records.'
+  },
+  service: {
+    id: 31
   }
 }
 
@@ -354,7 +357,8 @@ queue.push( function() {
 
 // ! services.show
 queue.push( function() {
-  ds.services.show( 31, function( err, data, meta ) {
+  ds.services.show( bogus.service.id, function( err, data, meta ) {
+    bogus.service = data
     doTest( err, 'services.show', testObj(data))
   })
 })
