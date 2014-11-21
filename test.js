@@ -363,6 +363,16 @@ queue.push( function() {
   })
 })
 
+// ! services.config
+queue.push( function() {
+  ds.services.config( bogus.service.short_name, function( err, data, meta ) {
+    doTest( err, 'services.config', [
+      ['type', data instanceof Object],
+      ['name', data.config && data.config.name && data.config.name === bogus.service.short_name]
+    ])
+  })
+})
+
 // ! templates.add
 queue.push( function() {
   ds.templates.add( bogus.template, function( err, data, meta ) {
