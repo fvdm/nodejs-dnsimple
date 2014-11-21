@@ -471,6 +471,47 @@ app.services = {
       if( error ) { callback( error, null, meta ); return }
       callback( null, service.service, meta )
     })
+  },
+  
+  // services.config
+  config: function( serviceName, callback ) {
+    var complete = false
+    function doCallback( err, res, meta ) {
+      if( ! complete ) {
+        complete = true
+        callback( err, res || null, meta )
+      }
+    }
+
+    https.get( 'https://raw.githubusercontent.com/aetrion/dnsimple-services/master/services/'+ serviceName +'/config.json', function( response ) {
+      var data = []
+      var size = 0
+      var error = null
+
+      response.on( 'data', function(ch) {
+        data.push(ch)
+        size += ch.length
+      })
+
+      response.on( 'end', function() {
+        data = new Buffer.concat( data, size ).toString('utf8').trim()
+
+        try {
+          data = JSON.parse( data )
+        } catch(e) {
+          error = new Error('not json')
+        }
+
+        if( response.statusCode >= 300 ) {
+          error = new Error('http error')
+          error.code = response.statusCode
+          error.headers = response.headers
+          error.body = data
+        }
+
+        doCallback( error, data, {service: 'github'} )
+      })
+    })
   }
 }
 
