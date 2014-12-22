@@ -373,6 +373,7 @@ app.domains = {
   zone: function( domainname, callback ) {
     app.talk( 'GET', 'domains/'+ domainname +'/zone', function(err, data, meta) {
       if (err) { return callback(err, null, meta) }
+      data = data.zone;
       callback(null, data, meta);
     })
   },
@@ -707,11 +708,6 @@ app.talk = function( method, path, fields, callback ) {
     'Accept': 'application/json',
     'User-Agent': 'Nodejs-DNSimple'
   }
-  
-  // Plain text
-  if( path.match(/\/zone$/) ) {
-    headers.Accept = 'text/plain'
-  }
 
   // token in headers
   if( app.api.token ) {
@@ -786,12 +782,10 @@ app.talk = function( method, path, fields, callback ) {
       } catch(e) {
         doCallback(new Error('not json'), data);
       }
-      
+
       // overrides
       var noError = false
-      if( typeof data === 'string' && headers.Accept == 'text/plain' ) {
-        noError = true
-      }
+
       // status ok, no data
       if( data == '' && meta.statusCode < 300 ) {
         noError = true
