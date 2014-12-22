@@ -368,20 +368,25 @@ app.domains = {
   },
   
   // domains.zone
-  zone: function( domainname, zone, callback ) {
-    if( typeof zone === 'function' ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/zone', function( err, data, meta ) {
-        if( err ) { return zone( err, null, meta )}
-        zone( null, data, meta )
-      })
-    } else {
-      var zone = {zone_import: {zone_data: zone}}
-      app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, function( err, data, meta ) {
-        data = data.zone_import || false
-        if( err ) { return callback( err, null, meta )}
-        callback( null, data, meta )
-      })
-    }
+  //
+  // See http://developer.dnsimple.com/domains/zones/#zone
+  zone: function( domainname, callback ) {
+    app.talk( 'GET', 'domains/'+ domainname +'/zone', function(err, data, meta) {
+      if (err) { return callback(err, null, meta) }
+      callback(null, data, meta);
+    })
+  },
+
+  // domains.importZone
+  //
+  // See http://developer.dnsimple.com/domains/zones/#import
+  importZone: function( domainname, zone, callback ) {
+    var zone = { zone_import: { zone_data: zone }};
+    app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, function(err, data, meta) {
+      data = data.zone_import || false;
+      if (err) { return callback(err, null, meta) }
+      callback(null, data, meta);
+    })
   },
 
 
