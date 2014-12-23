@@ -45,7 +45,7 @@ Authentication
 The module supports authentication by **email + token**, **email + password**, **domain token** and **2FA/Authy** (two-factor authentication).
 The *token* is more secure as it can easily be reset in your account at [dnsimple.com/account](https://dnsimple.com/account).
 The *password* uses HTTP Basic Authentication.
-Use *domain token* to connect to only one specific domainname.
+Use *domain token* to connect to only one specific domain name.
 
 
 ### Account token
@@ -90,7 +90,7 @@ var dnsimple = require('dnsimple')({
 
 ### Domain token
 
-For access to only one domainname, login with your `domainToken`.
+For access to only one domain name, login with your `domainToken`.
 
 ```js
 require('dnsimple')({ domainToken: 'abc123' })
@@ -146,7 +146,8 @@ When below `DomainObject` is mentioned, it looks like the one below.
 It is passed through directly from the API.
 
 ```js
-{ id: 1111,
+{
+  id: 1111,
   user_id: 432,
   registrant_id: null,
   name: 'example.net',
@@ -154,29 +155,25 @@ It is passed through directly from the API.
   token: 'uwakVhw4AB4ibbn4_gv',
   state: 'hosted',
   language: null,
-  lockable: true,
   auto_renew: false,
   whois_protected: false,
   record_count: 13,
   service_count: 0,
   expires_on: null,
   created_at: '2012-08-04T14:31:10.058Z',
-  updated_at: '2013-12-23T15:24:50.250Z',
-  parsed_expiration_date: null,
-  expires_at: null,
-  name_server_status: null,
-  'private_whois?': false }
+  updated_at: '2013-12-23T15:24:50.250Z'
+}
 ```
 
 
 ### domains.list ( [simpleBool], callback )
 
-List domainnames in your account.
+List domain names in your account.
 
 
 **simpleBool** true
 
-A simple *array* with domainnames.
+A simple *array* with domain names.
 
 ```js
 dnsimple.domains.list( true, console.log )
@@ -189,7 +186,7 @@ dnsimple.domains.list( true, console.log )
 
 **simpleBool** false (default)
 
-An array with your domainnames.
+An array with your domain names.
 
 ```js
 [ DomainObject,
@@ -211,8 +208,8 @@ Same output format as `domains.list`.
 
 ### domains.show ( domainname, cb )
 
-Get details about one domainname.
-Either use the domainname or its ID.
+Get details about one domain name.
+Either use the domain name or its ID.
 
 ```js
 dnsimple.domains.show( 'one.com', console.log )
@@ -251,7 +248,7 @@ Error
 ### domains.delete ( domainname, cb )
 
 Delete a domains and its DNS records from your account.
-Either use the domainname or its ID.
+Either use the domain name or its ID.
 
 ```js
 dnsimple.domains.delete( 'two.com', console.log )
@@ -261,17 +258,17 @@ dnsimple.domains.delete( 'two.com', console.log )
 ### domains.resetToken ( domainname, cb )
 
 Reset the domain specific API-token.
-Either use the domainname or its ID.
+Either use the domain name or its ID.
 
 ```js
 dnsimple.domains.resetToken( 'two.com', console.log )
 ```
 
 
-### domains.push ( domainname, email, contactId, cb )
+### domains.push ( domain name, email, contactId, cb )
 
 Give the domain to another DNSimple user.
-Either use the domainname or its ID.
+Either use the domain name or its ID.
 
 ```js
 dnsimple.domains.push( 'two.com', 'other@user.tld', '123', console.log )
@@ -280,24 +277,25 @@ dnsimple.domains.push( 'two.com', 'other@user.tld', '123', console.log )
 
 ### domains.vanitynameservers ( domainname, enable, cb )
 
-Toggle vanity nameservers on (`true`) or off (`false`) for a domain.
+Toggle vanity name servers on (`true`) or off (`false`) for a domain.
 
 ```js
 dnsimple.domains.vanitynameservers( 'two.com', true, console.log )
 ```
 
 
-### domains.zone ( domainname, [import], cb )
+### domains.zone ( domainname, cb )
 
-Get or import a plain text zone for the specified domainname.
-
-#### Get zone
+Get a plain text zone for the specified domain name.
 
 ```js
 dnsimple.domains.zone( 'two.com', console.log )
 ```
 
-#### Import zone
+
+### domains.importZone ( domainname, zone, cb )
+
+Import a plain text zone for the specified domain name.
 
 ```js
 var text = '$ORIGIN two.com.$TTL 1htwo.com. IN  SOA ns1.dnsimple.com admin.dnsimple.com 2011092001 86400 7200 604800 300two.com. IN NS  ns1.dnsimple.com.\ntwo.com. IN NS  ns2.dnsimple.com.\ntwo.com. IN NS  ns3.dnsimple.com.\ntwo.com. IN NS  ns4.dnsimple.com.\nds1.two.com. 3600 IN  A 184.106.215.134\n; two.com. 3600 IN  URL http://dnsimple.com\n; www.two.com. 3600 IN  URL https://dnsimple.com'
@@ -344,7 +342,7 @@ Registration
 
 ### domains.check ( domainname, cb )
 
-Check domainname availability for registration or transfer to DNSimple.
+Check domain name availability for registration or transfer to DNSimple.
 
 ```js
 dnsimple.domains.check( 'frankl.in', console.log )
@@ -376,7 +374,7 @@ dnsimple.domains.check( 'frankl.in', console.log )
 
 ### domains.register ( domainname, registrantID, [extendedAttribute], cb )
 
-Register a domainname at DNSimple. Your account will be charged on successful registration.
+Register a domain name at DNSimple. Your account will be charged on successful registration.
 
 * **domainname** - *required* - the domain to register
 * **registrantID** - *required* - the owner of the domain
@@ -435,8 +433,8 @@ domains.transferout( 'example.tld', console.log )
 
 Set nameservers for a domain at the registry.
 
-* **domainname** - *required* - the domain to set nameservers for
-* **nameservers** - *required* - object with nameservers to set
+* **domainname** - *required* - the domain to set name servers for
+* **nameservers** - *required* - object with name servers to set
 
 ```js
 dnsimple.domains.nameservers(
@@ -539,18 +537,19 @@ dnsimple.dns.show( 'one.com', 1234, console.log )
 Returns an object with the record details:
 
 ```js
-{ content: '4.3.2.1',
-  created_at: '2011-03-31T01:21:08Z',
-  domain_id: 123,
-  domain_service_id: null,
+{
   id: 1234,
+  domain_id: 123,
+  parent_id: 123,
   name: '',
-  pdns_identifier: '112233',
+  content: '4.3.2.1',
   prio: null,
   record_type: 'A',
-  special_type: null,
+  system_record: null,
   ttl: 3600,
-  updated_at: '2011-11-28T20:39:51Z' }
+  created_at: '2011-03-31T01:21:08Z',
+  updated_at: '2011-11-28T20:39:51Z'
+}
 ```
 
 
@@ -658,7 +657,8 @@ dnsimple.user( details, console.log )
 ```
 
 ```js
-{ id: 104,
+{
+  id: 104,
   email: 'john.smith@example.net',
   referral_token: 'd1a416add1d12a',
   single_access_token: '2aLdAc71vg1aIM1wLaTh',
@@ -668,9 +668,8 @@ dnsimple.user( details, console.log )
   failed_login_count: 0,
   created_at: '2014-10-30T18:55:40.819Z',
   updated_at: '2014-10-30T18:55:40.848Z',
-  first_name: null,
-  last_name: null,
-  default_contact_id: null }
+  default_contact_id: null
+}
 ```
 
 Unlicense
