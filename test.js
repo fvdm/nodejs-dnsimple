@@ -531,7 +531,7 @@ queue.push( function() {
 queue.push( function() {
   ds.domains.renew( bogus.domain.name, function( err, data, meta ) {
     doTest( null, 'domains.renew', [
-      ['too soon', err && meta.statusCode === 422]
+      ['too soon', err && err.code === 400]
     ])
   })
 })
