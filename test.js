@@ -260,7 +260,7 @@ queue.push( function() {
 
 // ! domains.zone - import
 queue.push( function() {
-  ds.domains.zone( bogus.domain.name, bogus.domain_zone, function( err, data, meta ) {
+  ds.domains.importZone( bogus.domain.name, bogus.domain_zone, function( err, data, meta ) {
     doTest( err, 'domains.zone import', [
       ['result', meta.statusCode === 201],
       ['data type', data instanceof Object],
