@@ -368,20 +368,26 @@ app.domains = {
   },
   
   // domains.zone
-  zone: function( domainname, zone, callback ) {
-    if( typeof zone === 'function' ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/zone', function( err, data, meta ) {
-        if( err ) { return zone( err, null, meta )}
-        zone( null, data, meta )
-      })
-    } else {
-      var zone = {zone_import: {zone_data: zone}}
-      app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, function( err, data, meta ) {
-        data = data.zone_import || false
-        if( err ) { return callback( err, null, meta )}
-        callback( null, data, meta )
-      })
-    }
+  //
+  // See http://developer.dnsimple.com/domains/zones/#zone
+  zone: function( domainname, callback ) {
+    app.talk( 'GET', 'domains/'+ domainname +'/zone', function(err, data, meta) {
+      if (err) { return callback(err, null, meta) }
+      data = data.zone;
+      callback(null, data, meta);
+    })
+  },
+
+  // domains.importZone
+  //
+  // See http://developer.dnsimple.com/domains/zones/#import
+  importZone: function( domainname, zone, callback ) {
+    var zone = { zone_import: { zone_data: zone }};
+    app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, function(err, data, meta) {
+      data = data.zone_import || false;
+      if (err) { return callback(err, null, meta) }
+      callback(null, data, meta);
+    })
   },
 
 
@@ -743,11 +749,6 @@ app.talk = function( method, path, fields, callback ) {
     'Accept': 'application/json',
     'User-Agent': 'Nodejs-DNSimple'
   }
-  
-  // Plain text
-  if( path.match(/\/zone$/) ) {
-    headers.Accept = 'text/plain'
-  }
 
   // token in headers
   if( app.api.token ) {
@@ -818,20 +819,14 @@ app.talk = function( method, path, fields, callback ) {
       }
 
       try {
-        data = JSON.parse( data )
+        data = JSON.parse( data );
       } catch(e) {
-        if( typeof data === 'string' && data.indexOf('<h1>The Domain Already Exists</h1>') > -1 ) {
-          failed = new Error('domain exists')
-        } else {
-          failed = new Error('not json')
-        }
+        doCallback(new Error('not json'), data);
       }
-      
+
       // overrides
       var noError = false
-      if( typeof data === 'string' && headers.Accept == 'text/plain' ) {
-        noError = true
-      }
+
       // status ok, no data
       if( data == '' && meta.statusCode < 300 ) {
         noError = true
