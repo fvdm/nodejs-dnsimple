@@ -103,14 +103,14 @@ Configuration
 When loading the module into your code you need to provide a _setupObject_ for authentication as described above.
 This object can have a few more settings.
 
-	name          description                             default value
-	-----------   -------------------------------------   ----------------
-	email         Account email address.
-	token         Account access token.
-	password      Account password.
-	domainToken   Domain specific API access token.
-	timeout       End API call after this amount of ms.   5000
-	hostname      API endpoint.                           api.dnsimple.com
+name        | description                           | default
+----------- | ------------------------------------- | ----------------
+email       | Account email address                 |
+token       | Account access token                  |
+password    | Account password                      |
+domainToken | Domain specific API access token      |
+timeout     | End API call after this amount of ms  | 5000
+hostname    | API endpoint                          | api.dnsimple.com
 
 
 Methods
@@ -128,13 +128,15 @@ The `meta` parameter is always available and contains extra information from the
 
 ### Errors
 
-	credentials missing   No authentication details set
-	connection dropped    Connection was closed too early
-	domain exists         You or another DNSimple user has this domain
-	not json              Invalid API response, see err.code and err.data
-	HTTP error            The API returned an error, see err.code and err.data
-	request timeout       The request took too long
-	request failed        The request failed, see err.error
+message             | description
+------------------- | --------------------------------------------------------
+credentials missing | No authentication details set
+connection dropped  | Connection was closed too early
+domain exists       | You or another DNSimple user has this domain
+not json            | Invalid API response, see `err.code` and `err.data`
+HTTP error          | The API returned an error, see `err.code` and `err.data`
+request timeout     | The request took too long
+request failed      | The request failed, see `err.error`
 	
 
 Domains
