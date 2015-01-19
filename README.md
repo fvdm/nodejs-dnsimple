@@ -22,7 +22,6 @@ Develop: `npm install fvdm/nodejs-dnsimple`
 Usage
 -----
 
-First you need to load and setup the module with `new require('dnsimple')( setupObject )`.
 See _Configuration_ below for details on _setupObject_.
 
 ```js
@@ -38,7 +37,7 @@ Authentication
 --------------
 
 The module supports authentication by **email + token**, **email + password**, **domain token** and **2FA/Authy** (two-factor authentication).
-The *token* is more secure as it can easily be reset in your account at [dnsimple.com/account](https://dnsimple.com/account).
+The *token* is more secure as it can easily be reset at [dnsimple.com/account](https://dnsimple.com/account).
 The *password* uses HTTP Basic Authentication.
 Use *domain token* to connect to only one specific domain name.
 
@@ -76,7 +75,7 @@ dnsimple.subscription( function( err, data, meta ) {
   console.log( 'Two-factor token: '+ meta.twoFactorToken )
 })
 
-// From now one only use this token - no email/password
+// From now on only use this token - no email/password
 var dnsimple = require('dnsimple')({
   twoFactorToken: '22596363b3de40b06f981fb85d82312e'
 })
@@ -95,7 +94,8 @@ require('dnsimple')({ domainToken: 'abc123' })
 Configuration
 -------------
 
-When loading the module into your code you need to provide a _setupObject_ for authentication as described above.
+When loading the module into your code you need to provide a _setupObject_ for
+authentication as described above.
 This object can have a few more settings.
 
 name        | description                           | default
@@ -113,12 +113,14 @@ Methods
 
 Each method takes a _callback_ function with three parameters: `err`, `data` and `meta`.
 
-When an error occurs `err` is an instance of `Error` and `data` is `null`. It can get a `.code` property if a HTTP error happened and a `.data` property
-if the remote API returned something other than JSON data. It also has a `.stack` property to figure out where the error was triggered.
+When an error occurs `err` is an instance of `Error` and `data` is _null_.
+It can have additional properties.
 
-When everything looks alright `err` will be _null_ and `data` will be the parsed JSON _object_ or _array_.
+When everything looks alright `err` will be _null_ and `data` will be the parsed
+JSON _object_, _array_ or _boolean_ depending on the method.
 
-The `meta` parameter is always available and contains extra information from the API, such as statusCode, request_id, runtime and twoFactorToken.
+The `meta` parameter is always available and contains extra information from the API,
+such as statusCode, request_id, runtime and twoFactorToken.
 
 
 ### Errors
@@ -317,8 +319,10 @@ dnsimple.domains.memberships.list( 'two.com', console.log )
 
 Add a member to a domain.
 
-If the person already exists in DNSimple as a customer then he will immediately be added to the domain’s membership list.
-If the person does not yet have a DNSimple account then he will receive an invitation to join via email.
+If the person already exists in DNSimple as a customer then he will immediately
+be added to the domain’s membership list.
+If the person does not yet have a DNSimple account then he will receive an
+invitation to join via email.
 
 ```js
 dnsimple.domains.memberships.add( 'two.com', 'other@user.tld', console.log )
@@ -668,6 +672,7 @@ dnsimple.user( details, console.log )
   default_contact_id: null
 }
 ```
+
 
 Unlicense
 ---------
