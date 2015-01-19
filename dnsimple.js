@@ -818,10 +818,12 @@ app.talk = function( method, path, fields, callback ) {
         meta.twoFactorToken = response.headers['x-dnsimple-otp-token']
       }
 
-      try {
-        data = JSON.parse( data );
-      } catch(e) {
-        doCallback(new Error('not json'), data);
+      if( response.statusCode !== 204 ) {
+        try {
+          data = JSON.parse( data );
+        } catch(e) {
+          doCallback(new Error('not json'), data);
+        }
       }
 
       // overrides
