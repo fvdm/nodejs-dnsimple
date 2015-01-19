@@ -38,7 +38,8 @@ dnsimple.domains.add( 'example.tld', function( err, domain ) {
 Authentication
 --------------
 
-The module supports authentication by **email + token**, **email + password**, **domain token** and **2FA/Authy** (two-factor authentication).
+The module supports authentication by **email + token**, **email + password**,
+**domain token** and **2FA/Authy** (two-factor authentication).
 The *token* is more secure as it can easily be reset at [dnsimple.com/account](https://dnsimple.com/account).
 The *password* uses HTTP Basic Authentication.
 Use *domain token* to connect to only one specific domain name.
@@ -59,9 +60,12 @@ require('dnsimple')({ email: 'your@email.tld', password: 'secret' })
 
 ### Two-factor authentication (2FA / OTP)
 
-When you have set up two-factor authentication for your account the module returns error `twoFactorOTP missing` when you did not provide your one-time password.
+When you have set up two-factor authentication for your account the module returns
+error `twoFactorOTP missing` when you did not provide your one-time password.
 
-First your need to tell the API _once_ your one-time code from Authy or SMS, by defining it during setup along with your email and password and calling a random method. Then the API returns a token which you can use instead of your email and password.
+First your need to tell the API _once_ your one-time code from Authy or SMS, by
+defining it during setup along with your email and password and calling a random
+method. Then the API returns a token which you can use instead of your email and password.
 
 ```js
 // Set the OTP code on load
