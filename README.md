@@ -15,13 +15,8 @@ You need a DNSimple account to use this.
 Installation
 ------------
 
-The release on npm is the latest stable version:
-
-	npm install dnsimple
-
-The code on Github is the most recent version, but can be unstable:
-
-	npm install git+https://github.com/fvdm/nodejs-dnsimple
+Stable: `npm install dnsimple`
+Develop: `npm install fvdm/nodejs-dnsimple`
 
 
 Usage
