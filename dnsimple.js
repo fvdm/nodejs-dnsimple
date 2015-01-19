@@ -11,10 +11,9 @@ Service API:   http://developer.dnsimple.com
 */
 
 var https = require('https')
-
-// init
 var app = {}
 
+// ! - Defaults
 app.api = {
   hostname: 'api.dnsimple.com',
   email: null,
@@ -27,10 +26,10 @@ app.api = {
 }
 
 
-// DNS
+// ! DNS
 
 app.dns = {
-  // dns.list
+  // ! dns.list
   list: function( domainname, callback ) {
     app.talk( 'GET', 'domains/'+ domainname +'/records', function( error, records, meta ) {
       if( error ) { callback( error, null, meta ); return }
@@ -42,7 +41,7 @@ app.dns = {
     })
   },
 
-  // dns.show
+  // ! dns.show
   show: function( domainname, recordID, callback ) {
     app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, function( error, record, meta ) {
       if( error ) { callback( error, null, meta ); return }
@@ -50,7 +49,7 @@ app.dns = {
     })
   },
 
-  // dns.add
+  // ! dns.add
   // REQUIRED: name, record_type, content
   // OPTIONAL: ttl, prio
   add: function( domainname, record, callback ) {
@@ -61,7 +60,7 @@ app.dns = {
     })
   },
 
-  // dns.update
+  // ! dns.update
   update: function( domainname, recordID, record, callback ) {
     var post = { record: record }
     app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( error, result, meta ) {
@@ -70,7 +69,7 @@ app.dns = {
     })
   },
 
-  // dns.delete
+  // ! dns.delete
   delete: function( domainname, recordID, callback ) {
     app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, function( err, data, meta ) {
       callback( err, meta.statusCode === 200, meta )
@@ -79,11 +78,11 @@ app.dns = {
 }
 
 
-// DOMAINS
+// ! DOMAINS
 
 app.domains = {
 
-  // domains.list
+  // ! domains.list
   // Simple returns only array with domainnames
   list: function( simple, callback ) {
     if( !callback && typeof simple === 'function' ) {
@@ -106,7 +105,7 @@ app.domains = {
     })
   },
 
-  // domains.findByRegex
+  // ! domains.findByRegex
   findByRegex: function( regex, callback ) {
     var result = []
     app.domains.list( false, function( error, domains, meta ) {
@@ -121,7 +120,7 @@ app.domains = {
     })
   },
 
-  // domains.show
+  // ! domains.show
   show: function( domainname, callback ) {
     app.talk( 'GET', 'domains/'+ domainname, function( error, domain, meta ) {
       if( error ) { callback( error, null, meta ); return }
@@ -129,7 +128,7 @@ app.domains = {
     })
   },
 
-  // domains.add
+  // ! domains.add
   add: function( domainname, callback ) {
     var dom = { domain: { name: domainname } }
     app.talk( 'POST', 'domains', dom, function( error, domain, meta ) {
@@ -138,21 +137,21 @@ app.domains = {
     })
   },
 
-  // domains.delete
+  // ! domains.delete
   delete: function( domainname, callback ) {
     app.talk( 'DELETE', 'domains/'+ domainname, function( err, data, meta ) {
       callback( err, meta.statusCode === 200, meta )
     })
   },
 
-  // domains.resetToken
+  // ! domains.resetToken
   resetToken: function( domainname, callback ) {
     app.talk( 'POST', 'domains/'+ domainname +'/token', function( err, data, meta ) {
       callback( err, data.domain || null, meta )
     })
   },
 
-  // domains.push
+  // ! domains.push
   push: function( domainname, email, regId, callback ) {
     var data = { push: {
       new_user_email: email,
@@ -161,7 +160,7 @@ app.domains = {
     app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback )
   },
 
-  // domains.vanitynameservers
+  // ! domains.vanitynameservers
   vanitynameservers: function( domainname, enable, callback ) {
     if( enable ) {
       app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', {auto_renewal:{}}, callback )
@@ -171,10 +170,10 @@ app.domains = {
   },
 
 
-  // MEMBERSHIPS
+  // ! DOMAINS.MEMBERSHIPS
 
   memberships: {
-    // domains.memberships.list
+    // ! domains.memberships.list
     list: function( domainname, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/memberships', function( error, memberships, meta ) {
         if( error ) { callback( error, null, meta ); return }
@@ -186,7 +185,7 @@ app.domains = {
       })
     },
 
-    // domains.memberships.add
+    // ! domains.memberships.add
     add: function( domainname, email, callback ) {
       var data = {membership: {email: email}}
       app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, function( err, data, meta ) {
@@ -196,7 +195,7 @@ app.domains = {
       })
     },
 
-    // domains.memberships.delete
+    // ! domains.memberships.delete
     delete: function( domainname, member, callback ) {
       app.talk( 'DELETE', 'domains/'+ domainname +'/memberships/'+ member, function( err, data, meta ) {
         if( err ) { return callback( err, null, meta )}
@@ -207,15 +206,15 @@ app.domains = {
   },
 
 
-  // REGISTRATION
+  // ! DOMAINS REGISTRATION
 
-  // domains.check
+  // ! domains.check
   // Check availability
   check: function( domainname, callback ) {
     app.talk( 'GET', 'domains/'+ domainname +'/check', {}, callback )
   },
 
-  // domains.register
+  // ! domains.register
   // Register domainname - auto-payment!
   register: function( domainname, registrantID, extendedAttribute, callback ) {
     var vars = {
@@ -240,7 +239,7 @@ app.domains = {
     })
   },
 
-  // domains.transfer
+  // ! domains.transfer
   // Transfer domainname - auto-payment!
   transfer: function( domainname, registrantID, authinfo, callback ) {
     var vars = {
@@ -263,7 +262,7 @@ app.domains = {
     app.talk( 'POST', 'domain_transfers', vars, callback )
   },
 
-  // domains.transferAttribute
+  // ! domains.transferAttribute
   // Transfer domainname with Extended Attributes - auto-payment!
   transferAttribute: function( domainname, registrantID, attr, authinfo, callback ) {
     var vars = {
@@ -287,7 +286,7 @@ app.domains = {
     app.talk( 'POST', 'domain_transfers', vars, callback )
   },
 
-  // domains.renew
+  // ! domains.renew
   // Renew domainname registration - auto-payment!
   renew: function( domainname, whoisPrivacy, callback ) {
     var vars = {
@@ -316,7 +315,7 @@ app.domains = {
     })
   },
 
-  // domains.autorenew
+  // ! domains.autorenew
   // Set auto-renewal for domain
   autorenew: function( domainname, enable, callback ) {
     var method = enable ? 'POST' : 'DELETE'
@@ -326,13 +325,13 @@ app.domains = {
     })
   },
 
-  // domains.transferout
+  // ! domains.transferout
   // Prepare domain for transferring out
   transferout: function( domainname, callback ) {
     app.talk( 'POST', 'domains/'+ domainname +'/transfer_outs', callback )
   },
 
-  // domains.nameservers
+  // ! domains.nameservers
   // Set nameservers at registry
   nameservers: function( domainname, nameservers, callback ) {
     var ns = {
@@ -341,7 +340,7 @@ app.domains = {
     app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback )
   },
 
-  // domains.whoisPrivacy
+  // ! domains.whoisPrivacy
   whoisPrivacy: function( domainname, enable, callback ) {
     var method = enable ? 'POST' : 'DELETE'
     app.talk( method, 'domains/'+ domainname +'/whois_privacy', function( err, data, meta ) {
@@ -353,7 +352,7 @@ app.domains = {
     })
   },
   
-  // domains.nameserver_register
+  // ! domains.nameserver_register
   nameserver_register: function( domainname, name, ip, callback ) {
     var vars = {
       name: name,
@@ -362,13 +361,12 @@ app.domains = {
     app.talk( 'POST', 'domains/'+ domainname +'/registry_name_servers', vars, callback )
   },
   
-  // domains.nameserver_deregister
+  // ! domains.nameserver_deregister
   nameserver_deregister: function( domainname, name, callback ) {
     app.talk( 'DELETE', 'domains/'+ domainname +'/registry_name_servers/'+ name, vars, callback )
   },
   
-  // domains.zone
-  //
+  // ! domains.zone
   // See http://developer.dnsimple.com/domains/zones/#zone
   zone: function( domainname, callback ) {
     app.talk( 'GET', 'domains/'+ domainname +'/zone', function(err, data, meta) {
@@ -378,8 +376,7 @@ app.domains = {
     })
   },
 
-  // domains.importZone
-  //
+  // ! domains.importZone
   // See http://developer.dnsimple.com/domains/zones/#import
   importZone: function( domainname, zone, callback ) {
     var zone = { zone_import: { zone_data: zone }}
@@ -391,11 +388,11 @@ app.domains = {
   },
 
 
-  // SERVICES
+  // ! DOMAINS SERVICES
 
   // Services for domain
   services: {
-    // domains.services.list
+    // ! domains.services.list
     // already applied
     list: function( domainname, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( error, result, meta ) {
@@ -408,7 +405,7 @@ app.domains = {
       })
     },
 
-    // domains.services.available
+    // ! domains.services.available
     // available
     available: function( domainname, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( error, result, meta ) {
@@ -421,7 +418,7 @@ app.domains = {
       })
     },
 
-    // domains.services.add
+    // ! domains.services.add
     // apply one
     add: function( domainname, serviceID, settings, callback ) {
       if( typeof settings === 'function' ) {
@@ -439,14 +436,14 @@ app.domains = {
       })
     },
 
-    // domains.services.delete
+    // ! domains.services.delete
     // delete one
     delete: function( domainname, serviceID, callback ) {
       app.talk( 'DELETE', 'domains/'+ domainname +'/applied_services/'+ serviceID, callback )
     }
   },
 
-  // domains.template
+  // ! domains.template
   // apply template -- alias for templates.apply
   template: function( domainname, templateID, callback ) {
     app.templates.apply( domainname, templateID, callback )
@@ -454,10 +451,10 @@ app.domains = {
 }
 
 
-// SERVICES
+// ! SERVICES
 
 app.services = {
-  // services.list
+  // ! services.list
   // List all supported services
   list: function( callback ) {
     app.talk( 'GET', 'services', function( error, list, meta ) {
@@ -470,7 +467,7 @@ app.services = {
     })
   },
 
-  // services.show
+  // ! services.show
   // Get one service' details
   show: function( serviceID, callback ) {
     app.talk( 'GET', 'services/'+ serviceID, function( error, service, meta ) {
@@ -479,7 +476,7 @@ app.services = {
     })
   },
   
-  // services.config
+  // ! services.config
   config: function( serviceName, callback ) {
     var complete = false
     function doCallback( err, res, meta ) {
@@ -522,10 +519,10 @@ app.services = {
 }
 
 
-// TEMPLATES
+// ! TEMPLATES
 
 app.templates = {
-  // templates.list
+  // ! templates.list
   // List all of the custom templates in the account
   list: function( callback ) {
     app.talk( 'GET', 'templates', function( error, list, meta ) {
@@ -538,7 +535,7 @@ app.templates = {
     })
   },
 
-  // templates.show
+  // ! templates.show
   // Get a specific template
   show: function( templateID, callback ) {
     app.talk( 'GET', 'templates/'+ templateID, function( error, template, meta ) {
@@ -547,7 +544,7 @@ app.templates = {
     })
   },
 
-  // templates.add
+  // ! templates.add
   // Create a custom template
   // REQUIRED: name, shortname
   // OPTIONAL: description
@@ -559,7 +556,7 @@ app.templates = {
     })
   },
 
-  // templates.delete
+  // ! templates.delete
   // Delete the given template
   delete: function( templateID, callback ) {
     app.talk( 'DELETE', 'templates/'+ templateID, function( err, data, meta ) {
@@ -569,7 +566,7 @@ app.templates = {
     })
   },
 
-  // templates.apply
+  // ! templates.apply
   // Apply a template to a domain
   apply: function( domainname, templateID, callback ) {
     app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', function( error, result, meta ) {
@@ -581,7 +578,7 @@ app.templates = {
 
   // records
   records: {
-    // templates.records.list
+    // ! templates.records.list
     // list records in template
     list: function( templateID, callback ) {
       app.talk( 'GET', 'templates/'+ templateID +'/records', function( error, result, meta ) {
@@ -594,7 +591,7 @@ app.templates = {
       })
     },
 
-    // templates.records.show
+    // ! templates.records.show
     // Get one record for template
     show: function( templateID, recordID, callback ) {
       app.talk( 'GET', 'templates/'+ templateID +'/records/'+ recordID, function( error, result, meta ) {
@@ -603,7 +600,7 @@ app.templates = {
       })
     },
 
-    // templates.records.add
+    // ! templates.records.add
     // Add record to template
     // REQUIRED: name, record_type, content
     // OPTIONAL: ttl, prio
@@ -615,7 +612,7 @@ app.templates = {
       })
     },
 
-    // templates.records.delete
+    // ! templates.records.delete
     // Delete record from template
     delete: function( templateID, recordID, callback ) {
       app.talk( 'DELETE', 'templates/'+ templateID +'/records/'+ recordID, {}, function( err, data, meta ) {
@@ -628,20 +625,20 @@ app.templates = {
 }
 
 
-// CONTACTS
+// ! CONTACTS
 
 app.contacts = {
-  // contacts.list
+  // ! contacts.list
   list: function( callback ) {
     app.talk( 'GET', 'contacts', callback )
   },
 
-  // contacts.show
+  // ! contacts.show
   show: function( contactID, callback ) {
     app.talk( 'GET', 'contacts/'+ contactID, callback )
   },
 
-  // contacts.create
+  // ! contacts.create
   // http://developer.dnsimple.com/contacts/#create-a-contact
   add: function( contact, callback ) {
     app.talk( 'POST', 'contacts', {contact: contact}, function( err, data, meta ) {
@@ -651,7 +648,7 @@ app.contacts = {
     })
   },
 
-  // contacts.update
+  // ! contacts.update
   // http://developer.dnsimple.com/contacts/#update-a-contact
   update: function( contactID, contact, callback ) {
     app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, function( err, data, meta ) {
@@ -661,7 +658,7 @@ app.contacts = {
     })
   },
 
-  // contacts.delete
+  // ! contacts.delete
   delete: function( contactID, callback ) {
     app.talk( 'DELETE', 'contacts/'+ contactID, function( err, data, meta ) {
       if( err ) { return callback( err, null, meta )}
@@ -672,8 +669,9 @@ app.contacts = {
 }
 
 
-// ACCOUNT
+// ! ACCOUNT
 
+// ! .subscription
 app.subscription = function( vars, callback ) {
   if( ! callback ) {
     app.talk( 'GET', 'subscription', function( err, data, meta ) {
@@ -690,8 +688,9 @@ app.subscription = function( vars, callback ) {
 }
 
 
-// OTHER
+// ! OTHER
 
+// ! .prices
 app.prices = function( callback ) {
   app.talk( 'GET', 'prices', function( err, data, meta ) {
     if( err ) { callback( err, null, meta ); return }
@@ -705,6 +704,7 @@ app.prices = function( callback ) {
   })
 }
 
+// ! .user
 app.user = function( user, callback ) {
   var user = {user: user}
   app.talk( 'POST', 'users', user, function( err, data, meta ) {
@@ -714,6 +714,7 @@ app.user = function( user, callback ) {
   })
 }
 
+// ! .extendedAttributes
 app.extendedAttributes = function( tld, callback ) {
   app.talk( 'GET', 'extended_attributes/'+ tld, callback )
 }
@@ -721,7 +722,7 @@ app.extendedAttributes = function( tld, callback ) {
 
 // MODULE
 
-// communicate
+// ! - Communicate
 app.talk = function( method, path, fields, callback ) {
   if( !callback && typeof fields === 'function' ) {
     var callback = fields
