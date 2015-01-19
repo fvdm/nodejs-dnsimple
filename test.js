@@ -457,7 +457,7 @@ queue.push( function() {
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
-    doTest( err, 'domains.delete (1/2)', [
+    doTest( err, 'domains.delete (add)', [
       ['data type', typeof data === 'boolean'],
       ['data value', data === true]
     ])
@@ -597,7 +597,7 @@ queue.push( function() {
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
-    doTest( err, 'domains.delete (2/2)', [
+    doTest( err, 'domains.delete (register)', [
       ['data type', typeof data === 'boolean'],
       ['data value', data === true]
     ])
