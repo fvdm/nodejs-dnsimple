@@ -796,10 +796,12 @@ app.talk = function( method, path, fields, callback ) {
   // response
   request.on( 'response', function( response ) {
     var meta = {statusCode: null}
-    var data = ''
+    var data = []
+    var size = 0
 
     response.on( 'data', function( chunk ) {
-      data += chunk
+      data.push( chunk )
+      size += chunk.length
     })
 
     response.on( 'close', function() {
@@ -808,7 +810,7 @@ app.talk = function( method, path, fields, callback ) {
 
     // request finished
     response.on( 'end', function() {
-      data = data.toString('utf8').trim()
+      data = new Buffer.concat( data, size ).toString('utf8').trim()
       var failed = null
 
       meta.statusCode = response.statusCode
