@@ -28,7 +28,7 @@ See _Configuration_ below for details on _setupObject_.
 var dnsimple = new require('dnsimple')({ email: 'you@web.tld', token: 'abc123' })
 
 dnsimple.domains.add( 'example.tld', function( err, domain ) {
-	console.log( domain.name +' created with ID '+ domain.id )
+  console.log( domain.name +' created with ID '+ domain.id )
 })
 ```
 
@@ -142,7 +142,7 @@ not json            | Invalid API response, see `err.code` and `err.data`
 HTTP error          | The API returned an error, see `err.code` and `err.data`
 request timeout     | The request took too long
 request failed      | The request failed, see `err.error`
-	
+
 
 Domains
 -------
@@ -447,12 +447,12 @@ Set nameservers for a domain at the registry.
 
 ```js
 dnsimple.domains.nameservers(
-	'example.tld',
-	{
-		ns1:	'ns1.company.tld',
-		ns2:	'ns2.company.tld'
-	},
-	console.log
+  'example.tld',
+  {
+    ns1: 'ns1.company.tld',
+    ns2: 'ns2.company.tld'
+  },
+  console.log
 )
 ```
 
@@ -570,13 +570,13 @@ Returns an object with the record details:
 
 ```js
 dnsimple.dns.add(
-	'one.com',
-	{
-		name:			'www',
-		record_type:	'A',
-		content:		'4.3.2.1'
-	},
-	console.log()
+  'one.com',
+  {
+    name:        'www',
+    record_type: 'A',
+    content:     '4.3.2.1'
+  },
+  console.log()
 )
 ```
 
@@ -614,20 +614,20 @@ dnsimple.subscription( console.log )
 
 ```js
 dnsimple.subscription(
-	{
-		plan: 'Silver',
-		credit_card: {
-			number: '1',
-			first_name: 'John',
-			last_name: 'Smith',
-			billing_address: '111 SW 1st Street',
-			billing_zip: '12345',
-			month: '02',
-			year: '2015',
-			cvv: '111'
-		}
-	},
-	console.log
+  {
+    plan: 'Silver',
+    credit_card: {
+      number: '1',
+      first_name: 'John',
+      last_name: 'Smith',
+      billing_address: '111 SW 1st Street',
+      billing_zip: '12345',
+      month: '02',
+      year: '2015',
+      cvv: '111'
+    }
+  },
+  console.log
 )
 ```
 
@@ -658,8 +658,8 @@ Create a user account at DNSimple.com
 
 ```js
 var details = {
-  email: 'john.smith@example.net',
-  password: 'abc123',
+  email:                 'john.smith@example.net',
+  password:              'abc123',
   password_confirmation: 'abc123'
 }
 dnsimple.user( details, console.log )
