@@ -478,7 +478,7 @@ app.domains = {
 
   // ! CERTIFICATES
   certificates: {
-    
+
     // ! domains.certificates.list
     list: function( domain, callback ) {
       app.talk( 'GET', 'domains/'+ domain +'/certificates', function( err, data, meta ) {
@@ -487,7 +487,7 @@ app.domains = {
         callback( null, data, meta )
       })
     },
-    
+
     // ! domains.certificates.show
     show: function( domain, id, callback ) {
       app.talk( 'GET', 'domains/'+ domain +'/certificates/'+ id, function( err, data, meta ) {
@@ -495,7 +495,7 @@ app.domains = {
         callback( null, data.certificate, meta )
       })
     },
-    
+
     // ! domains.certificates.add
     add: function( domain, subdomain, contactId, csr, callback ) {
       if( typeof csr === 'function' ) {
@@ -516,7 +516,7 @@ app.domains = {
         callback( null, data.certificate, meta )
       })
     },
-    
+
     // ! domains.certificates.configure
     configure: function( domain, id, callback ) {
       app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/configure', function( err, data, meta ) {
@@ -524,7 +524,7 @@ app.domains = {
         callback( null, data.certificate, meta )
       })
     },
-    
+
     // ! domains.certificates.submit
     submit: function( domain, id, email, callback ) {
       var input = {
