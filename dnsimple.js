@@ -479,6 +479,14 @@ app.domains = {
   // ! CERTIFICATES
   certificates: {
     
+    // ! domains.certificates.show
+    show: function( domain, id, callback ) {
+      app.talk( 'GET', 'domains/'+ domain +'/certificates/'+ id, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        callback( null, data.certificate, meta )
+      })
+    },
+    
     // ! domains.certificates.add
     add: function( domain, subdomain, contactId, csr, callback ) {
       if( typeof csr === 'function' ) {

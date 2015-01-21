@@ -638,6 +638,13 @@ queue.push( function() {
   })
 })
 
+// ! domains.certificates.show
+queue.push( function() {
+  ds.domains.certificates.show( bogus.domain.name, bogus.certificate.id, function( err, data, meta ) {
+    doTest( err, 'domains.certificates.show', testObj( data ))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
