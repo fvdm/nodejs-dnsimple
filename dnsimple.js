@@ -605,7 +605,11 @@ app.templates = {
 app.contacts = {
   // ! contacts.list
   list: function( callback ) {
-    app.talk( 'GET', 'contacts', callback )
+    app.talk( 'GET', 'contacts', function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      data.map( function( cur, i, arr ) { arr[i] = cur.contact })
+      callback( null, data, meta )
+    })
   },
 
   // ! contacts.show
