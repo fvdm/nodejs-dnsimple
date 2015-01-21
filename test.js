@@ -588,7 +588,7 @@ queue.push( function() {
     doTest( err, 'domains.nameservers list', [
       ['type', data instanceof Array],
       ['size', data.length === 2],
-      ['value', typeof data[0] === 'ns1.example.net']
+      ['value', data[0] === 'ns1.example.net']
     ])
   })
 })
