@@ -606,6 +606,13 @@ queue.push( function() {
   })
 })
 
+// ! domains.email_forwards.show
+queue.push( function() {
+  ds.domains.email_forwards.show( bogus.domain.name, bogus.email.id, function( err, data, meta ) {
+    doTest( err, 'domains.email_forwards.show', testObj( data ))
+  })
+})
+
 // ! domains.email_forwards.list
 queue.push( function() {
   ds.domains.email_forwards.list( bogus.domain.name, function( err, data, meta ) {

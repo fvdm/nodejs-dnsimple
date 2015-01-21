@@ -457,6 +457,14 @@ app.domains = {
         callback( null, data.email_forward, meta )
       })
     },
+    
+    // domains.email_forwards.show
+    show: function( domainname, id, callback ) {
+      app.talk( 'GET', 'domains/'+ domainname +'/email_forwards/'+ id, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        callback( null, data.email_forward, meta )
+      })
+    },
   }
 }
 
