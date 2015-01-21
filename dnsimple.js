@@ -338,15 +338,6 @@ app.domains = {
     app.talk( 'POST', 'domains/'+ domainname +'/transfer_outs', callback )
   },
 
-  // ! domains.nameservers
-  // Set nameservers at registry
-  nameservers: function( domainname, nameservers, callback ) {
-    var ns = {
-      name_servers: nameservers
-    }
-    app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback )
-  },
-
   // ! domains.whoisPrivacy
   whoisPrivacy: function( domainname, enable, callback ) {
     var method = enable ? 'POST' : 'DELETE'
@@ -354,6 +345,15 @@ app.domains = {
       if( err ) { return callback( err, null, meta )}
       callback( null, data.whois_privacy, meta )
     })
+  },
+
+  // ! domains.nameservers
+  // Set nameservers at registry
+  nameservers: function( domainname, nameservers, callback ) {
+    var ns = {
+      name_servers: nameservers
+    }
+    app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback )
   },
 
   // ! domains.nameserver_register
