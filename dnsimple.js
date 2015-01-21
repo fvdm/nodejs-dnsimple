@@ -782,6 +782,7 @@ app.talk = function( method, path, fields, callback ) {
 
       // overrides
       var noError = false;
+      var error = null;
 
       // status ok, no data
       if( data === '' && meta.statusCode < 300 ) {
@@ -797,15 +798,12 @@ app.talk = function( method, path, fields, callback ) {
         doCallback( null, data, meta );
       } else {
         if( response.statusCode === 401 && response.headers['x-dnsimple-otp'] === 'required' ) {
-          var error = new Error('twoFactorOTP required');
+          error = new Error('twoFactorOTP required');
         } else {
-          var error = failed || new Error('API error');
+          error = failed || new Error('API error');
         }
         error.code = response.statusCode;
-        error.error = data.message
-          || data.error
-          || (data.errors && data instanceof Object && Object.keys(data.errors)[0] ? data.errors[ Object.keys(data.errors)[0] ] : null)
-          || null;
+        error.error = data.message || data.error || (data.errors && data instanceof Object && Object.keys(data.errors)[0] ? data.errors[ Object.keys(data.errors)[0] ] : null) || null;
         error.data = data;
         doCallback( error, null, meta );
       }
@@ -825,10 +823,11 @@ app.talk = function( method, path, fields, callback ) {
 
   // error
   request.on( 'error', function( error ) {
+    var er = null;
     if( error.code === 'ECONNRESET' ) {
-      var er = new Error('request timeout');
+      er = new Error('request timeout');
     } else {
-      var er = new Error('request failed');
+      er = new Error('request failed');
     }
     er.error = error;
     doCallback( er );
