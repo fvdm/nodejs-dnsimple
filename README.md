@@ -39,14 +39,14 @@ dnsimple.domains.add( 'example.tld', function( err, domain ) {
 Authentication
 --------------
 
-The module supports authentication by **email + token**, **email + password**,
-**domain token** and **2FA/Authy** (two-factor authentication).
-The *token* is more secure as it can easily be reset at [dnsimple.com/account](https://dnsimple.com/account).
-The *password* uses HTTP Basic Authentication.
-Use *domain token* to connect to only one specific domain name.
+This module supports multiple authentication methods.
+None of them is totally secure, but some are easier to reset.
 
 
 ### Account token
+
+Full API access, easy to reset at [dnsimple.com/account](https://dnsimple.com/account).
+
 
 ```js
 require('dnsimple')({ email: 'your@email.tld', token: '12345abcde' })
@@ -55,11 +55,17 @@ require('dnsimple')({ email: 'your@email.tld', token: '12345abcde' })
 
 ### Password
 
+Full API and web access, don't use.
+
+
 ```js
 require('dnsimple')({ email: 'your@email.tld', password: 'secret' })
 ```
 
+
 ### Two-factor authentication (2FA / OTP)
+
+Full API access, can't reset token.
 
 When you have set up two-factor authentication for your account the module returns
 error `twoFactorOTP missing` when you did not provide your one-time password.
@@ -67,6 +73,7 @@ error `twoFactorOTP missing` when you did not provide your one-time password.
 First your need to tell the API _once_ your one-time code from Authy or SMS, by
 defining it during setup along with your email and password and calling a random
 method. Then the API returns a token which you can use instead of your email and password.
+
 
 ```js
 // Set the OTP code on load
@@ -78,7 +85,7 @@ var dnsimple = require('dnsimple')({
 
 // Now call a random method to trade the OTP for a longterm token
 dnsimple.subscription( function( err, data, meta ) {
-  if( err ) { console.log(err); return }
+  if( err ) { return console.log(err) }
   console.log( 'Two-factor token: '+ meta.twoFactorToken )
 })
 
@@ -91,7 +98,8 @@ var dnsimple = require('dnsimple')({
 
 ### Domain token
 
-For access to only one domain name, login with your `domainToken`.
+Access to only one domain name, easy to reset.
+
 
 ```js
 require('dnsimple')({ domainToken: 'abc123' })
