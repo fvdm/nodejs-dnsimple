@@ -443,6 +443,20 @@ app.domains = {
         callback( null, data, meta )
       })
     },
+    
+    // domains.email_forwards.add
+    add: function( domainname, from, to, callback ) {
+      var vars = {
+        email_forward: {
+          from: from,
+          to: to
+        }
+      }
+      app.talk( 'POST', 'domains/'+ domainname +'/email_forwards', vars, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        callback( null, data.email_forward, meta )
+      })
+    },
   }
 }
 
