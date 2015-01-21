@@ -240,7 +240,7 @@ app.domains = {
 
     // send
     app.talk( 'POST', 'domain_registrations', vars, function( err, data, meta ) {
-      if( err ) { return callback( err, null, data )}
+      if( err ) { return callback( err, null, meta )}
       data = data.domain || false
       callback( null, data, meta )
     })
