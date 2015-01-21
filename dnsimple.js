@@ -327,8 +327,8 @@ app.domains = {
   autorenew: function( domainname, enable, callback ) {
     var method = enable ? 'POST' : 'DELETE'
     app.talk( method, 'domains/'+ domainname +'/auto_renewal', function( err, data, meta ) {
-      data = data.domain || null
-      callback( err, data, meta )
+      if( err ) { return callback( err, null, meta )}
+      callback( null, data.domain, meta )
     })
   },
 
