@@ -341,7 +341,7 @@ app.domains = {
       callback( err, data, meta )
     })
   },
-  
+
   // ! domains.nameserver_register
   nameserver_register: function( domainname, name, ip, callback ) {
     var vars = {
@@ -350,12 +350,12 @@ app.domains = {
     }
     app.talk( 'POST', 'domains/'+ domainname +'/registry_name_servers', vars, callback )
   },
-  
+
   // ! domains.nameserver_deregister
   nameserver_deregister: function( domainname, name, callback ) {
     app.talk( 'DELETE', 'domains/'+ domainname +'/registry_name_servers/'+ name, vars, callback )
   },
-  
+
   // ! domains.zone
   // See http://developer.dnsimple.com/domains/zones/#zone
   zone: function( domainname, callback ) {
@@ -431,10 +431,10 @@ app.domains = {
   template: function( domainname, templateID, callback ) {
     app.templates.apply( domainname, templateID, callback )
   },
-  
+
   // ! EMAIL FORWARDS
   email_forwards: {
-    
+
     // domains.email_forwards.list
     list: function( domainname, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/email_forwards', function( err, data, meta ) {
@@ -443,7 +443,7 @@ app.domains = {
         callback( null, data, meta )
       })
     },
-    
+
     // domains.email_forwards.add
     add: function( domainname, from, to, callback ) {
       var vars = {
@@ -457,7 +457,7 @@ app.domains = {
         callback( null, data.email_forward, meta )
       })
     },
-    
+
     // domains.email_forwards.show
     show: function( domainname, id, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/email_forwards/'+ id, function( err, data, meta ) {
@@ -465,7 +465,7 @@ app.domains = {
         callback( null, data.email_forward, meta )
       })
     },
-    
+
     // domains.email_forwards.delete
     delete: function( domainname, id, callback ) {
       app.talk( 'DELETE', 'domains/'+ domainname +'/email_forwards/'+ id, function( err, data, meta ) {
@@ -499,7 +499,7 @@ app.services = {
       callback( null, service.service, meta )
     })
   },
-  
+
   // ! services.config
   config: function( serviceName, callback ) {
     var complete = false
