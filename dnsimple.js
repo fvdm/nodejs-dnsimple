@@ -479,6 +479,27 @@ app.domains = {
   // ! CERTIFICATES
   certificates: {
     
+    // ! domains.certificates.add
+    add: function( domain, subdomain, contactId, csr, callback ) {
+      if( typeof csr === 'function' ) {
+        var callback = csr
+        var csr = null
+      }
+      var input = {
+        certificate: {
+          name: subdomain || '',
+          contact_id: contactId
+        }
+      }
+      if( csr ) {
+        input.certificate.csr = csr
+      }
+      app.talk( 'POST', 'domains/'+ domain +'/certificates', input, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        callback( null, data.certificate, meta )
+      })
+    },
+    
   }
 }
 

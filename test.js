@@ -630,6 +630,14 @@ queue.push( function() {
   })
 })
 
+// ! domains.certificates.add
+queue.push( function() {
+  ds.domains.certificates.add( bogus.domain.name, null, bogus.contact.id, function( err, data, meta ) {
+    bogus.certificate = data
+    doTest( err, 'domains.certificates.add', testObj( data ))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {
