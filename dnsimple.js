@@ -157,9 +157,23 @@ app.domains = {
   },
 
   // ! domains.vanitynameservers
-  vanitynameservers: function( domainname, enable, callback ) {
+  vanitynameservers: function( domainname, enable, nameservers, callback ) {
+    if( typeof nameservers === 'function' ) {
+      var callback = nameservers
+      var nameservers = null
+    }
+
     if( enable ) {
-      app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', {auto_renewal:{}}, callback )
+      var input = {
+        vanity_nameserver_configuration: {
+          server_source: 'dnsimple'
+        }
+      }
+      if( nameservers ) {
+        input.vanity_nameserver_configuration = nameservers
+        input.vanity_nameserver_configuration.server_source = 'external'
+      }
+      app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', input, callback )
     } else {
       app.talk( 'DELETE', 'domains/'+ domainname +'/vanity_name_servers', callback )
     }
