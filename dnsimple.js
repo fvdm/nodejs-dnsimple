@@ -12,7 +12,7 @@ Service API:   http://developer.dnsimple.com
 */
 
 var https = require('https');
-var app = {}
+var app = {};
 
 // ! - Defaults
 app.api = {
@@ -24,7 +24,7 @@ app.api = {
   twoFactorToken: null, // OTP exchange token
   password: null,
   timeout: 30000
-}
+};
 
 
 // ! DNS
@@ -44,13 +44,13 @@ app.dns = {
   // REQUIRED: name, record_type, content
   // OPTIONAL: ttl, prio
   add: function( domainname, record, callback ) {
-    var post = { record: record }
+    var post = { record: record };
     app.talk( 'POST', 'domains/'+ domainname +'/records', post, callback );
   },
 
   // ! dns.update
   update: function( domainname, recordID, record, callback ) {
-    var post = { record: record }
+    var post = { record: record };
     app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, callback );
   },
 
@@ -103,7 +103,7 @@ app.domains = {
 
   // ! domains.add
   add: function( domainname, callback ) {
-    var dom = { domain: { name: domainname } }
+    var dom = { domain: { name: domainname } };
     app.talk( 'POST', 'domains', dom, callback );
   },
 
@@ -122,7 +122,7 @@ app.domains = {
     var data = { push: {
       new_user_email: email,
       contact_id: regId
-    }}
+    }};
     app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback );
   },
 
@@ -138,7 +138,7 @@ app.domains = {
         vanity_nameserver_configuration: {
           server_source: 'dnsimple'
         }
-      }
+      };
       if( nameservers ) {
         input.vanity_nameserver_configuration = nameservers;
         input.vanity_nameserver_configuration.server_source = 'external';
@@ -160,7 +160,7 @@ app.domains = {
 
     // ! domains.memberships.add
     add: function( domainname, email, callback ) {
-      var data = {membership: {email: email}}
+      var data = {membership: {email: email}};
       app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback );
     },
 
@@ -187,7 +187,7 @@ app.domains = {
         name: domainname,
         registrant_id: registrantID
       }
-    }
+    };
 
     // fix 3 & 4 params
     if( !callback && typeof extendedAttribute == 'function' ) {
@@ -208,7 +208,7 @@ app.domains = {
         name: domainname,
         registrant_id: registrantID
       }
-    }
+    };
 
     // fix 3 & 4 params
     if( !callback && typeof authinfo == 'function' ) {
@@ -232,7 +232,7 @@ app.domains = {
         registrant_id: registrantID
       },
       extended_attribute: attr
-    }
+    };
 
     // fix 3 & 4 params
     if( !callback && typeof authinfo == 'function' ) {
@@ -254,7 +254,7 @@ app.domains = {
       domain: {
         name: domainname
       }
-    }
+    };
 
     // fix 2 & 3 params
     if( !callback && typeof whoisPrivacy == 'function' ) {
@@ -301,7 +301,7 @@ app.domains = {
     if( nameservers ) {
       var ns = {
         name_servers: nameservers
-      }
+      };
       app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback );
     } else {
       app.talk( 'GET', 'domains/'+ domainname +'/name_servers', callback );
@@ -315,7 +315,7 @@ app.domains = {
         name: name,
         ip: ip
       }
-    }
+    };
     app.talk( 'POST', 'domains/'+ domainname +'/registry_name_servers', vars, callback );
   },
 
@@ -335,7 +335,7 @@ app.domains = {
   // ! domains.importZone
   // See http://developer.dnsimple.com/domains/zones/#import
   importZone: function( domainname, zone, callback ) {
-    var zone = { zone_import: { zone_data: zone }}
+    var zone = { zone_import: { zone_data: zone }};
     app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, callback );
   },
 
@@ -363,7 +363,7 @@ app.domains = {
         var callback = settings;
         var settings = null;
       }
-      var service = { service: { id: serviceID } }
+      var service = { service: { id: serviceID } };
       if( settings ) {
         service.settings = settings;
       }
@@ -398,7 +398,7 @@ app.domains = {
           from: from,
           to: to
         }
-      }
+      };
       app.talk( 'POST', 'domains/'+ domainname +'/email_forwards', vars, callback );
     },
 
@@ -437,7 +437,7 @@ app.domains = {
           name: subdomain || '',
           contact_id: contactId
         }
-      }
+      };
       if( csr ) {
         input.certificate.csr = csr;
       }
@@ -455,7 +455,7 @@ app.domains = {
         certificate: {
           approver_email: email
         }
-      }
+      };
       app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/submit', input, callback );
     }
   }
@@ -540,7 +540,7 @@ app.templates = {
   // REQUIRED: name, shortname
   // OPTIONAL: description
   add: function( template, callback ) {
-    var set = { dns_template: template }
+    var set = { dns_template: template };
     app.talk( 'POST', 'templates', set, callback );
   },
 
@@ -575,7 +575,7 @@ app.templates = {
     // REQUIRED: name, record_type, content
     // OPTIONAL: ttl, prio
     add: function( templateID, record, callback ) {
-      var rec = { dns_template_record: record }
+      var rec = { dns_template_record: record };
       app.talk( 'POST', 'templates/'+ templateID +'/records', rec, callback );
     },
 
@@ -627,7 +627,7 @@ app.subscription = function( vars, callback ) {
   if( ! callback ) {
     app.talk( 'GET', 'subscription', vars );
   } else {
-    var data = {subscription: vars}
+    var data = {subscription: vars};
     app.talk( 'PUT', 'subscription', data, callback );
   }
 }
@@ -642,7 +642,7 @@ app.prices = function( callback ) {
 
 // ! .user
 app.user = function( user, callback ) {
-  var user = {user: user}
+  var user = {user: user};
   app.talk( 'POST', 'users', user, callback );
 }
 
@@ -658,7 +658,7 @@ app.extendedAttributes = function( tld, callback ) {
 app.talk = function( method, path, fields, callback ) {
   if( !callback && typeof fields === 'function' ) {
     var callback = fields;
-    var fields = {}
+    var fields = {};
   }
 
   // prevent multiple callbacks
@@ -708,7 +708,7 @@ app.talk = function( method, path, fields, callback ) {
   var headers = {
     'Accept': 'application/json',
     'User-Agent': 'Nodejs-DNSimple'
-  }
+  };
 
   // token in headers
   if( app.api.token ) {
@@ -731,7 +731,7 @@ app.talk = function( method, path, fields, callback ) {
     path: '/v1/'+ path,
     method: method,
     headers: headers
-  }
+  };
 
   // password authentication
   if( ! app.api.twoFactorToken && ! app.api.token && ! app.api.domainToken && app.api.password && app.api.email ) {
@@ -754,7 +754,7 @@ app.talk = function( method, path, fields, callback ) {
 
   // response
   request.on( 'response', function( response ) {
-    var meta = {statusCode: null}
+    var meta = {statusCode: null};
     var data = [];
     var size = 0;
 

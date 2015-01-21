@@ -8,7 +8,7 @@ var acc = {
   hostname: process.env.npm_config_dnshostname || process.env.DNSIMPLE_HOSTNAME || 'api.sandbox.dnsimple.com',
   timeout: process.env.npm_config_dnstimeout || process.env.DNSIMPLE_TIMEOUT || null,
   email: process.env.npm_config_dnsemail || process.env.DNSIMPLE_EMAIL || null
-}
+};
 
 var token = process.env.npm_config_dnstoken || process.env.DNSIMPLE_TOKEN || null;
 var pass = process.env.npm_config_dnspass || process.env.DNSIMPLE_PASS || null;
