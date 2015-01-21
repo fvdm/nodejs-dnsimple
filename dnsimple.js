@@ -237,7 +237,7 @@ app.domains.transferAttribute = function( domainname, registrantID, attr, authin
   } else if( typeof authinfo === 'string' ) {
     vars.transfer_order = {
       authinfo: authinfo
-    }
+    };
   }
 
   // send
