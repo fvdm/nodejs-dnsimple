@@ -593,7 +593,7 @@ queue.push( function() {
 queue.push( function() {
   ds.domains.whoisPrivacy( bogus.domain.name, false, function( err, data, meta ) {
     doTest( err, 'domains.whoisPrivacy off', [
-      ['result', data === true]
+      ['result', data.enabled === false]
     ])
   })
 })

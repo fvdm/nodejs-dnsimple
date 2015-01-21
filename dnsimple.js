@@ -351,11 +351,8 @@ app.domains = {
   whoisPrivacy: function( domainname, enable, callback ) {
     var method = enable ? 'POST' : 'DELETE'
     app.talk( method, 'domains/'+ domainname +'/whois_privacy', function( err, data, meta ) {
-      data = data.whois_privacy || data
-      if( method === 'DELETE' ) {
-        data = meta.statusCode === 200 || meta.statusCode === 204 ? true : false
-      }
-      callback( err, data, meta )
+      if( err ) { return callback( err, null, meta )}
+      callback( null, data.whois_privacy, meta )
     })
   },
 
