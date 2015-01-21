@@ -361,8 +361,7 @@ app.domains = {
   zone: function( domainname, callback ) {
     app.talk( 'GET', 'domains/'+ domainname +'/zone', function(err, data, meta) {
       if (err) { return callback(err, null, meta) }
-      data = data.zone
-      callback(null, data, meta)
+      callback(null, data.zone, meta)
     })
   },
 
@@ -620,7 +619,7 @@ app.contacts = {
     })
   },
 
-  // ! contacts.create
+  // ! contacts.add
   // http://developer.dnsimple.com/contacts/#create-a-contact
   add: function( contact, callback ) {
     app.talk( 'POST', 'contacts', {contact: contact}, function( err, data, meta ) {
