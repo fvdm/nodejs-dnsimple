@@ -435,7 +435,7 @@ app.domains = {
   // ! EMAIL FORWARDS
   email_forwards: {
 
-    // domains.email_forwards.list
+    // ! domains.email_forwards.list
     list: function( domainname, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/email_forwards', function( err, data, meta ) {
         if( err ) { return callback( err, null, meta )}
@@ -444,7 +444,7 @@ app.domains = {
       })
     },
 
-    // domains.email_forwards.add
+    // ! domains.email_forwards.add
     add: function( domainname, from, to, callback ) {
       var vars = {
         email_forward: {
@@ -458,7 +458,7 @@ app.domains = {
       })
     },
 
-    // domains.email_forwards.show
+    // ! domains.email_forwards.show
     show: function( domainname, id, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/email_forwards/'+ id, function( err, data, meta ) {
         if( err ) { return callback( err, null, meta )}
@@ -466,7 +466,7 @@ app.domains = {
       })
     },
 
-    // domains.email_forwards.delete
+    // ! domains.email_forwards.delete
     delete: function( domainname, id, callback ) {
       app.talk( 'DELETE', 'domains/'+ domainname +'/email_forwards/'+ id, function( err, data, meta ) {
         if( err ) { return callback( err, null, meta )}

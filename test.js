@@ -620,7 +620,7 @@ queue.push( function() {
   })
 })
 
-// domains.email_forwards.delete
+// ! domains.email_forwards.delete
 queue.push( function() {
   ds.domains.email_forwards.delete( bogus.domain.name, bogus.email.id, function( err, data, meta ) {
     doTest( err, 'domains.email_forwards.delete', [
