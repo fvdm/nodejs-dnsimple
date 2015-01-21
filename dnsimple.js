@@ -28,595 +28,587 @@ app.api = {
 
 
 // ! DNS
+app.dns = {};
 
-app.dns = {
-  // ! dns.list
-  list: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/records', callback );
-  },
+// ! dns.list
+app.dns.list = function( domainname, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/records', callback );
+}
 
-  // ! dns.show
-  show: function( domainname, recordID, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, callback );
-  },
+// ! dns.show
+app.dns.show = function( domainname, recordID, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, callback );
+}
 
-  // ! dns.add
-  // REQUIRED: name, record_type, content
-  // OPTIONAL: ttl, prio
-  add: function( domainname, record, callback ) {
-    var post = { record: record };
-    app.talk( 'POST', 'domains/'+ domainname +'/records', post, callback );
-  },
+// ! dns.add
+// REQUIRED: name, record_type, content
+// OPTIONAL: ttl, prio
+app.dns.add = function( domainname, record, callback ) {
+  var post = { record: record };
+  app.talk( 'POST', 'domains/'+ domainname +'/records', post, callback );
+}
 
-  // ! dns.update
-  update: function( domainname, recordID, record, callback ) {
-    var post = { record: record };
-    app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, callback );
-  },
+// ! dns.update
+app.dns.update = function( domainname, recordID, record, callback ) {
+  var post = { record: record };
+  app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, callback );
+}
 
-  // ! dns.delete
-  delete: function( domainname, recordID, callback ) {
-    app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, callback );
-  }
+// ! dns.delete
+app.dns.delete = function( domainname, recordID, callback ) {
+  app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, callback );
 }
 
 
 // ! DOMAINS
+app.domains = {};
 
-app.domains = {
+// ! domains.list
+// Simple returns only array with domainnames
+app.domains.list = function( simple, callback ) {
+  if( !callback && typeof simple === 'function' ) {
+    var callback = simple;
+    var simple = false;
+  }
 
-  // ! domains.list
-  // Simple returns only array with domainnames
-  list: function( simple, callback ) {
-    if( !callback && typeof simple === 'function' ) {
-      var callback = simple;
-      var simple = false;
+  app.talk( 'GET', 'domains', function( error, domains, meta ) {
+    if( simple ) {
+      domains.map( function( cur, i, arr ) { arr[i] = cur.name });
     }
+    callback( null, domains, meta );
+  });
+}
 
-    app.talk( 'GET', 'domains', function( error, domains, meta ) {
-      if( simple ) {
-        domains.map( function( cur, i, arr ) { arr[i] = cur.name });
+// ! domains.findByRegex
+app.domains.findByRegex = function( regex, callback ) {
+  var result = [];
+  app.domains.list( false, function( error, domains, meta ) {
+    if( error ) { return callback( error, null, meta )}
+    var regexp = new RegExp( regex );
+    for( var i = 0; i < domains.length; i++ ) {
+      if( domains[i].name.match( regexp ) ) {
+        result.push( domains[i] );
       }
-      callback( null, domains, meta );
-    });
-  },
-
-  // ! domains.findByRegex
-  findByRegex: function( regex, callback ) {
-    var result = [];
-    app.domains.list( false, function( error, domains, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      var regexp = new RegExp( regex );
-      for( var i = 0; i < domains.length; i++ ) {
-        if( domains[i].name.match( regexp ) ) {
-          result.push( domains[i] );
-        }
-      }
-      callback( null, result, meta );
-    });
-  },
-
-  // ! domains.show
-  show: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname, callback );
-  },
-
-  // ! domains.add
-  add: function( domainname, callback ) {
-    var dom = { domain: { name: domainname } };
-    app.talk( 'POST', 'domains', dom, callback );
-  },
-
-  // ! domains.delete
-  delete: function( domainname, callback ) {
-    app.talk( 'DELETE', 'domains/'+ domainname, callback );
-  },
-
-  // ! domains.resetToken
-  resetToken: function( domainname, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/token', callback );
-  },
-
-  // ! domains.push
-  push: function( domainname, email, regId, callback ) {
-    var data = { push: {
-      new_user_email: email,
-      contact_id: regId
-    }};
-    app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback );
-  },
-
-  // ! domains.vanitynameservers
-  vanitynameservers: function( domainname, enable, nameservers, callback ) {
-    if( typeof nameservers === 'function' ) {
-      var callback = nameservers;
-      var nameservers = null;
     }
+    callback( null, result, meta );
+  });
+}
 
-    if( enable ) {
-      var input = {
-        vanity_nameserver_configuration: {
-          server_source: 'dnsimple'
-        }
-      };
-      if( nameservers ) {
-        input.vanity_nameserver_configuration = nameservers;
-        input.vanity_nameserver_configuration.server_source = 'external';
-      }
-      app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', input, callback );
-    } else {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/vanity_name_servers', callback );
-    }
-  },
+// ! domains.show
+app.domains.show = function( domainname, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname, callback );
+}
 
+// ! domains.add
+app.domains.add = function( domainname, callback ) {
+  var dom = { domain: { name: domainname } };
+  app.talk( 'POST', 'domains', dom, callback );
+}
 
-  // ! DOMAINS.MEMBERSHIPS
+// ! domains.delete
+app.domains.delete = function( domainname, callback ) {
+  app.talk( 'DELETE', 'domains/'+ domainname, callback );
+}
 
-  memberships: {
-    // ! domains.memberships.list
-    list: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback );
-    },
+// ! domains.resetToken
+app.domains.resetToken = function( domainname, callback ) {
+  app.talk( 'POST', 'domains/'+ domainname +'/token', callback );
+}
 
-    // ! domains.memberships.add
-    add: function( domainname, email, callback ) {
-      var data = {membership: {email: email}};
-      app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback );
-    },
+// ! domains.push
+app.domains.push = function( domainname, email, regId, callback ) {
+  var data = { push: {
+    new_user_email: email,
+    contact_id: regId
+  }};
+  app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback );
+}
 
-    // ! domains.memberships.delete
-    delete: function( domainname, member, callback ) {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/memberships/'+ member, callback );
-    }
-  },
+// ! domains.vanitynameservers
+app.domains.vanitynameservers = function( domainname, enable, nameservers, callback ) {
+  if( typeof nameservers === 'function' ) {
+    var callback = nameservers;
+    var nameservers = null;
+  }
 
-
-  // ! DOMAINS REGISTRATION
-
-  // ! domains.check
-  // Check availability
-  check: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/check', callback );
-  },
-
-  // ! domains.register
-  // Register domainname - auto-payment!
-  register: function( domainname, registrantID, extendedAttribute, callback ) {
-    var vars = {
-      domain: {
-        name: domainname,
-        registrant_id: registrantID
+  if( enable ) {
+    var input = {
+      vanity_nameserver_configuration: {
+        server_source: 'dnsimple'
       }
     };
-
-    // fix 3 & 4 params
-    if( !callback && typeof extendedAttribute == 'function' ) {
-      var callback = extendedAttribute;
-    } else if( typeof extendedAttribute == 'object' ) {
-      vars.domain.extended_attribute = extendedAttribute;
-    }
-
-    // send
-    app.talk( 'POST', 'domain_registrations', vars, callback );
-  },
-
-  // ! domains.transfer
-  // Transfer domainname - auto-payment!
-  transfer: function( domainname, registrantID, authinfo, callback ) {
-    var vars = {
-      domain: {
-        name: domainname,
-        registrant_id: registrantID
-      }
-    };
-
-    // fix 3 & 4 params
-    if( !callback && typeof authinfo == 'function' ) {
-      var callback = authinfo;
-    } else if( typeof authinfo == 'string' ) {
-      vars.transfer_order = {
-        authinfo: authinfo
-      }
-    }
-
-    // send
-    app.talk( 'POST', 'domain_transfers', vars, callback );
-  },
-
-  // ! domains.transferAttribute
-  // Transfer domainname with Extended Attributes - auto-payment!
-  transferAttribute: function( domainname, registrantID, attr, authinfo, callback ) {
-    var vars = {
-      domain: {
-        name: domainname,
-        registrant_id: registrantID
-      },
-      extended_attribute: attr
-    };
-
-    // fix 3 & 4 params
-    if( !callback && typeof authinfo == 'function' ) {
-      var callback = authinfo;
-    } else if( typeof authinfo == 'string' ) {
-      vars.transfer_order = {
-        authinfo: authinfo
-      }
-    }
-
-    // send
-    app.talk( 'POST', 'domain_transfers', vars, callback );
-  },
-
-  // ! domains.renew
-  // Renew domainname registration - auto-payment!
-  renew: function( domainname, whoisPrivacy, callback ) {
-    var vars = {
-      domain: {
-        name: domainname
-      }
-    };
-
-    // fix 2 & 3 params
-    if( !callback && typeof whoisPrivacy == 'function' ) {
-      var callback = whoisPrivacy;
-    } else {
-      // string matching
-      if( whoisPrivacy ) {
-        vars.domain.renew_whois_privacy = 'true';
-      } else {
-        vars.domain.renew_whois_privacy = 'false';
-      }
-    }
-
-    // send
-    app.talk( 'POST', 'domain_renewals', vars, callback );
-  },
-
-  // ! domains.autorenew
-  // Set auto-renewal for domain
-  autorenew: function( domainname, enable, callback ) {
-    var method = enable ? 'POST' : 'DELETE';
-    app.talk( method, 'domains/'+ domainname +'/auto_renewal', callback );
-  },
-
-  // ! domains.transferout
-  // Prepare domain for transferring out
-  transferout: function( domainname, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/transfer_outs', callback );
-  },
-
-  // ! domains.whoisPrivacy
-  whoisPrivacy: function( domainname, enable, callback ) {
-    var method = enable ? 'POST' : 'DELETE';
-    app.talk( method, 'domains/'+ domainname +'/whois_privacy', callback );
-  },
-
-  // ! domains.nameservers
-  // Get or set nameservers at registry
-  nameservers: function( domainname, nameservers, callback ) {
-    if( typeof nameservers === 'function' ) {
-      var callback = nameservers;
-      var nameservers = null;
-    }
     if( nameservers ) {
-      var ns = {
-        name_servers: nameservers
-      };
-      app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback );
-    } else {
-      app.talk( 'GET', 'domains/'+ domainname +'/name_servers', callback );
+      input.vanity_nameserver_configuration = nameservers;
+      input.vanity_nameserver_configuration.server_source = 'external';
     }
-  },
-
-  // ! domains.nameserver_register
-  nameserver_register: function( domainname, name, ip, callback ) {
-    var vars = {
-      name_server: {
-        name: name,
-        ip: ip
-      }
-    };
-    app.talk( 'POST', 'domains/'+ domainname +'/registry_name_servers', vars, callback );
-  },
-
-  // ! domains.nameserver_deregister
-  nameserver_deregister: function( domainname, name, callback ) {
-    app.talk( 'DELETE', 'domains/'+ domainname +'/registry_name_servers/'+ name, vars, callback );
-  },
-
-  // ! domains.zone
-  // See http://developer.dnsimple.com/domains/zones/#zone
-  zone: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/zone', function( err, data, meta ) {
-      callback( err, data.zone || null, meta )
-    });
-  },
-
-  // ! domains.importZone
-  // See http://developer.dnsimple.com/domains/zones/#import
-  importZone: function( domainname, zone, callback ) {
-    var zone = { zone_import: { zone_data: zone }};
-    app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, callback );
-  },
+    app.talk( 'POST', 'domains/'+ domainname +'/vanity_name_servers', input, callback );
+  } else {
+    app.talk( 'DELETE', 'domains/'+ domainname +'/vanity_name_servers', callback );
+  }
+}
 
 
-  // ! DOMAINS SERVICES
+// ! DOMAINS.MEMBERSHIPS
+app.domains.memberships = {};
 
-  // Services for domain
-  services: {
-    // ! domains.services.list
-    // already applied
-    list: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/applied_services', callback );
-    },
+// ! domains.memberships.list
+app.domains.memberships.list = function( domainname, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback );
+}
 
-    // ! domains.services.available
-    // available
-    available: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/available_services', callback );
-    },
+// ! domains.memberships.add
+app.domains.memberships.add = function( domainname, email, callback ) {
+  var data = {membership: {email: email}};
+  app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback );
+}
 
-    // ! domains.services.add
-    // apply one
-    add: function( domainname, serviceID, settings, callback ) {
-      if( typeof settings === 'function' ) {
-        var callback = settings;
-        var settings = null;
-      }
-      var service = { service: { id: serviceID } };
-      if( settings ) {
-        service.settings = settings;
-      }
-      app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, callback );
-    },
+// ! domains.memberships.delete
+app.domains.memberships.delete = function( domainname, member, callback ) {
+  app.talk( 'DELETE', 'domains/'+ domainname +'/memberships/'+ member, callback );
+}
 
-    // ! domains.services.delete
-    // delete one
-    delete: function( domainname, serviceID, callback ) {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/applied_services/'+ serviceID, callback );
+
+// ! DOMAINS REGISTRATION
+
+// ! domains.check
+// Check availability
+app.domains.check = function( domainname, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/check', callback );
+}
+
+// ! domains.register
+// Register domainname - auto-payment!
+app.domains.register = function( domainname, registrantID, extendedAttribute, callback ) {
+  var vars = {
+    domain: {
+      name: domainname,
+      registrant_id: registrantID
     }
-  },
+  };
 
-  // ! domains.template
-  // apply template -- alias for templates.apply
-  template: function( domainname, templateID, callback ) {
-    app.templates.apply( domainname, templateID, callback );
-  },
+  // fix 3 & 4 params
+  if( !callback && typeof extendedAttribute == 'function' ) {
+    var callback = extendedAttribute;
+  } else if( typeof extendedAttribute == 'object' ) {
+    vars.domain.extended_attribute = extendedAttribute;
+  }
 
-  // ! EMAIL FORWARDS
-  email_forwards: {
+  // send
+  app.talk( 'POST', 'domain_registrations', vars, callback );
+}
 
-    // ! domains.email_forwards.list
-    list: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/email_forwards', callback );
-    },
-
-    // ! domains.email_forwards.add
-    add: function( domainname, from, to, callback ) {
-      var vars = {
-        email_forward: {
-          from: from,
-          to: to
-        }
-      };
-      app.talk( 'POST', 'domains/'+ domainname +'/email_forwards', vars, callback );
-    },
-
-    // ! domains.email_forwards.show
-    show: function( domainname, id, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/email_forwards/'+ id, callback );
-    },
-
-    // ! domains.email_forwards.delete
-    delete: function( domainname, id, callback ) {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/email_forwards/'+ id, callback );
+// ! domains.transfer
+// Transfer domainname - auto-payment!
+app.domains.transfer = function( domainname, registrantID, authinfo, callback ) {
+  var vars = {
+    domain: {
+      name: domainname,
+      registrant_id: registrantID
     }
-  },
+  };
 
-  // ! CERTIFICATES
-  certificates: {
-
-    // ! domains.certificates.list
-    list: function( domain, callback ) {
-      app.talk( 'GET', 'domains/'+ domain +'/certificates', callback );
-    },
-
-    // ! domains.certificates.show
-    show: function( domain, id, callback ) {
-      app.talk( 'GET', 'domains/'+ domain +'/certificates/'+ id, callback );
-    },
-
-    // ! domains.certificates.add
-    add: function( domain, subdomain, contactId, csr, callback ) {
-      if( typeof csr === 'function' ) {
-        var callback = csr;
-        var csr = null;
-      }
-      var input = {
-        certificate: {
-          name: subdomain || '',
-          contact_id: contactId
-        }
-      };
-      if( csr ) {
-        input.certificate.csr = csr;
-      }
-      app.talk( 'POST', 'domains/'+ domain +'/certificates', input, callback );
-    },
-
-    // ! domains.certificates.configure
-    configure: function( domain, id, callback ) {
-      app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/configure', callback );
-    },
-
-    // ! domains.certificates.submit
-    submit: function( domain, id, email, callback ) {
-      var input = {
-        certificate: {
-          approver_email: email
-        }
-      };
-      app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/submit', input, callback );
+  // fix 3 & 4 params
+  if( !callback && typeof authinfo == 'function' ) {
+    var callback = authinfo;
+  } else if( typeof authinfo == 'string' ) {
+    vars.transfer_order = {
+      authinfo: authinfo
     }
   }
+
+  // send
+  app.talk( 'POST', 'domain_transfers', vars, callback );
+}
+
+// ! domains.transferAttribute
+// Transfer domainname with Extended Attributes - auto-payment!
+app.domains.transferAttribute = function( domainname, registrantID, attr, authinfo, callback ) {
+  var vars = {
+    domain: {
+      name: domainname,
+      registrant_id: registrantID
+    },
+    extended_attribute: attr
+  };
+
+  // fix 3 & 4 params
+  if( !callback && typeof authinfo == 'function' ) {
+    var callback = authinfo;
+  } else if( typeof authinfo == 'string' ) {
+    vars.transfer_order = {
+      authinfo: authinfo
+    }
+  }
+
+  // send
+  app.talk( 'POST', 'domain_transfers', vars, callback );
+}
+
+// ! domains.renew
+// Renew domainname registration - auto-payment!
+app.domains.renew = function( domainname, whoisPrivacy, callback ) {
+  var vars = {
+    domain: {
+      name: domainname
+    }
+  };
+
+  // fix 2 & 3 params
+  if( !callback && typeof whoisPrivacy == 'function' ) {
+    var callback = whoisPrivacy;
+  } else {
+    // string matching
+    if( whoisPrivacy ) {
+      vars.domain.renew_whois_privacy = 'true';
+    } else {
+      vars.domain.renew_whois_privacy = 'false';
+    }
+  }
+
+  // send
+  app.talk( 'POST', 'domain_renewals', vars, callback );
+}
+
+// ! domains.autorenew
+// Set auto-renewal for domain
+app.domains.autorenew = function( domainname, enable, callback ) {
+  var method = enable ? 'POST' : 'DELETE';
+  app.talk( method, 'domains/'+ domainname +'/auto_renewal', callback );
+}
+
+// ! domains.transferout
+// Prepare domain for transferring out
+app.domains.transferout = function( domainname, callback ) {
+  app.talk( 'POST', 'domains/'+ domainname +'/transfer_outs', callback );
+}
+
+// ! domains.whoisPrivacy
+app.domains.whoisPrivacy = function( domainname, enable, callback ) {
+  var method = enable ? 'POST' : 'DELETE';
+  app.talk( method, 'domains/'+ domainname +'/whois_privacy', callback );
+}
+
+// ! domains.nameservers
+// Get or set nameservers at registry
+app.domains.nameservers = function( domainname, nameservers, callback ) {
+  if( typeof nameservers === 'function' ) {
+    var callback = nameservers;
+    var nameservers = null;
+  }
+  if( nameservers ) {
+    var ns = {
+      name_servers: nameservers
+    };
+    app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback );
+  } else {
+    app.talk( 'GET', 'domains/'+ domainname +'/name_servers', callback );
+  }
+}
+
+// ! domains.nameserver_register
+app.domains.nameserver_register = function( domainname, name, ip, callback ) {
+  var vars = {
+    name_server: {
+      name: name,
+      ip: ip
+    }
+  };
+  app.talk( 'POST', 'domains/'+ domainname +'/registry_name_servers', vars, callback );
+}
+
+// ! domains.nameserver_deregister
+app.domains.nameserver_deregister = function( domainname, name, callback ) {
+  app.talk( 'DELETE', 'domains/'+ domainname +'/registry_name_servers/'+ name, vars, callback );
+}
+
+// ! domains.zone
+// See http://developer.dnsimple.com/domains/zones/#zone
+app.domains.zone = function( domainname, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/zone', function( err, data, meta ) {
+    callback( err, data.zone || null, meta )
+  });
+}
+
+// ! domains.importZone
+// See http://developer.dnsimple.com/domains/zones/#import
+app.domains.importZone = function( domainname, zone, callback ) {
+  var zone = { zone_import: { zone_data: zone }};
+  app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, callback );
+}
+
+
+// ! DOMAINS SERVICES
+app.domains.services = {};
+
+// ! domains.services.list
+// already applied
+app.domains.services.list = function( domainname, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/applied_services', callback );
+}
+
+// ! domains.services.available
+// available
+app.domains.services.available = function( domainname, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/available_services', callback );
+}
+
+// ! domains.services.add
+// apply one
+app.domains.services.add = function( domainname, serviceID, settings, callback ) {
+  if( typeof settings === 'function' ) {
+    var callback = settings;
+    var settings = null;
+  }
+  var service = { service: { id: serviceID } };
+  if( settings ) {
+    service.settings = settings;
+  }
+  app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, callback );
+}
+
+// ! domains.services.delete
+// delete one
+app.domains.services.delete = function( domainname, serviceID, callback ) {
+  app.talk( 'DELETE', 'domains/'+ domainname +'/applied_services/'+ serviceID, callback );
+}
+
+
+// ! domains.template
+// apply template -- alias for templates.apply
+app.domains.template = function( domainname, templateID, callback ) {
+  app.templates.apply( domainname, templateID, callback );
+}
+
+
+// ! EMAIL FORWARDS
+app.domains.email_forwards = {};
+
+// ! domains.email_forwards.list
+app.domains.email_forwards.list = function( domainname, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/email_forwards', callback );
+}
+
+// ! domains.email_forwards.add
+app.domains.email_forwards.add = function( domainname, from, to, callback ) {
+  var vars = {
+    email_forward: {
+      from: from,
+      to: to
+    }
+  };
+  app.talk( 'POST', 'domains/'+ domainname +'/email_forwards', vars, callback );
+}
+
+// ! domains.email_forwards.show
+app.domains.email_forwards.show = function( domainname, id, callback ) {
+  app.talk( 'GET', 'domains/'+ domainname +'/email_forwards/'+ id, callback );
+}
+
+// ! domains.email_forwards.delete
+app.domains.email_forwards.delete = function( domainname, id, callback ) {
+  app.talk( 'DELETE', 'domains/'+ domainname +'/email_forwards/'+ id, callback );
+}
+
+
+// ! CERTIFICATES
+app.domains.certificates = {};
+
+// ! domains.certificates.list
+app.domains.certificates.list = function( domain, callback ) {
+  app.talk( 'GET', 'domains/'+ domain +'/certificates', callback );
+}
+
+// ! domains.certificates.show
+app.domains.certificates.show = function( domain, id, callback ) {
+  app.talk( 'GET', 'domains/'+ domain +'/certificates/'+ id, callback );
+}
+
+// ! domains.certificates.add
+app.domains.certificates.add = function( domain, subdomain, contactId, csr, callback ) {
+  if( typeof csr === 'function' ) {
+    var callback = csr;
+    var csr = null;
+  }
+  var input = {
+    certificate: {
+      name: subdomain || '',
+      contact_id: contactId
+    }
+  };
+  if( csr ) {
+    input.certificate.csr = csr;
+  }
+  app.talk( 'POST', 'domains/'+ domain +'/certificates', input, callback );
+}
+
+// ! domains.certificates.configure
+app.domains.certificates.configure = function( domain, id, callback ) {
+  app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/configure', callback );
+}
+
+// ! domains.certificates.submit
+app.domains.certificates.submit = function( domain, id, email, callback ) {
+  var input = {
+    certificate: {
+      approver_email: email
+    }
+  };
+  app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/submit', input, callback );
 }
 
 
 // ! SERVICES
+app.services = {};
 
-app.services = {
-  // ! services.list
-  // List all supported services
-  list: function( callback ) {
-    app.talk( 'GET', 'services', callback );
-  },
+// ! services.list
+// List all supported services
+app.services.list = function( callback ) {
+  app.talk( 'GET', 'services', callback );
+}
 
-  // ! services.show
-  // Get one service' details
-  show: function( serviceID, callback ) {
-    app.talk( 'GET', 'services/'+ serviceID, callback );
-  },
+// ! services.show
+// Get one service' details
+app.services.show = function( serviceID, callback ) {
+  app.talk( 'GET', 'services/'+ serviceID, callback );
+}
 
-  // ! services.config
-  config: function( serviceName, callback ) {
-    var complete = false;
-    function doCallback( err, res, meta ) {
-      if( ! complete ) {
-        complete = true;
-        callback( err, res || null, meta );
-      };
-    }
-
-    https.get( 'https://raw.githubusercontent.com/aetrion/dnsimple-services/master/services/'+ serviceName +'/config.json', function( response ) {
-      var data = [];
-      var size = 0;
-      var error = null;
-
-      response.on( 'data', function(ch) {
-        data.push(ch);
-        size += ch.length;
-      })
-
-      response.on( 'end', function() {
-        data = new Buffer.concat( data, size ).toString('utf8').trim();
-
-        try {
-          data = JSON.parse( data );
-        } catch(e) {
-          error = new Error('not json');
-        }
-
-        if( response.statusCode >= 300 ) {
-          error = new Error('API error');
-          error.code = response.statusCode;
-          error.headers = response.headers;
-          error.body = data;
-        }
-
-        doCallback( error, data, {service: 'github'} );
-      })
-    })
+// ! services.config
+app.services.config = function( serviceName, callback ) {
+  var complete = false;
+  function doCallback( err, res, meta ) {
+    if( ! complete ) {
+      complete = true;
+      callback( err, res || null, meta );
+    };
   }
+
+  https.get( 'https://raw.githubusercontent.com/aetrion/dnsimple-services/master/services/'+ serviceName +'/config.json', function( response ) {
+    var data = [];
+    var size = 0;
+    var error = null;
+
+    response.on( 'data', function(ch) {
+      data.push(ch);
+      size += ch.length;
+    })
+
+    response.on( 'end', function() {
+      data = new Buffer.concat( data, size ).toString('utf8').trim();
+
+      try {
+        data = JSON.parse( data );
+      } catch(e) {
+        error = new Error('not json');
+      }
+
+      if( response.statusCode >= 300 ) {
+        error = new Error('API error');
+        error.code = response.statusCode;
+        error.headers = response.headers;
+        error.body = data;
+      }
+
+      doCallback( error, data, {service: 'github'} );
+    });
+  });
 }
 
 
 // ! TEMPLATES
+app.templates = {};
 
-app.templates = {
-  // ! templates.list
-  // List all of the custom templates in the account
-  list: function( callback ) {
-    app.talk( 'GET', 'templates', callback );
-  },
+// ! templates.list
+// List all of the custom templates in the account
+app.templates.list = function( callback ) {
+  app.talk( 'GET', 'templates', callback );
+}
 
-  // ! templates.show
-  // Get a specific template
-  show: function( templateID, callback ) {
-    app.talk( 'GET', 'templates/'+ templateID, callback );
-  },
+// ! templates.show
+// Get a specific template
+app.templates.show = function( templateID, callback ) {
+  app.talk( 'GET', 'templates/'+ templateID, callback );
+}
 
-  // ! templates.add
-  // Create a custom template
-  // REQUIRED: name, shortname
-  // OPTIONAL: description
-  add: function( template, callback ) {
-    var set = { dns_template: template };
-    app.talk( 'POST', 'templates', set, callback );
-  },
+// ! templates.add
+// Create a custom template
+// REQUIRED: name, shortname
+// OPTIONAL: description
+app.templates.add = function( template, callback ) {
+  var set = { dns_template: template };
+  app.talk( 'POST', 'templates', set, callback );
+}
 
-  // ! templates.delete
-  // Delete the given template
-  delete: function( templateID, callback ) {
-    app.talk( 'DELETE', 'templates/'+ templateID, callback );
-  },
+// ! templates.delete
+// Delete the given template
+app.templates.delete = function( templateID, callback ) {
+  app.talk( 'DELETE', 'templates/'+ templateID, callback );
+},
 
-  // ! templates.apply
-  // Apply a template to a domain
-  apply: function( domainname, templateID, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', callback );
-  },
+// ! templates.apply
+// Apply a template to a domain
+app.templates.apply = function( domainname, templateID, callback ) {
+  app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', callback );
+}
 
-  // records
-  records: {
-    // ! templates.records.list
-    // list records in template
-    list: function( templateID, callback ) {
-      app.talk( 'GET', 'templates/'+ templateID +'/records', callback );
-    },
+// records
+app.templates.records = {};
 
-    // ! templates.records.show
-    // Get one record for template
-    show: function( templateID, recordID, callback ) {
-      app.talk( 'GET', 'templates/'+ templateID +'/records/'+ recordID, callback );
-    },
+// ! templates.records.list
+// list records in template
+app.templates.records.list = function( templateID, callback ) {
+  app.talk( 'GET', 'templates/'+ templateID +'/records', callback );
+}
 
-    // ! templates.records.add
-    // Add record to template
-    // REQUIRED: name, record_type, content
-    // OPTIONAL: ttl, prio
-    add: function( templateID, record, callback ) {
-      var rec = { dns_template_record: record };
-      app.talk( 'POST', 'templates/'+ templateID +'/records', rec, callback );
-    },
+// ! templates.records.show
+// Get one record for template
+app.templates.records.show = function( templateID, recordID, callback ) {
+  app.talk( 'GET', 'templates/'+ templateID +'/records/'+ recordID, callback );
+}
 
-    // ! templates.records.delete
-    // Delete record from template
-    delete: function( templateID, recordID, callback ) {
-      app.talk( 'DELETE', 'templates/'+ templateID +'/records/'+ recordID, callback );
-    }
-  }
+// ! templates.records.add
+// Add record to template
+// REQUIRED: name, record_type, content
+// OPTIONAL: ttl, prio
+app.templates.records.add = function( templateID, record, callback ) {
+  var rec = { dns_template_record: record };
+  app.talk( 'POST', 'templates/'+ templateID +'/records', rec, callback );
+}
+
+// ! templates.records.delete
+// Delete record from template
+app.templates.records.delete = function( templateID, recordID, callback ) {
+  app.talk( 'DELETE', 'templates/'+ templateID +'/records/'+ recordID, callback );
 }
 
 
 // ! CONTACTS
+app.contacts = {};
 
-app.contacts = {
-  // ! contacts.list
-  list: function( callback ) {
-    app.talk( 'GET', 'contacts', callback );
-  },
+// ! contacts.list
+app.contacts.list = function( callback ) {
+  app.talk( 'GET', 'contacts', callback );
+}
 
-  // ! contacts.show
-  show: function( contactID, callback ) {
-    app.talk( 'GET', 'contacts/'+ contactID, callback );
-  },
+// ! contacts.show
+app.contacts.show = function( contactID, callback ) {
+  app.talk( 'GET', 'contacts/'+ contactID, callback );
+}
 
-  // ! contacts.add
-  // http://developer.dnsimple.com/contacts/#create-a-contact
-  add: function( contact, callback ) {
-    app.talk( 'POST', 'contacts', {contact: contact}, callback );
-  },
+// ! contacts.add
+// http://developer.dnsimple.com/contacts/#create-a-contact
+app.contacts.add = function( contact, callback ) {
+  app.talk( 'POST', 'contacts', {contact: contact}, callback );
+}
 
-  // ! contacts.update
-  // http://developer.dnsimple.com/contacts/#update-a-contact
-  update: function( contactID, contact, callback ) {
-    app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback );
-  },
+// ! contacts.update
+// http://developer.dnsimple.com/contacts/#update-a-contact
+app.contacts.update = function( contactID, contact, callback ) {
+  app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback );
+}
 
-  // ! contacts.delete
-  delete: function( contactID, callback ) {
-    app.talk( 'DELETE', 'contacts/'+ contactID, callback );
-  }
+// ! contacts.delete
+app.contacts.delete = function( contactID, callback ) {
+  app.talk( 'DELETE', 'contacts/'+ contactID, callback );
 }
 
 
