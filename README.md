@@ -183,14 +183,18 @@ It is passed through directly from the API.
 ```
 
 
-### domains.list ( [simpleBool], callback )
+### domains.list ( [simple], callback )
 
 List domain names in your account.
 
 
-**simpleBool** true
+param    | type     | required | description
+---------|----------|----------|---------------------------------------
+simple   | boolean  | no       | return shallow array with domain names
+callback | function | yes      | your callback function
 
-A simple *array* with domain names.
+
+A simple _array_ with domain names.
 
 ```js
 dnsimple.domains.list( true, console.log )
@@ -201,9 +205,7 @@ dnsimple.domains.list( true, console.log )
 ```
 
 
-**simpleBool** false (default)
-
-An array with your domain names.
+An _array_ with your detailed domains.
 
 ```js
 [ DomainObject,
@@ -211,22 +213,35 @@ An array with your domain names.
 ```
 
 
-### domains.findByRegex ( regexString, cb )
+### domains.findByRegex ( regex, callback )
 
 List only domains with names matching on regex.
 
+
+param    | type     | required | description
+---------|----------|----------|-----------------------
+regex    | string   | yes      | regular expression
+callback | function | yes      | your callback function
+
+
 ```js
-// All .com domains
+// All your .com domains
 dnsimple.domains.findByRegex( '\.com$', console.log )
 ```
 
 Same output format as `domains.list`.
 
 
-### domains.show ( domainname, cb )
+### domains.show ( domainname, callback )
 
 Get details about one domain name.
-Either use the domain name or its ID.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.show( 'one.com', console.log )
@@ -235,9 +250,16 @@ dnsimple.domains.show( 'one.com', console.log )
 Output: `DomainObject`
 
 
-### domains.add ( domainname, cb )
+### domains.add ( domainname, callback )
 
 Add a domain to your account
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.add( 'mydomain.net', console.log )
@@ -250,49 +272,67 @@ Success
 Error
 
 ```js
-{ [Error: HTTP error]
+{ [Error: API error]
   code: 400,
   data: { errors: { name: [ 'has already been taken' ] } } }
 ```
 
 ```js
-{ [Error: HTTP error]
+{ [Error: API error]
   code: 400,
   data: { errors: { name: [ 'is an invalid domain' ] } } }
 ```
 
 
-### domains.delete ( domainname, cb )
+### domains.delete ( domainname, callback )
 
 Delete a domains and its DNS records from your account.
-Either use the domain name or its ID.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.delete( 'two.com', console.log )
 ```
 
 
-### domains.resetToken ( domainname, cb )
+### domains.resetToken ( domainname, callback )
 
 Reset the domain specific API-token.
-Either use the domain name or its ID.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.resetToken( 'two.com', console.log )
 ```
 
 
-### domains.push ( domain name, email, contactId, cb )
+### domains.push ( domain name, email, contactId, callback )
 
 Give the domain to another DNSimple user.
-Either use the domain name or its ID.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.push( 'two.com', 'other@user.tld', '123', console.log )
 ```
 
 
-### domains.vanitynameservers ( domainname, enable, [external], cb )
+### domains.vanitynameservers ( domainname, enable, [external], callback )
 
 Toggle vanity name servers on (`true`) or off (`false`) for a domain.
 
@@ -327,18 +367,33 @@ dnsimple.domains.vanitynameservers( 'two.com', true, names, console.log )
 ```
 
 
-### domains.zone ( domainname, cb )
+### domains.zone ( domainname, callback )
 
 Get a plain text zone for the specified domain name.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.zone( 'two.com', console.log )
 ```
 
 
-### domains.importZone ( domainname, zone, cb )
+### domains.importZone ( domainname, zone, callback )
 
 Import a plain text zone for the specified domain name.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+zone       | string   | yes      | zone file text
+callback   | function | yes      | your callback function
+
 
 ```js
 var text = '$ORIGIN two.com.\n$TTL 1h\ntwo.com. IN  SOA ns1.dnsimple.com admin.dnsimple.com 2011092001 86400 7200 604800 300\ntwo.com. IN NS  ns1.dnsimple.com.\ntwo.com. IN NS  ns2.dnsimple.com.\ntwo.com. IN NS  ns3.dnsimple.com.\ntwo.com. IN NS  ns4.dnsimple.com.\nds1.two.com. 3600 IN  A 184.106.215.134\n; two.com. 3600 IN  URL http://dnsimple.com\n; www.two.com. 3600 IN  URL https://dnsimple.com'
@@ -350,18 +405,33 @@ dnsimple.domains.zone( 'two.com', text, console.log )
 Memberships
 -----------
 
-### domains.memberships.list ( domainname, cb )
+### domains.memberships.list ( domainname, callback )
 
 List memberships for a domain.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.memberships.list( 'two.com', console.log )
 ```
 
 
-### domains.memberships.add ( domainname, email, cb )
+### domains.memberships.add ( domainname, email, callback )
 
 Add a member to a domain.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+email      | string   | yes      | new member's email
+callback   | function | yes      | your callback function
+
 
 If the person already exists in DNSimple as a customer then he will immediately
 be added to the domain’s membership list.
@@ -373,9 +443,17 @@ dnsimple.domains.memberships.add( 'two.com', 'other@user.tld', console.log )
 ```
 
 
-### domains.memberships.delete ( domainname, member, cb )
+### domains.memberships.delete ( domainname, member, callback )
 
 Remove a member from a domain.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name or ID
+member     | string   | yes      | member email or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.memberships.delete( 'two.com', 'other@user.tld', console.log )
@@ -385,9 +463,16 @@ dnsimple.domains.memberships.delete( 'two.com', 'other@user.tld', console.log )
 Registration
 ------------
 
-### domains.check ( domainname, cb )
+### domains.check ( domainname, callback )
 
 Check domain name availability for registration or transfer to DNSimple.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.check( 'frankl.in', console.log )
@@ -417,69 +502,112 @@ dnsimple.domains.check( 'frankl.in', console.log )
 ```
 
 
-### domains.register ( domainname, registrantID, [extendedAttribute], cb )
+### domains.register ( domainname, registrantID, [extendedAttribute], callback )
 
 Register a domain name at DNSimple. Your account will be charged on successful registration.
 
-* **domainname** - *required* - the domain to register
-* **registrantID** - *required* - the owner of the domain
-* **extendedAttribute** - *optional* - extra fields for certain TLDs
+
+param             | type     | required | description
+------------------|----------|----------|-----------------------
+domainname        | string   | yes      | domain name
+registrantID      | string   | yes      | existing contact ID
+extendedAttribute | object   | no       | extended attributes for certain TLDs
+callback          | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.register( 'example.tld', 1, console.log )
 ```
 
 
-### domains.transfer ( domainname, registrantID, [authinfo], cb )
+### domains.transfer ( domainname, registrantID, [authinfo], callback )
 
-* **domainname** - *required* - the domain to transfer into your account
-* **registrantID** - *required* - the new owner of the domain
-* **authinfo** - *optional* - the auth-code required for some TLDs
+Transfer a domain name to DNSimple.
+
+
+param        | type     | required | description
+-------------|----------|----------|------------------------
+domainname   | string   | yes      | domain name
+registrantID | string   | yes      | existing contact ID
+authinfo     | string   | no       | auth-code for some TLDs
+callback     | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.transfer( 'example.tld', 1, 'abcdefg', console.log )
 ```
 
 
-### domains.renew ( domainname, [whoisPrivacy], cb )
+### domains.renew ( domainname, [whoisPrivacy], callback )
 
-Renew a domainname registration for a new period.
+Renew a domain name registration for a new period.
 
-* **domainname** - *required* - the domain to renew
-* **whoisPrivacy** - *optional* - also renew whois privacy protection, true or false
+
+param        | type     | required | description
+-------------|----------|----------|-----------------------
+domainname   | string   | yes      | domain name
+whoisPrivacy | boolean  | no       | hide your registration details from public
+callback     | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.renew( 'example.tld', true, console.log )
 ```
 
 
-### domains.autorenew ( domainname, status, cb )
+### domains.autorenew ( domainname, status, callback )
 
 Enable or disable auto-renewal for a domainname.
 
-* **domainname** - *required* - the domain to set the autorenew for
-* **status** - *required* - enabled or disable autorenewal
+
+param      | type     | required | description
+-----------|----------|----------|---------------------------
+domainname | string   | yes      | domain name
+status     | boolean  | yes      | switch auto renewal on/off
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.autorenew( 'example.tld', true, console.log )
 ```
 
 
-### domains.transferout ( domainname, cb )
+### domains.transferout ( domainname, callback )
 
 Prepare a domain for transferring to another registrar.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+callback   | function | yes      | your callback function
+
 
 ```js
 domains.transferout( 'example.tld', console.log )
 ```
 
 
-### domains.nameservers ( domainname, nameservers, cb )
+### domains.nameservers ( domainname, [nameservers], callback )
 
-Set nameservers for a domain at the registry.
+Get or set nameservers for a domain at the registry.
 
-* **domainname** - *required* - the domain to set name servers for
-* **nameservers** - *required* - object with name servers to set
+
+param       | type     | required | description
+------------|----------|----------|-----------------------
+domainname  | string   | yes      | domain name
+nameservers | object   | no       | new nameservers to set
+callback    | function | yes      | your callback function
+
+
+#### Get current nameservers
+
+```js
+dnsimple.domains.nameservers( 'example.tld', console.log )
+```
+
+
+#### Change nameservers
 
 ```js
 dnsimple.domains.nameservers(
@@ -493,41 +621,78 @@ dnsimple.domains.nameservers(
 ```
 
 
-### domains.whoisPrivacy ( domainname, enable, cb )
+### domains.whoisPrivacy ( domainname, enable, callback )
 
-Toggle whois privacy protection on a domain on (`true`) or off (`false`).
+Get current whois privacy setting or switch it on or off.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+enable     | boolean  | no       | switch on or off
+callback   | function | yes      | your callback function
+
+
+#### Switch on
 
 ```js
 dnsimple.domains.whoisPrivacy( 'two.com', true, console.log )
 ```
 
 
+#### Get current setting
+
+```js
+dnsimple.domains.whoisPrivacy( 'two.com', console.log )
+```
+
+
 Services
 --------
 
-### domains.services.list ( domainname, cb )
+### domains.services.list ( domainname, callback )
 
 List applied services (vendor presets) for a domain
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.services.list( 'one.com', console.log )
 ```
 
 
-### domains.services.available ( domainname, cb )
+### domains.services.available ( domainname, callback )
 
 List available services for a domain
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.domains.services.available( 'one.com', console.log )
 ```
 
 
-### domains.services.add ( domainname, serviceID, cb )
+### domains.services.add ( domainname, service, callback )
 
 Apply a service to a domain
 
-**serviceID** can be a service *numeric* ID or its *shortname*
+
+param      | type     | required | description
+-----------|----------|----------|---------------------------
+domainname | string   | yes      | domain name
+service    | string   | yes      | service `short_name` or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 // Apply Heroku presets to one.com
@@ -535,11 +700,17 @@ dnsimple.domains.services.add( 'one.com', 'heroku', console.log )
 ```
 
 
-### domains.services.delete ( domainname, serviceID, cb )
+### domains.services.delete ( domainname, service, callback )
 
 Remove a service from a domain
 
-**serviceID** can be a service *numeric* ID or its *shortname*
+
+param      | type     | required | description
+-----------|----------|----------|---------------------------
+domainname | string   | yes      | domain name
+service    | string   | yes      | service `short_name` or ID
+callback   | function | yes      | your callback function
+
 
 ```js
 // Remove Heroku presets from one.com
@@ -547,11 +718,18 @@ dnsimple.domains.services.delete( 'one.com', 'heroku', console.log )
 ```
 
 
-### domains.template ( domainname, templateID, cb )
+### domains.template ( domainname, template, callback )
 
 Apply a template (custom presets) to a domain. This is an alias for *templates.apply*.
 
-**serviceID** can be a service *numeric* ID or its *shortname*
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+template   | string   | yes      | template name or ID
+callback   | function | yes      | your callback function
+
+
 
 ```js
 // Apply your office records to one.com
@@ -562,18 +740,33 @@ dnsimple.domains.template( 'one.com', 'office', console.log )
 DNS
 ---
 
-### dns.list ( domainname, cb )
+### dns.list ( domainname, callback )
 
 List DNS records for a domain
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.dns.list( 'one.com', console.log )
 ```
 
 
-### dns.show ( domainname, recordID cb )
+### dns.show ( domainname, record, cb )
 
-Get DNS record details for a *recordID* on *domainname*
+Get DNS record details.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+record     | numeric  | yes      | dns record ID
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.dns.show( 'one.com', 1234, console.log )
@@ -598,11 +791,28 @@ Returns an object with the record details:
 ```
 
 
-### dns.add ( domainname, recordObject, cb )
+### dns.add ( domainname, recordObject, callback )
 
-**Required:** name, record_type, content
+Add a DNS record to a domain name.
 
-**Optional:** ttl, prio
+
+param      | type     | required | description
+-----------|----------|----------|--------------------------
+domainname | string   | yes      | domain name
+record     | object   | yes      | record details, see below
+callback   | function | yes      | your callback function
+
+
+#### Record object
+
+param       | required | description
+------------|----------|-------------------------------------------
+name        | yes      | sub domain, wildcard (*) or empty for root
+record_type | yes      | A, AAAA, MX, TXT, etc.
+content     | yes      | record value
+ttl         | no       | record expire time in seconds
+prio        | no       | recort priority for MX
+
 
 ```js
 dnsimple.dns.add(
@@ -617,14 +827,30 @@ dnsimple.dns.add(
 ```
 
 
-### dns.update ( domainname, recordID, cb )
+### dns.update ( domainname, recordID, record, callback )
 
-Replace a record's details, same syntax as **dns.add**.
+Replace a record's details, same syntax as `dns.add`
 
 
-### dns.delete ( domainname, recordID, cb )
+param      | type     | required | description
+-----------|----------|----------|-----------------------------
+domainname | string   | yes      | domain name
+recordID   | numeric  | yes      | record ID to update
+record     | object   | yes      | record object, see `dns.add`
+callback   | function | yes      | your callback function
+
+
+### dns.delete ( domainname, recordID, callback )
 
 Delete a DNS record from a domain.
+
+
+param      | type     | required | description
+-----------|----------|----------|-----------------------
+domainname | string   | yes      | domain name
+recordID   | object   | yes      | record ID to delete
+callback   | function | yes      | your callback function
+
 
 ```js
 dnsimple.dns.delete( 'one.com', 1234 )
@@ -634,19 +860,25 @@ dnsimple.dns.delete( 'one.com', 1234 )
 Other methods
 -------------
 
-### subscription ( [createObject], cb )
+### subscription ( [subscription], callback )
 
 Get or create subscription details for your account.
 
 
-**Get details:**
+param        | type     | required | description
+-------------|----------|----------|-------------------------
+subscription | object   | no       | new details, see example
+callback     | function | yes      | your callback function
+
+
+#### Get details
 
 ```js
 dnsimple.subscription( console.log )
 ```
 
 
-**Create subscription:**
+#### Create subscription
 
 ```js
 dnsimple.subscription(
@@ -672,6 +904,12 @@ dnsimple.subscription(
 
 List all prices.
 
+
+param    | type     | required | description
+---------|----------|----------|-----------------------
+callback | function | yes      | your callback function
+
+
 ```js
 dnsimple.prices( console.log )
 ```
@@ -688,9 +926,18 @@ dnsimple.prices( console.log )
 ```
 
 
-### user ( object, cb )
+### user ( details, callback )
 
 Create a user account at DNSimple.com
+
+
+param    | type     | required | description
+---------|----------|----------|-----------------------
+details  | object   | yes      | user account details
+callback | function | yes      | your callback function
+
+
+#### Create account
 
 ```js
 var details = {
@@ -700,6 +947,9 @@ var details = {
 }
 dnsimple.user( details, console.log )
 ```
+
+
+#### Callback data
 
 ```js
 {
