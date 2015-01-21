@@ -645,6 +645,13 @@ queue.push( function() {
   })
 })
 
+// ! domains.certificates.list
+queue.push( function() {
+  ds.domains.certificates.list( bogus.domain.name, function( err, data, meta ) {
+    doTest( err, 'domains.certificates.list', testArrObj( data ))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {

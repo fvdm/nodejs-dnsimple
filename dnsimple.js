@@ -479,6 +479,15 @@ app.domains = {
   // ! CERTIFICATES
   certificates: {
     
+    // ! domains.certificates.list
+    list: function( domain, callback ) {
+      app.talk( 'GET', 'domains/'+ domain +'/certificates', function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data.map( function( cur, i, arr ) { arr[i] = cur.certificate })
+        callback( null, data, meta )
+      })
+    },
+    
     // ! domains.certificates.show
     show: function( domain, id, callback ) {
       app.talk( 'GET', 'domains/'+ domain +'/certificates/'+ id, function( err, data, meta ) {
