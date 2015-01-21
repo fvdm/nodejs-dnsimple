@@ -465,6 +465,15 @@ app.domains = {
         callback( null, data.email_forward, meta )
       })
     },
+    
+    // domains.email_forwards.delete
+    delete: function( domainname, id, callback ) {
+      app.talk( 'DELETE', 'domains/'+ domainname +'/email_forwards/'+ id, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data = meta.statusCode === 204 ? true : false
+        callback( null, data, meta )
+      })
+    }
   }
 }
 
