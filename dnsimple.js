@@ -32,19 +32,12 @@ app.api = {
 app.dns = {
   // ! dns.list
   list: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/records', function( error, records, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      records.map( function( cur, i, arr ) { arr[i] = cur.record });
-      callback( null, records, meta );
-    });
+    app.talk( 'GET', 'domains/'+ domainname +'/records', callback );
   },
 
   // ! dns.show
   show: function( domainname, recordID, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, function( error, record, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      callback( null, record.record, meta );
-    });
+    app.talk( 'GET', 'domains/'+ domainname +'/records/'+ recordID, callback );
   },
 
   // ! dns.add
@@ -52,26 +45,18 @@ app.dns = {
   // OPTIONAL: ttl, prio
   add: function( domainname, record, callback ) {
     var post = { record: record }
-    app.talk( 'POST', 'domains/'+ domainname +'/records', post, function( error, result, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      callback( null, result.record, meta );
-    });
+    app.talk( 'POST', 'domains/'+ domainname +'/records', post, callback );
   },
 
   // ! dns.update
   update: function( domainname, recordID, record, callback ) {
     var post = { record: record }
-    app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, function( error, result, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      callback( null, result.record, meta );
-    });
+    app.talk( 'PUT', 'domains/'+ domainname +'/records/'+ recordID, post, callback );
   },
 
   // ! dns.delete
   delete: function( domainname, recordID, callback ) {
-    app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, function( err, data, meta ) {
-      callback( err, meta.statusCode === 200, meta );
-    });
+    app.talk( 'DELETE', 'domains/'+ domainname +'/records/'+ recordID, callback );
   }
 }
 
@@ -89,8 +74,6 @@ app.domains = {
     }
 
     app.talk( 'GET', 'domains', function( error, domains, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      domains.map( function( cur, i, arr ) { arr[i] = cur.domain });
       if( simple ) {
         domains.map( function( cur, i, arr ) { arr[i] = cur.name });
       }
@@ -115,33 +98,23 @@ app.domains = {
 
   // ! domains.show
   show: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname, function( error, domain, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      callback( null, domain.domain, meta );
-    });
+    app.talk( 'GET', 'domains/'+ domainname, callback );
   },
 
   // ! domains.add
   add: function( domainname, callback ) {
     var dom = { domain: { name: domainname } }
-    app.talk( 'POST', 'domains', dom, function( error, domain, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      callback( null, domain.domain, meta );
-    });
+    app.talk( 'POST', 'domains', dom, callback );
   },
 
   // ! domains.delete
   delete: function( domainname, callback ) {
-    app.talk( 'DELETE', 'domains/'+ domainname, function( err, data, meta ) {
-      callback( err, meta.statusCode === 200, meta );
-    });
+    app.talk( 'DELETE', 'domains/'+ domainname, callback );
   },
 
   // ! domains.resetToken
   resetToken: function( domainname, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/token', function( err, data, meta ) {
-      callback( err, data.domain || null, meta );
-    });
+    app.talk( 'POST', 'domains/'+ domainname +'/token', callback );
   },
 
   // ! domains.push
@@ -150,10 +123,7 @@ app.domains = {
       new_user_email: email,
       contact_id: regId
     }}
-    app.talk( 'POST', 'domains/'+ domainname +'/push', data, function( err, res, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      callback( null, res.domain, meta );
-    });
+    app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback );
   },
 
   // ! domains.vanitynameservers
@@ -185,30 +155,18 @@ app.domains = {
   memberships: {
     // ! domains.memberships.list
     list: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/memberships', function( error, memberships, meta ) {
-        if( error ) { return callback( error, null, meta )}
-        memberships.map( function( cur, i, arr ) { arr[i] = cur.membership });
-        callback( null, memberships, meta );
-      });
+      app.talk( 'GET', 'domains/'+ domainname +'/memberships', callback );
     },
 
     // ! domains.memberships.add
     add: function( domainname, email, callback ) {
       var data = {membership: {email: email}}
-      app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        data = data.membership || false;
-        callback( null, data, meta );
-      });
+      app.talk( 'POST', 'domains/'+ domainname +'/memberships', data, callback );
     },
 
     // ! domains.memberships.delete
     delete: function( domainname, member, callback ) {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/memberships/'+ member, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        data = meta.statusCode === 204 ? true : false;
-        callback( null, data, meta );
-      });
+      app.talk( 'DELETE', 'domains/'+ domainname +'/memberships/'+ member, callback );
     }
   },
 
@@ -218,7 +176,7 @@ app.domains = {
   // ! domains.check
   // Check availability
   check: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/check', {}, callback );
+    app.talk( 'GET', 'domains/'+ domainname +'/check', callback );
   },
 
   // ! domains.register
@@ -239,11 +197,7 @@ app.domains = {
     }
 
     // send
-    app.talk( 'POST', 'domain_registrations', vars, function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      data = data.domain || false;
-      callback( null, data, meta );
-    });
+    app.talk( 'POST', 'domain_registrations', vars, callback );
   },
 
   // ! domains.transfer
@@ -315,21 +269,14 @@ app.domains = {
     }
 
     // send
-    app.talk( 'POST', 'domain_renewals', vars, function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      data = data.domain || false;
-      callback( null, data, meta );
-    })
+    app.talk( 'POST', 'domain_renewals', vars, callback );
   },
 
   // ! domains.autorenew
   // Set auto-renewal for domain
   autorenew: function( domainname, enable, callback ) {
     var method = enable ? 'POST' : 'DELETE';
-    app.talk( method, 'domains/'+ domainname +'/auto_renewal', function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      callback( null, data.domain, meta );
-    });
+    app.talk( method, 'domains/'+ domainname +'/auto_renewal', callback );
   },
 
   // ! domains.transferout
@@ -341,10 +288,7 @@ app.domains = {
   // ! domains.whoisPrivacy
   whoisPrivacy: function( domainname, enable, callback ) {
     var method = enable ? 'POST' : 'DELETE';
-    app.talk( method, 'domains/'+ domainname +'/whois_privacy', function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      callback( null, data.whois_privacy, meta );
-    });
+    app.talk( method, 'domains/'+ domainname +'/whois_privacy', callback );
   },
 
   // ! domains.nameservers
@@ -383,9 +327,8 @@ app.domains = {
   // ! domains.zone
   // See http://developer.dnsimple.com/domains/zones/#zone
   zone: function( domainname, callback ) {
-    app.talk( 'GET', 'domains/'+ domainname +'/zone', function(err, data, meta) {
-      if (err) { return callback(err, null, meta) }
-      callback(null, data.zone, meta);
+    app.talk( 'GET', 'domains/'+ domainname +'/zone', function( err, data, meta ) {
+      callback( err, data.zone || null, meta )
     });
   },
 
@@ -393,11 +336,7 @@ app.domains = {
   // See http://developer.dnsimple.com/domains/zones/#import
   importZone: function( domainname, zone, callback ) {
     var zone = { zone_import: { zone_data: zone }}
-    app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, function(err, data, meta) {
-      if (err) { return callback(err, null, meta) }
-      data = data.zone_import || false;
-      callback(null, data, meta);
-    });
+    app.talk( 'POST', 'domains/'+ domainname +'/zone_imports', zone, callback );
   },
 
 
@@ -408,21 +347,13 @@ app.domains = {
     // ! domains.services.list
     // already applied
     list: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( error, result, meta ) {
-        if( error ) { return callback( error, null, meta )}
-        result.map( function( cur, i, arr ) { arr[i] = cur.service });
-        callback( null, result, meta );
-      });
+      app.talk( 'GET', 'domains/'+ domainname +'/applied_services', callback );
     },
 
     // ! domains.services.available
     // available
     available: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( error, result, meta ) {
-        if( error ) { return callback( error, null, meta )}
-        result.map( function( cur, i, arr ) { arr[i] = cur.service });
-        callback( null, result, meta );
-      });
+      app.talk( 'GET', 'domains/'+ domainname +'/available_services', callback );
     },
 
     // ! domains.services.add
@@ -436,11 +367,7 @@ app.domains = {
       if( settings ) {
         service.settings = settings;
       }
-      app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        data = data[0] && data[0].service ? data[0].service : false;
-        callback( null, data, meta );
-      });
+      app.talk( 'POST', 'domains/'+ domainname +'/applied_services', service, callback );
     },
 
     // ! domains.services.delete
@@ -461,11 +388,7 @@ app.domains = {
 
     // ! domains.email_forwards.list
     list: function( domainname, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/email_forwards', function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        data.map( function( cur, i, arr ) { arr[i] = cur.email_forward });
-        callback( null, data, meta );
-      });
+      app.talk( 'GET', 'domains/'+ domainname +'/email_forwards', callback );
     },
 
     // ! domains.email_forwards.add
@@ -476,27 +399,17 @@ app.domains = {
           to: to
         }
       }
-      app.talk( 'POST', 'domains/'+ domainname +'/email_forwards', vars, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        callback( null, data.email_forward, meta );
-      });
+      app.talk( 'POST', 'domains/'+ domainname +'/email_forwards', vars, callback );
     },
 
     // ! domains.email_forwards.show
     show: function( domainname, id, callback ) {
-      app.talk( 'GET', 'domains/'+ domainname +'/email_forwards/'+ id, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        callback( null, data.email_forward, meta );
-      });
+      app.talk( 'GET', 'domains/'+ domainname +'/email_forwards/'+ id, callback );
     },
 
     // ! domains.email_forwards.delete
     delete: function( domainname, id, callback ) {
-      app.talk( 'DELETE', 'domains/'+ domainname +'/email_forwards/'+ id, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        data = meta.statusCode === 204 ? true : false;
-        callback( null, data, meta );
-      });
+      app.talk( 'DELETE', 'domains/'+ domainname +'/email_forwards/'+ id, callback );
     }
   },
 
@@ -505,19 +418,12 @@ app.domains = {
 
     // ! domains.certificates.list
     list: function( domain, callback ) {
-      app.talk( 'GET', 'domains/'+ domain +'/certificates', function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        data.map( function( cur, i, arr ) { arr[i] = cur.certificate });
-        callback( null, data, meta );
-      });
+      app.talk( 'GET', 'domains/'+ domain +'/certificates', callback );
     },
 
     // ! domains.certificates.show
     show: function( domain, id, callback ) {
-      app.talk( 'GET', 'domains/'+ domain +'/certificates/'+ id, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        callback( null, data.certificate, meta );
-      });
+      app.talk( 'GET', 'domains/'+ domain +'/certificates/'+ id, callback );
     },
 
     // ! domains.certificates.add
@@ -535,18 +441,12 @@ app.domains = {
       if( csr ) {
         input.certificate.csr = csr;
       }
-      app.talk( 'POST', 'domains/'+ domain +'/certificates', input, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        callback( null, data.certificate, meta );
-      });
+      app.talk( 'POST', 'domains/'+ domain +'/certificates', input, callback );
     },
 
     // ! domains.certificates.configure
     configure: function( domain, id, callback ) {
-      app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/configure', function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        callback( null, data.certificate, meta );
-      });
+      app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/configure', callback );
     },
 
     // ! domains.certificates.submit
@@ -556,10 +456,7 @@ app.domains = {
           approver_email: email
         }
       }
-      app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/submit', input, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        callback( null, data.certificate, meta );
-      });
+      app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/submit', input, callback );
     }
   }
 }
@@ -571,20 +468,13 @@ app.services = {
   // ! services.list
   // List all supported services
   list: function( callback ) {
-    app.talk( 'GET', 'services', function( error, list, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      list.map( function( cur, i, arr ) { arr[i] = cur.service });
-      callback( null, list, meta );
-    });
+    app.talk( 'GET', 'services', callback );
   },
 
   // ! services.show
   // Get one service' details
   show: function( serviceID, callback ) {
-    app.talk( 'GET', 'services/'+ serviceID, function( error, service, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      callback( null, service.service, meta );
-    });
+    app.talk( 'GET', 'services/'+ serviceID, callback );
   },
 
   // ! services.config
@@ -636,20 +526,13 @@ app.templates = {
   // ! templates.list
   // List all of the custom templates in the account
   list: function( callback ) {
-    app.talk( 'GET', 'templates', function( error, list, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      list.map( function( cur, i, arr ) { arr[i] = cur.dns_template });
-      callback( null, list, meta );
-    });
+    app.talk( 'GET', 'templates', callback );
   },
 
   // ! templates.show
   // Get a specific template
   show: function( templateID, callback ) {
-    app.talk( 'GET', 'templates/'+ templateID, function( error, template, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      callback( null, template.dns_template, meta );
-    });
+    app.talk( 'GET', 'templates/'+ templateID, callback );
   },
 
   // ! templates.add
@@ -658,30 +541,19 @@ app.templates = {
   // OPTIONAL: description
   add: function( template, callback ) {
     var set = { dns_template: template }
-    app.talk( 'POST', 'templates', set, function( error, result, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      callback( null, result.dns_template, meta );
-    });
+    app.talk( 'POST', 'templates', set, callback );
   },
 
   // ! templates.delete
   // Delete the given template
   delete: function( templateID, callback ) {
-    app.talk( 'DELETE', 'templates/'+ templateID, function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      data = meta.statusCode === 200 ? true : false;
-      callback( null, data, meta );
-    });
+    app.talk( 'DELETE', 'templates/'+ templateID, callback );
   },
 
   // ! templates.apply
   // Apply a template to a domain
   apply: function( domainname, templateID, callback ) {
-    app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', function( error, result, meta ) {
-      if( error ) { return callback( error, null, meta )}
-      var result = result.domain ? result.domain : result;
-      callback( null, result, meta );
-    });
+    app.talk( 'POST', 'domains/'+ domainname +'/templates/'+ templateID +'/apply', callback );
   },
 
   // records
@@ -689,20 +561,13 @@ app.templates = {
     // ! templates.records.list
     // list records in template
     list: function( templateID, callback ) {
-      app.talk( 'GET', 'templates/'+ templateID +'/records', function( error, result, meta ) {
-        if( error ) { return callback( error, null, meta )}
-        result.map( function( cur, i, arr ) { arr[i] = cur.dns_template_record });
-        callback( null, result, meta );
-      });
+      app.talk( 'GET', 'templates/'+ templateID +'/records', callback );
     },
 
     // ! templates.records.show
     // Get one record for template
     show: function( templateID, recordID, callback ) {
-      app.talk( 'GET', 'templates/'+ templateID +'/records/'+ recordID, function( error, result, meta ) {
-        if( error ) { return callback( error, null, meta )}
-        callback( null, result.dns_template_record, meta );
-      });
+      app.talk( 'GET', 'templates/'+ templateID +'/records/'+ recordID, callback );
     },
 
     // ! templates.records.add
@@ -711,20 +576,13 @@ app.templates = {
     // OPTIONAL: ttl, prio
     add: function( templateID, record, callback ) {
       var rec = { dns_template_record: record }
-      app.talk( 'POST', 'templates/'+ templateID +'/records', rec, function( error, result, meta ) {
-        if( error ) { return callback( error, null, meta )}
-        callback( null, result.dns_template_record, meta );
-      });
+      app.talk( 'POST', 'templates/'+ templateID +'/records', rec, callback );
     },
 
     // ! templates.records.delete
     // Delete record from template
     delete: function( templateID, recordID, callback ) {
-      app.talk( 'DELETE', 'templates/'+ templateID +'/records/'+ recordID, {}, function( err, data, meta ) {
-        if( err ) { return callback( err, null, meta )}
-        data = meta.statusCode === 200 ? true : false;
-        callback( null, data, meta );
-      });
+      app.talk( 'DELETE', 'templates/'+ templateID +'/records/'+ recordID, callback );
     }
   }
 }
@@ -735,48 +593,29 @@ app.templates = {
 app.contacts = {
   // ! contacts.list
   list: function( callback ) {
-    app.talk( 'GET', 'contacts', function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      data.map( function( cur, i, arr ) { arr[i] = cur.contact });
-      callback( null, data, meta );
-    });
+    app.talk( 'GET', 'contacts', callback );
   },
 
   // ! contacts.show
   show: function( contactID, callback ) {
-    app.talk( 'GET', 'contacts/'+ contactID, function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      callback( null, data.contact, meta );
-    });
+    app.talk( 'GET', 'contacts/'+ contactID, callback );
   },
 
   // ! contacts.add
   // http://developer.dnsimple.com/contacts/#create-a-contact
   add: function( contact, callback ) {
-    app.talk( 'POST', 'contacts', {contact: contact}, function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      data = data.contact || false;
-      callback( null, data, meta );
-    });
+    app.talk( 'POST', 'contacts', {contact: contact}, callback );
   },
 
   // ! contacts.update
   // http://developer.dnsimple.com/contacts/#update-a-contact
   update: function( contactID, contact, callback ) {
-    app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      data = data.contact || false;
-      callback( null, data, meta );
-    });
+    app.talk( 'PUT', 'contacts/'+ contactID, {contact: contact}, callback );
   },
 
   // ! contacts.delete
   delete: function( contactID, callback ) {
-    app.talk( 'DELETE', 'contacts/'+ contactID, function( err, data, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      data = meta.statusCode === 204 ? true : false;
-      callback( null, data, meta );
-    });
+    app.talk( 'DELETE', 'contacts/'+ contactID, callback );
   }
 }
 
@@ -786,16 +625,10 @@ app.contacts = {
 // ! .subscription
 app.subscription = function( vars, callback ) {
   if( ! callback ) {
-    app.talk( 'GET', 'subscription', function( err, data, meta ) {
-      if( err ) { vars( err, null, meta ); return }
-      vars( null, data.subscription, meta );
-    })
+    app.talk( 'GET', 'subscription', vars );
   } else {
     var data = {subscription: vars}
-    app.talk( 'PUT', 'subscription', data, function( err, res, meta ) {
-      if( err ) { return callback( err, null, meta )}
-      callback( null, res.subscription, meta );
-    });
+    app.talk( 'PUT', 'subscription', data, callback );
   }
 }
 
@@ -804,20 +637,13 @@ app.subscription = function( vars, callback ) {
 
 // ! .prices
 app.prices = function( callback ) {
-  app.talk( 'GET', 'prices', function( err, data, meta ) {
-    if( err ) { return callback( err, null, meta )}
-    data.map( function( cur, i, arr ) { arr[i] = cur.price });
-    callback( null, data, meta );
-  });
+  app.talk( 'GET', 'prices', callback );
 }
 
 // ! .user
 app.user = function( user, callback ) {
   var user = {user: user}
-  app.talk( 'POST', 'users', user, function( err, data, meta ) {
-    if( err ) { return callback( err, null, meta )}
-    callback( null, data.user, meta );
-  });
+  app.talk( 'POST', 'users', user, callback );
 }
 
 // ! .extendedAttributes
@@ -837,17 +663,44 @@ app.talk = function( method, path, fields, callback ) {
 
   // prevent multiple callbacks
   var complete = false;
-  function doCallback( err, res, meta ) {
+  function doCallback( err, data, meta ) {
     if( !complete ) {
       complete = true;
-      callback( err || null, res || null, meta );
+
+      if( err ) {
+        callback( err, null, meta );
+        return;
+      }
+
+      if( method === 'DELETE' && !(data instanceof Object && Object.keys(data).length > 0) ) {
+        callback( null, meta.statusCode === 200 || meta.statusCode === 204, meta );
+        return;
+      }
+
+      // [ {type: {}}, {type: {}} ]
+      if( data instanceof Array && data[0] instanceof Object ) {
+        var keys = Object.keys( data[0] );
+        if( keys.length === 1 && data[0][ keys[0] ] instanceof Object ) {
+          data.map( function( cur, i, arr ) { arr[i] = cur[ keys[0] ] });
+        }
+      }
+
+      // {type: {}}
+      else if( data instanceof Object ) {
+        var keys = Object.keys( data );
+        if( keys.length === 1 && data[ keys[0] ] instanceof Object ) {
+          data = data[ keys[0] ];
+        }
+      }
+
+      callback( null, data, meta );
     }
   }
 
   // credentials set?
   if( ! (app.api.email && app.api.token) && ! (app.api.email && app.api.password) && ! app.api.domainToken && ! app.api.twoFactorToken ) {
     doCallback( new Error('credentials missing') );
-    return
+    return;
   }
 
   // prepare
@@ -916,15 +769,15 @@ app.talk = function( method, path, fields, callback ) {
 
     // request finished
     response.on( 'end', function() {
-      data = new Buffer.concat( data, size ).toString('utf8').trim()
-      var failed = null
+      data = new Buffer.concat( data, size ).toString('utf8').trim();
+      var failed = null;
 
-      meta.statusCode = response.statusCode
-      meta.request_id = response.headers['x-request-id']
-      meta.runtime = response.headers['x-runtime']
+      meta.statusCode = response.statusCode;
+      meta.request_id = response.headers['x-request-id'];
+      meta.runtime = response.headers['x-runtime'];
 
       if( typeof response.headers['x-dnsimple-otp-token'] === 'string' ) {
-        meta.twoFactorToken = response.headers['x-dnsimple-otp-token']
+        meta.twoFactorToken = response.headers['x-dnsimple-otp-token'];
       }
 
       if( response.statusCode !== 204 ) {
@@ -959,7 +812,7 @@ app.talk = function( method, path, fields, callback ) {
         error.code = response.statusCode;
         error.error = data.message
           || data.error
-          || (data.errors && data instanceof Object && Object.keys(data.errors)[0] ? data.errors[Object.keys(data.errors)[0]] : null)
+          || (data.errors && data instanceof Object && Object.keys(data.errors)[0] ? data.errors[ Object.keys(data.errors)[0] ] : null)
           || null;
         error.data = data;
         doCallback( error, null, meta );
@@ -1000,7 +853,7 @@ app.talk = function( method, path, fields, callback ) {
 // wrap it up
 module.exports = function( setup ) {
   for( var i in setup ) {
-    app.api[ i ] = setup[ i ];
+    app.api[i] = setup[i];
   }
   return app;
 }
