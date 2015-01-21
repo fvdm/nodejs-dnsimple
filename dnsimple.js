@@ -430,6 +430,10 @@ app.domains = {
   // apply template -- alias for templates.apply
   template: function( domainname, templateID, callback ) {
     app.templates.apply( domainname, templateID, callback )
+  },
+  
+  // ! EMAIL FORWARDS
+  email_forwards: {
   }
 }
 
