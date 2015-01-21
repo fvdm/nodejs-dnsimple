@@ -25,7 +25,8 @@ Develop: `npm install fvdm/nodejs-dnsimple`
 Usage
 -----
 
-See _Configuration_ below for details on _setupObject_.
+See _Configuration_ below for details.
+
 
 ```js
 var dnsimple = new require('dnsimple')({ email: 'you@web.tld', token: 'abc123' })
@@ -109,7 +110,7 @@ require('dnsimple')({ domainToken: 'abc123' })
 Configuration
 -------------
 
-When loading the module into your code you need to provide a _setupObject_ for
+When loading the module into your code you need to provide an _Object_ for
 authentication as described above.
 This object can have a few more settings.
 
@@ -132,11 +133,10 @@ Methods
 
 Each method takes a _callback_ function with three parameters: `err`, `data` and `meta`.
 
-When an error occurs `err` is an instance of `Error` and `data` is _null_.
-It can have additional properties.
+When an error occurs `err` is an instance of `Error` and `data` may not be available.
+`err` can have additional properties.
 
-When everything looks alright `err` will be _null_ and `data` will be the parsed
-JSON _object_, _array_ or _boolean_ depending on the method.
+When everything is good `err` will be _null_ and `data` will be the parsed result.
 
 The `meta` parameter is always available and contains extra information from the API,
 such as statusCode, request_id, runtime and twoFactorToken.
@@ -148,11 +148,10 @@ message             | description
 ------------------- | --------------------------------------------------------
 credentials missing | No authentication details set
 connection dropped  | Connection was closed too early
-domain exists       | You or another DNSimple user has this domain
 not json            | Invalid API response, see `err.code` and `err.data`
-HTTP error          | The API returned an error, see `err.code` and `err.data`
+API error           | The API returned an error, see `err.code` and `err.data`
 request timeout     | The request took too long
-request failed      | The request failed, see `err.error`
+request failed      | The request cannot be made, see `err.error`
 
 
 Domains
