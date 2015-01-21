@@ -815,9 +815,8 @@ app.prices = function( callback ) {
 app.user = function( user, callback ) {
   var user = {user: user}
   app.talk( 'POST', 'users', user, function( err, data, meta ) {
-    if( err ) { return callback( err, null, meta ) }
-    var data = data.user || false
-    callback( null, data, meta )
+    if( err ) { return callback( err, null, meta )}
+    callback( null, data.user, meta )
   })
 }
 
