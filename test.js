@@ -659,6 +659,16 @@ queue.push( function() {
   })
 })
 
+// ! domains.certificates.submit
+queue.push( function() {
+  ds.domains.certificates.submit( bogus.domain.name, bogus.certificate.id, 'invalid@email.tld', function( err, data, meta ) {
+    doTest( null, 'domains.certificates.submit (error)', [
+      ['code', err.code === 400],
+      ['message', err.message === 'API error']
+    ])
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {

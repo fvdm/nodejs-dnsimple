@@ -525,6 +525,18 @@ app.domains = {
       })
     },
     
+    // ! domains.certificates.submit
+    submit: function( domain, id, email, callback ) {
+      var input = {
+        certificate: {
+          approver_email: email
+        }
+      }
+      app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/submit', input, function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        callback( null, data.certificate, meta )
+      })
+    }
   }
 }
 
