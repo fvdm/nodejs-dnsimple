@@ -617,7 +617,7 @@ app.services = {
         }
 
         if( response.statusCode >= 300 ) {
-          error = new Error('http error')
+          error = new Error('API error')
           error.code = response.statusCode
           error.headers = response.headers
           error.body = data
