@@ -614,7 +614,10 @@ app.contacts = {
 
   // ! contacts.show
   show: function( contactID, callback ) {
-    app.talk( 'GET', 'contacts/'+ contactID, callback )
+    app.talk( 'GET', 'contacts/'+ contactID, function( err, data, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      callback( null, data.contact, meta )
+    })
   },
 
   // ! contacts.create
