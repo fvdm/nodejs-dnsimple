@@ -1,5 +1,6 @@
 /*
 Name:          DNSimple module for Node.js
+Author:        Franklin van de Meent (https://frankl.in)
 Source:        https://github.com/fvdm/nodejs-dnsimple
 Feedback:      https://github.com/fvdm/nodejs-dnsimple/issues
 License:       Unlicense (public domain)
