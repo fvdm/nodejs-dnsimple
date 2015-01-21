@@ -474,6 +474,11 @@ app.domains = {
         callback( null, data, meta )
       })
     }
+  },
+
+  // ! CERTIFICATES
+  certificates: {
+    
   }
 }
 
