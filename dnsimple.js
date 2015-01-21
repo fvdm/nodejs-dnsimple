@@ -318,7 +318,7 @@ app.domains.nameserver_register = function( domainname, name, ip, callback ) {
 
 // ! domains.nameserver_deregister
 app.domains.nameserver_deregister = function( domainname, name, callback ) {
-  app.talk( 'DELETE', 'domains/'+ domainname +'/registry_name_servers/'+ name, vars, callback );
+  app.talk( 'DELETE', 'domains/'+ domainname +'/registry_name_servers/'+ name, callback );
 };
 
 // ! domains.zone
