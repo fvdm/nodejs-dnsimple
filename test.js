@@ -598,6 +598,13 @@ queue.push( function() {
   })
 })
 
+// ! domains.email_forwards.list
+queue.push( function() {
+  ds.domains.email_forwards.list( bogus.domain.name, function( err, data, meta ) {
+    doTest( err, 'domains.email_forwards.list', testArrObj( data ))
+  })
+})
+
 // ! domains.delete
 queue.push( function() {
   ds.domains.delete( bogus.domain.name, function( err, data, meta ) {

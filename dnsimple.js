@@ -434,6 +434,15 @@ app.domains = {
   
   // ! EMAIL FORWARDS
   email_forwards: {
+    
+    // domains.email_forwards.list
+    list: function( domainname, callback ) {
+      app.talk( 'GET', 'domains/'+ domainname +'/email_forwards', function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        data.map( function( cur, i, arr ) { arr[i] = cur.email_forward })
+        callback( null, data, meta )
+      })
+    },
   }
 }
 
