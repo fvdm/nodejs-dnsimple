@@ -18,6 +18,7 @@ Installation
 ------------
 
 Stable: `npm install dnsimple`
+
 Develop: `npm install fvdm/nodejs-dnsimple`
 
 
