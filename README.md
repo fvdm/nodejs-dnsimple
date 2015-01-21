@@ -4,6 +4,8 @@ nodejs-dnsimple
 This is an unofficial DNSimple API module for node.js.
 You need a DNSimple account to use this.
 
+[![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=Tests)](https://travis-ci.org/fvdm/nodejs-dnsimple)
+
 [Documentation](https://github.com/fvdm/nodejs-dnsimple/blob/master/README.md) -
 [Changelog](https://github.com/fvdm/nodejs-dnsimple/blob/master/CHANGELOG.md)
 
@@ -14,8 +16,6 @@ You need a DNSimple account to use this.
 
 Installation
 ------------
-
-[![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=Tests)](https://travis-ci.org/fvdm/nodejs-dnsimple)
 
 Stable: `npm install dnsimple`
 Develop: `npm install fvdm/nodejs-dnsimple`
