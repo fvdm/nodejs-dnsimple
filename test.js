@@ -567,17 +567,28 @@ queue.push( function() {
   })
 })
 
-// ! domains.nameservers
+// ! domains.nameservers set
 queue.push( function() {
   var ns = {
     ns1: 'ns1.example.net',
     ns2: 'ns2.example.net'
   }
   ds.domains.nameservers( bogus.domain.name, ns, function( err, data, meta ) {
-    doTest( err, 'domains.nameservers', [
+    doTest( err, 'domains.nameservers set', [
       ['result', meta.statusCode === 200],
       ['type', data instanceof Array],
       ['content', data[0] === ns.ns1 && data[1] === ns.ns2]
+    ])
+  })
+})
+
+// ! domains.nameservers list
+queue.push( function() {
+  ds.domains.nameservers( bogus.domain.name, function( err, data, meta ) {
+    doTest( err, 'domains.nameservers list', [
+      ['type', data instanceof Array],
+      ['size', data.length === 2],
+      ['value', typeof data[0] === 'ns1.example.net']
     ])
   })
 })

@@ -348,12 +348,20 @@ app.domains = {
   },
 
   // ! domains.nameservers
-  // Set nameservers at registry
+  // Get or set nameservers at registry
   nameservers: function( domainname, nameservers, callback ) {
-    var ns = {
-      name_servers: nameservers
+    if( typeof nameservers === 'function' ) {
+      var callback = nameservers
+      var nameservers = null
     }
-    app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback )
+    if( nameservers ) {
+      var ns = {
+        name_servers: nameservers
+      }
+      app.talk( 'POST', 'domains/'+ domainname +'/name_servers', ns, callback )
+    } else {
+      app.talk( 'GET', 'domains/'+ domainname +'/name_servers', callback )
+    }
   },
 
   // ! domains.nameserver_register
