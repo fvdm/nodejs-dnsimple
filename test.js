@@ -1,3 +1,4 @@
+var testStart = Date.now()
 var util = require('util')
 
 // Setup
@@ -25,11 +26,14 @@ var ds = require('./')( acc )
 // handle exits
 var errors = 0
 process.on( 'exit', function() {
+  var testTime = Date.now() - testStart
   if( errors == 0 ) {
-    console.log('\n\033[1mDONE, no errors.\033[0m\n')
+    console.log('\n\033[1mDONE, no errors.\033[0m')
+    console.log('Timing: \033[33m%s ms\033[0m\n', testTime)
     process.exit(0)
   } else {
-    console.log('\n\033[1mFAIL, '+ errors +' error'+ (errors > 1 ? 's' : '') +' occurred!\033[0m\n')
+    console.log('\n\033[1mFAIL, '+ errors +' error'+ (errors > 1 ? 's' : '') +' occurred!\033[0m')
+    console.log('Timing: \033[33m%s ms\033[0m\n', testTime)
     process.exit(1)
   }
 })
