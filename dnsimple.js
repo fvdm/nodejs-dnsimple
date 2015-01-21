@@ -517,6 +517,14 @@ app.domains = {
       })
     },
     
+    // ! domains.certificates.configure
+    configure: function( domain, id, callback ) {
+      app.talk( 'PUT', 'domains/'+ domain +'/certificates/'+ id +'/configure', function( err, data, meta ) {
+        if( err ) { return callback( err, null, meta )}
+        callback( null, data.certificate, meta )
+      })
+    },
+    
   }
 }
 
