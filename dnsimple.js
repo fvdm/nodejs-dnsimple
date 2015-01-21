@@ -73,7 +73,7 @@ app.domains.list = function( simple, callback ) {
 
   app.talk( 'GET', 'domains', function( error, domains, meta ) {
     if( simple ) {
-      domains.map( function( cur, i, arr ) { arr[i] = cur.name });
+      domains.map( function( cur, i, arr ) { arr[i] = cur.name; });
     }
     callback( null, domains, meta );
   });
@@ -83,7 +83,7 @@ app.domains.list = function( simple, callback ) {
 app.domains.findByRegex = function( regex, callback ) {
   var result = [];
   app.domains.list( false, function( error, domains, meta ) {
-    if( error ) { return callback( error, null, meta )}
+    if( error ) { return callback( error, null, meta ); }
     var regexp = new RegExp( regex );
     for( var i = 0; i < domains.length; i++ ) {
       if( domains[i].name.match( regexp ) ) {
@@ -213,7 +213,7 @@ app.domains.transfer = function( domainname, registrantID, authinfo, callback ) 
   } else if( typeof authinfo === 'string' ) {
     vars.transfer_order = {
       authinfo: authinfo
-    }
+    };
   }
 
   // send
@@ -325,7 +325,7 @@ app.domains.nameserver_deregister = function( domainname, name, callback ) {
 // See http://developer.dnsimple.com/domains/zones/#zone
 app.domains.zone = function( domainname, callback ) {
   app.talk( 'GET', 'domains/'+ domainname +'/zone', function( err, data, meta ) {
-    callback( err, data.zone || null, meta )
+    callback( err, data.zone || null, meta );
   });
 };
 
@@ -479,7 +479,7 @@ app.services.config = function( serviceName, callback ) {
     if( ! complete ) {
       complete = true;
       callback( err, res || null, meta );
-    };
+    }
   }
 
   https.get( 'https://raw.githubusercontent.com/aetrion/dnsimple-services/master/services/'+ serviceName +'/config.json', function( response ) {
@@ -490,7 +490,7 @@ app.services.config = function( serviceName, callback ) {
     response.on( 'data', function(ch) {
       data.push(ch);
       size += ch.length;
-    })
+    });
 
     response.on( 'end', function() {
       data = new Buffer.concat( data, size ).toString('utf8').trim();
@@ -542,7 +542,7 @@ app.templates.add = function( template, callback ) {
 // Delete the given template
 app.templates.delete = function( templateID, callback ) {
   app.talk( 'DELETE', 'templates/'+ templateID, callback );
-},
+};
 
 // ! templates.apply
 // Apply a template to a domain
@@ -673,7 +673,7 @@ app.talk = function( method, path, fields, callback ) {
       if( data instanceof Array && data[0] instanceof Object ) {
         var keys = Object.keys( data[0] );
         if( keys.length === 1 && data[0][ keys[0] ] instanceof Object ) {
-          data.map( function( cur, i, arr ) { arr[i] = cur[ keys[0] ] });
+          data.map( function( cur, i, arr ) { arr[i] = cur[ keys[0] ]; });
         }
       }
 
@@ -696,7 +696,7 @@ app.talk = function( method, path, fields, callback ) {
   }
 
   // prepare
-  var querystr = JSON.stringify(fields)
+  var querystr = JSON.stringify(fields);
   var headers = {
     'Accept': 'application/json',
     'User-Agent': 'Nodejs-DNSimple'
