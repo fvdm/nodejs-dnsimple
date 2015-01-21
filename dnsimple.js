@@ -187,9 +187,9 @@ app.domains.register = function( domainname, registrantID, extendedAttribute, ca
   };
 
   // fix 3 & 4 params
-  if( !callback && typeof extendedAttribute == 'function' ) {
+  if( !callback && typeof extendedAttribute === 'function' ) {
     var callback = extendedAttribute;
-  } else if( typeof extendedAttribute == 'object' ) {
+  } else if( typeof extendedAttribute === 'object' ) {
     vars.domain.extended_attribute = extendedAttribute;
   }
 
@@ -208,9 +208,9 @@ app.domains.transfer = function( domainname, registrantID, authinfo, callback ) 
   };
 
   // fix 3 & 4 params
-  if( !callback && typeof authinfo == 'function' ) {
+  if( !callback && typeof authinfo === 'function' ) {
     var callback = authinfo;
-  } else if( typeof authinfo == 'string' ) {
+  } else if( typeof authinfo === 'string' ) {
     vars.transfer_order = {
       authinfo: authinfo
     }
@@ -232,9 +232,9 @@ app.domains.transferAttribute = function( domainname, registrantID, attr, authin
   };
 
   // fix 3 & 4 params
-  if( !callback && typeof authinfo == 'function' ) {
+  if( !callback && typeof authinfo === 'function' ) {
     var callback = authinfo;
-  } else if( typeof authinfo == 'string' ) {
+  } else if( typeof authinfo === 'string' ) {
     vars.transfer_order = {
       authinfo: authinfo
     }
@@ -254,7 +254,7 @@ app.domains.renew = function( domainname, whoisPrivacy, callback ) {
   };
 
   // fix 2 & 3 params
-  if( !callback && typeof whoisPrivacy == 'function' ) {
+  if( !callback && typeof whoisPrivacy === 'function' ) {
     var callback = whoisPrivacy;
   } else {
     // string matching
@@ -784,7 +784,7 @@ app.talk = function( method, path, fields, callback ) {
       var noError = false;
 
       // status ok, no data
-      if( data == '' && meta.statusCode < 300 ) {
+      if( data === '' && meta.statusCode < 300 ) {
         noError = true;
       }
       // domain check 404 = free
@@ -796,7 +796,7 @@ app.talk = function( method, path, fields, callback ) {
       if( noError || (!failed && response.statusCode < 300) ) {
         doCallback( null, data, meta );
       } else {
-        if( response.statusCode == 401 && response.headers['x-dnsimple-otp'] == 'required' ) {
+        if( response.statusCode === 401 && response.headers['x-dnsimple-otp'] === 'required' ) {
           var error = new Error('twoFactorOTP required');
         } else {
           var error = failed || new Error('API error');
