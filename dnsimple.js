@@ -33,11 +33,8 @@ app.dns = {
   list: function( domainname, callback ) {
     app.talk( 'GET', 'domains/'+ domainname +'/records', function( error, records, meta ) {
       if( error ) { callback( error, null, meta ); return }
-      var result = []
-      for( var i = 0; i < records.length; i++ ) {
-        result.push( records[i].record )
-      }
-      callback( null, result, meta )
+      records.map( function( cur, i, arr ) { arr[i] = cur.record })
+      callback( null, records, meta )
     })
   },
 
@@ -90,18 +87,13 @@ app.domains = {
       var simple = false
     }
 
-    var result = []
-
     app.talk( 'GET', 'domains', function( error, domains, meta ) {
       if( error ) { callback( error, null, meta ); return }
-      for( var i = 0; i < domains.length; i++ ) {
-        if( simple ) {
-          result.push( domains[i].domain.name )
-        } else {
-          result.push( domains[i].domain )
-        }
+      domains.map( function( cur, i, arr ) { arr[i] = cur.domain })
+      if( simple ) {
+        domains.map( function( cur, i, arr ) { arr[i] = cur.name })
       }
-      callback( null, result, meta )
+      callback( null, domains, meta )
     })
   },
 
@@ -177,11 +169,8 @@ app.domains = {
     list: function( domainname, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/memberships', function( error, memberships, meta ) {
         if( error ) { callback( error, null, meta ); return }
-        var result = []
-        for( var i = 0; i < memberships.length; i++ ) {
-          result.push( memberships[i].membership )
-        }
-        callback( null, result, meta )
+        memberships.map( function( cur, i, arr ) { arr[i] = cur.membership })
+        callback( null, memberships, meta )
       })
     },
 
@@ -397,11 +386,8 @@ app.domains = {
     list: function( domainname, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/applied_services', function( error, result, meta ) {
         if( error ) { callback( error, null, meta ); return }
-        var services = []
-        for( var i = 0; i < result.length; i++ ) {
-          services.push( result[i].service )
-        }
-        callback( null, services, meta )
+        result.map( function( cur, i, arr ) { arr[i] = cur.service })
+        callback( null, result, meta )
       })
     },
 
@@ -410,11 +396,8 @@ app.domains = {
     available: function( domainname, callback ) {
       app.talk( 'GET', 'domains/'+ domainname +'/available_services', function( error, result, meta ) {
         if( error ) { callback( error, null, meta ); return }
-        var services = []
-        for( var i = 0; i < result.length; i++ ) {
-          services.push( result[i].service )
-        }
-        callback( null, services, meta )
+        result.map( function( cur, i, arr ) { arr[i] = cur.service })
+        callback( null, result, meta )
       })
     },
 
@@ -459,11 +442,8 @@ app.services = {
   list: function( callback ) {
     app.talk( 'GET', 'services', function( error, list, meta ) {
       if( error ) { callback( error, null, meta ); return }
-      var services = []
-      for( var i = 0; i < list.length; i++ ) {
-        services.push( list[i].service )
-      }
-      callback( null, services, meta )
+      list.map( function( cur, i, arr ) { arr[i] = cur.service })
+      callback( null, list, meta )
     })
   },
 
@@ -527,11 +507,8 @@ app.templates = {
   list: function( callback ) {
     app.talk( 'GET', 'templates', function( error, list, meta ) {
       if( error ) { callback( error, null, meta ); return }
-      var templates = []
-      for( var i = 0; i < list.length; i++ ) {
-        templates.push( list[i].dns_template )
-      }
-      callback( null, templates, meta )
+      list.map( function( cur, i, arr ) { arr[i] = cur.dns_template })
+      callback( null, list, meta )
     })
   },
 
@@ -583,11 +560,8 @@ app.templates = {
     list: function( templateID, callback ) {
       app.talk( 'GET', 'templates/'+ templateID +'/records', function( error, result, meta ) {
         if( error ) { callback( error, null, meta ); return }
-        var records = []
-        for( var i = 0; i < result.length; i++ ) {
-          records.push( result[i].dns_template_record )
-        }
-        callback( null, records, meta )
+        result.map( function( cur, i, arr ) { arr[i] = cur.dns_template_record })
+        callback( null, result, meta )
       })
     },
 
@@ -694,13 +668,8 @@ app.subscription = function( vars, callback ) {
 app.prices = function( callback ) {
   app.talk( 'GET', 'prices', function( err, data, meta ) {
     if( err ) { callback( err, null, meta ); return }
-    var result = []
-    if( typeof data === 'object' ) {
-      for( var i = 0; i < data.length; i++ ) {
-        result.push( data[i].price )
-      }
-    }
-    callback( null, result, meta )
+    data.map( function( cur, i, arr ) { arr[i] = cur.price })
+    callback( null, data, meta )
   })
 }
 
