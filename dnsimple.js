@@ -150,7 +150,10 @@ app.domains = {
       new_user_email: email,
       contact_id: regId
     }}
-    app.talk( 'POST', 'domains/'+ domainname +'/push', data, callback )
+    app.talk( 'POST', 'domains/'+ domainname +'/push', data, function( err, res, meta ) {
+      if( err ) { return callback( err, null, meta )}
+      callback( null, res.domain, meta )
+    })
   },
 
   // ! domains.vanitynameservers
