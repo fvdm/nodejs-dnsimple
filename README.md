@@ -285,12 +285,38 @@ dnsimple.domains.push( 'two.com', 'other@user.tld', '123', console.log )
 ```
 
 
-### domains.vanitynameservers ( domainname, enable, cb )
+### domains.vanitynameservers ( domainname, enable, [external], cb )
 
 Toggle vanity name servers on (`true`) or off (`false`) for a domain.
 
+**Note:** contact support to activate this feature.
+
+
+param      | type     | required | description
+-----------|----------|----------|------------------
+domainname | string   | yes      | domain name
+enable     | boolean  | yes      | switch on or off
+external   | object   | no       | use custom names
+cb         | function | yes      | callback function
+
+
+#### Just enable
+
 ```js
 dnsimple.domains.vanitynameservers( 'two.com', true, console.log )
+```
+
+
+#### Enable with custom names
+
+```js
+var names = {
+  ns1: 'ns1.company.net',
+  ns2: 'ns2.company.net',
+  ns3: 'ns3.company.net'
+}
+
+dnsimple.domains.vanitynameservers( 'two.com', true, names, console.log )
 ```
 
 
