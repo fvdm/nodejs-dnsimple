@@ -8,9 +8,8 @@ v1.0.0
 
 * Module converted to API wrapper, see README.md
 * Callback parameter order is now `function( err, data, meta )`
-* Named objects are trimmed. i.e. `data[0].domain.name` -> `data[0].name`
+* Named result objects are trimmed, i.e. `data[0].domain.name` -> `data[0].name`
 * Listing methods now always return an array with items, without ID keys
-* Changed string input on toggles to boolean, `true` vs `"on"`
 
 ### New
 
