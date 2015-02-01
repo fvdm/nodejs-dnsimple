@@ -146,7 +146,7 @@ queue.push( function() {
       ['data type', data instanceof Array],
       ['data size', data && data.length >= 1],
       ['item type', data[0] instanceof Object],
-      ['item name', data[0].name === bogus.domain.name]
+      ['item name', typeof data[0].name === 'string']
     ]);
   });
 });
