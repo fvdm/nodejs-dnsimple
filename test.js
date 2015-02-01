@@ -120,11 +120,11 @@ queue.push( function() {
     }
   }
   app( 'POST', '/domains', input, function( err, data, meta ) {
-    bogus.domain = data;
+    bogus.domain = data.domain;
     doTest( err, 'POST object', [
       ['code', meta.statusCode === 201],
-      ['type', data instanceof Object],
-      ['item', data.name === bogus.domain.name]
+      ['type', data && data.domain instanceof Object],
+      ['item', data.domain.name === bogus.domain.name]
     ]);
   });
 });
@@ -133,8 +133,8 @@ queue.push( function() {
 queue.push( function() {
   app( 'GET', '/domains/'+ bogus.domain.id, function( err, data, meta ) {
     doTest( err, 'GET object', [
-      ['type', data instanceof Object],
-      ['name', data.name === bogus.domain.name]
+      ['type', data && data.domain instanceof Object],
+      ['name', data.domain.name === bogus.domain.name]
     ]);
   });
 });
@@ -145,8 +145,8 @@ queue.push( function() {
     doTest( err, 'GET array object', [
       ['data type', data instanceof Array],
       ['data size', data && data.length >= 1],
-      ['item type', data[0] instanceof Object],
-      ['item name', typeof data[0].name === 'string']
+      ['item type', data && data[0] && data[0].domain instanceof Object],
+      ['item name', typeof data[0].domain.name === 'string']
     ]);
   });
 });
