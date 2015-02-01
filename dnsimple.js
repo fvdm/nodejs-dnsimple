@@ -28,8 +28,8 @@ module.exports = function( setup ) {
   // ! API
   return function( method, path, fields, callback ) {
     if( !callback && typeof fields === 'function' ) {
-      var callback = fields;
-      var fields = {};
+      callback = fields;
+      fields = {};
     }
 
     // process callback data

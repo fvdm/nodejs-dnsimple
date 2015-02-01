@@ -27,7 +27,7 @@ var app = require('./')( acc );
 var errors = 0;
 process.on( 'exit', function() {
   var testTime = Date.now() - testStart;
-  if( errors == 0 ) {
+  if( errors === 0 ) {
     console.log('\n\033[1mDONE, no errors.\033[0m');
     console.log('Timing: \033[33m%s ms\033[0m\n', testTime);
     process.exit(0);
@@ -44,7 +44,7 @@ process.on( 'uncaughtException', function( err ) {
   console.error( err.stack );
   console.trace();
   console.log();
-  errors++
+  errors++;
 });
 
 // Queue to prevent flooding
@@ -78,7 +78,7 @@ function doTest( err, label, tests ) {
       }
     });
 
-    if( testErrors.length == 0 ) {
+    if( testErrors.length === 0 ) {
       console.log( label +': \033[1m\033[32mok\033[0m' );
     } else {
       console.error( label +': \033[1m\033[31mfailed\033[0m ('+ testErrors.join(', ') +')' );
@@ -90,11 +90,11 @@ function doTest( err, label, tests ) {
 
 // First check API access
 queue.push( function() {
-  app( 'GET', '/prices', function(err, data) {
+  app( 'GET', '/prices', function(err) {
     if(err) {
       console.log('API access: failed ('+ err.message +')');
       console.log(err.stack);
-      errors++
+      errors++;
       process.exit(1);
     } else {
       console.log('API access: \033[1m\033[32mok\033[0m');
@@ -109,7 +109,7 @@ var bogus = {
   domain: {
     name: 'test-'+ Date.now() +'-delete.me'
   }
-}
+};
 
 
 // ! POST object
@@ -118,7 +118,7 @@ queue.push( function() {
     domain: {
       name: bogus.domain.name
     }
-  }
+  };
   app( 'POST', '/domains', input, function( err, data, meta ) {
     bogus.domain = data.domain;
     doTest( err, 'POST object', [
@@ -131,7 +131,7 @@ queue.push( function() {
 
 // ! GET object
 queue.push( function() {
-  app( 'GET', '/domains/'+ bogus.domain.id, function( err, data, meta ) {
+  app( 'GET', '/domains/'+ bogus.domain.id, function( err, data ) {
     doTest( err, 'GET object', [
       ['type', data && data.domain instanceof Object],
       ['name', data.domain.name === bogus.domain.name]
@@ -141,7 +141,7 @@ queue.push( function() {
 
 // ! GET array object
 queue.push( function() {
-  app( 'GET', '/domains', function( err, data, meta ) {
+  app( 'GET', '/domains', function( err, data ) {
     doTest( err, 'GET array object', [
       ['data type', data instanceof Array],
       ['data size', data && data.length >= 1],
@@ -153,7 +153,7 @@ queue.push( function() {
 
 // ! DELETE
 queue.push( function() {
-  app( 'DELETE', '/domains/'+ bogus.domain.id, function( err, data, meta ) {
+  app( 'DELETE', '/domains/'+ bogus.domain.id, function( err, data ) {
     doTest( err, 'DELETE', [
       ['data', data === true]
     ]);
@@ -162,7 +162,7 @@ queue.push( function() {
 
 // ! Error
 queue.push( function() {
-  app( 'GET', '/domains/'+ bogus.domain.id, function( err, data, meta ) {
+  app( 'GET', '/domains/'+ bogus.domain.id, function( err ) {
     doTest( null, 'Error', [
       ['type', err && err.message === 'API error']
     ]);
