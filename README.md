@@ -157,23 +157,7 @@ The last argument `callback` receives three arguments: `err`, `data` and `meta`.
 
 	* DELETE result `data` is _true_ on success, _false_ otherwise.
 
-	* Named objects are trimmed, for example the domains list:
-
-```js
-// API response (array > object > object)
-[{
-  domain: {
-    name: 'one.tld',
-    id: 92039
-  }
-}]
-
-// Module data (array > object)
-[{
-  name: 'one.tld',
-  id: 92039
-}]
-```
+	* Named objects are trimmed, for example the domains list: `data[0].domain.name` -> `data[0].name`
 
 * The `meta` parameter is always available and contains extra information from
 the API, such as statusCode, request_id, runtime and twoFactorToken.
