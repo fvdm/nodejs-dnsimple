@@ -31,23 +31,23 @@ module.exports = function( setup ) {
       var callback = fields;
       var fields = {};
     }
-  
+
     // process callback data
     var complete = false;
     function doCallback( err, data, meta ) {
       if( !complete ) {
         complete = true;
-  
+
         if( err ) {
           callback( err, null, meta );
           return;
         }
-  
+
         if( method === 'DELETE' && !(data instanceof Object && Object.keys(data).length > 0) ) {
           callback( null, meta.statusCode === 200 || meta.statusCode === 204, meta );
           return;
         }
-  
+
         // [ {type: {}}, {type: {}} ]
         if( data instanceof Array && data[0] instanceof Object ) {
           var keys = Object.keys( data[0] );
@@ -55,7 +55,7 @@ module.exports = function( setup ) {
             data.map( function( cur, i, arr ) { arr[i] = cur[ keys[0] ]; });
           }
         }
-  
+
         // {type: {}}
         else if( data instanceof Object ) {
           var keys = Object.keys( data );
@@ -63,39 +63,39 @@ module.exports = function( setup ) {
             data = data[ keys[0] ];
           }
         }
-  
+
         callback( null, data, meta );
       }
     }
-  
+
     // credentials set?
     if( ! (api.email && api.token) && ! (api.email && api.password) && ! api.domainToken && ! api.twoFactorToken ) {
       doCallback( new Error('credentials missing') );
       return;
     }
-  
+
     // prepare
     var querystr = JSON.stringify(fields);
     var headers = {
       'Accept': 'application/json',
       'User-Agent': 'Nodejs-DNSimple'
     };
-  
+
     // token in headers
     if( api.token ) {
       headers['X-DNSimple-Token'] = api.email +':'+ api.token;
     }
-  
+
     if( api.domainToken ) {
       headers['X-DNSimple-Domain-Token'] = api.domainToken;
     }
-  
+
     // build request
     if( method.match( /(POST|PUT|DELETE)/ ) ) {
       headers['Content-Type'] = 'application/json';
       headers['Content-Length'] = querystr.length;
     }
-  
+
     var options = {
       host: api.hostname,
       port: 443,
@@ -103,54 +103,54 @@ module.exports = function( setup ) {
       method: method,
       headers: headers
     };
-  
+
     // password authentication
     if( ! api.twoFactorToken && ! api.token && ! api.domainToken && api.password && api.email ) {
       options.auth = api.email +':'+ api.password;
-  
+
       // two-factor authentication (2FA)
       if( api.twoFactorOTP ) {
         headers['X-DNSimple-2FA-Strict'] = 1;
         headers['X-DNSimple-OTP'] = api.twoFactorOTP;
       }
     }
-  
+
     if( api.twoFactorToken ) {
       options.auth = api.twoFactorToken +':x-2fa-basic';
       headers['X-DNSimple-2FA-Strict'] = 1;
     }
-  
+
     // start request
     var request = require('https').request( options );
-  
+
     // response
     request.on( 'response', function( response ) {
       var meta = {statusCode: null};
       var data = [];
       var size = 0;
-  
+
       response.on( 'data', function( chunk ) {
         data.push( chunk );
         size += chunk.length;
       });
-  
+
       response.on( 'close', function() {
         doCallback( new Error('connection dropped') );
       });
-  
+
       // request finished
       response.on( 'end', function() {
         data = new Buffer.concat( data, size ).toString('utf8').trim();
         var failed = null;
-  
+
         meta.statusCode = response.statusCode;
         meta.request_id = response.headers['x-request-id'];
         meta.runtime = response.headers['x-runtime'];
-  
+
         if( typeof response.headers['x-dnsimple-otp-token'] === 'string' ) {
           meta.twoFactorToken = response.headers['x-dnsimple-otp-token'];
         }
-  
+
         if( response.statusCode !== 204 ) {
           try {
             data = JSON.parse( data );
@@ -158,11 +158,11 @@ module.exports = function( setup ) {
             doCallback(new Error('not json'), data);
           }
         }
-  
+
         // overrides
         var noError = false;
         var error = null;
-  
+
         // status ok, no data
         if( data === '' && meta.statusCode < 300 ) {
           noError = true;
@@ -171,7 +171,7 @@ module.exports = function( setup ) {
         if( path.match(/^domains\/.+\/check$/) && meta.statusCode === 404 ) {
           noError = true;
         }
-  
+
         // check HTTP status code
         if( noError || (!failed && response.statusCode < 300) ) {
           doCallback( null, data, meta );
@@ -188,7 +188,7 @@ module.exports = function( setup ) {
         }
       });
     });
-  
+
     // timeout
     request.on( 'socket', function( socket ) {
       if( api.timeout ) {
@@ -199,7 +199,7 @@ module.exports = function( setup ) {
         });
       }
     });
-  
+
     // error
     request.on( 'error', function( error ) {
       var er = null;
@@ -211,7 +211,7 @@ module.exports = function( setup ) {
       er.error = error;
       doCallback( er );
     });
-  
+
     // run it
     if( method.match( /(POST|PUT|DELETE)/ ) ) {
       request.end( querystr );
