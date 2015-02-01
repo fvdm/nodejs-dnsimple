@@ -119,7 +119,7 @@ email       | Account email address                 |
 token       | Account access token                  |
 password    | Account password                      |
 domainToken | Domain specific API access token      |
-timeout     | End API call after this amount of ms  | 5000
+timeout     | End API call after this amount of ms  | 30000
 hostname    | API endpoint                          | api.dnsimple.com
 
 
