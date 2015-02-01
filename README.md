@@ -6,7 +6,7 @@ You need a DNSimple account to use this.
 
 [![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=Tests)](https://travis-ci.org/fvdm/nodejs-dnsimple)
 
-[Readme](https://github.com/fvdm/nodejs-dnsimple/blob/master/README.md) -
+[Changelog](https://github.com/fvdm/nodejs-dnsimple/releases) -
 [DNSimple](https://dnsimple.com/) -
 [API documentation](http://developer.dnsimple.com/)
 
