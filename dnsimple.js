@@ -48,22 +48,6 @@ module.exports = function( setup ) {
           return;
         }
 
-        // [ {type: {}}, {type: {}} ]
-        if( data instanceof Array && data[0] instanceof Object ) {
-          var keys = Object.keys( data[0] );
-          if( keys.length === 1 && data[0][ keys[0] ] instanceof Object ) {
-            data.map( function( cur, i, arr ) { arr[i] = cur[ keys[0] ]; });
-          }
-        }
-
-        // {type: {}}
-        else if( data instanceof Object ) {
-          var keys = Object.keys( data );
-          if( keys.length === 1 && data[ keys[0] ] instanceof Object ) {
-            data = data[ keys[0] ];
-          }
-        }
-
         callback( null, data, meta );
       }
     }

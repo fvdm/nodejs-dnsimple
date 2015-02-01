@@ -33,11 +33,11 @@ var input = {
   domain: { name: 'example.tld' }
 };
 
-dnsimple( 'POST', '/domains', input, function( err, domain ) {
+dnsimple( 'POST', '/domains', input, function( err, data ) {
   if( err ) {
     return console.log( err );
   }
-  console.log( domain.name +' created with ID '+ domain.id );
+  console.log( data.domain.name +' created with ID '+ data.domain.id );
 });
 ```
 
@@ -156,8 +156,6 @@ The last argument `callback` receives three arguments: `err`, `data` and `meta`.
 * When everything is good `err` will be _null_ and `data` will be the parsed result.
 
 	* DELETE result `data` is _true_ on success, _false_ otherwise.
-
-	* Named objects are trimmed, for example the domains list: `data[0].domain.name` -> `data[0].name`
 
 * The `meta` parameter is always available and contains extra information from
 the API, such as statusCode, request_id, runtime and twoFactorToken.
