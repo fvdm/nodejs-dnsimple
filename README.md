@@ -1,10 +1,10 @@
-nodejs-dnsimple
-===============
+dnsimple
+========
 
 This is an unofficial DNSimple API module for node.js.
 You need a DNSimple account to use this.
 
-[![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=Tests)](https://travis-ci.org/fvdm/nodejs-dnsimple)
+[![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=master)](https://travis-ci.org/fvdm/nodejs-dnsimple)
 
 [Changelog](https://github.com/fvdm/nodejs-dnsimple/releases) -
 [DNSimple](https://dnsimple.com/) -
@@ -113,14 +113,16 @@ When loading the module into your code you need to provide an _Object_ for
 authentication as described above.
 This object can have a few more settings.
 
-name        | description                           | default
-------------|---------------------------------------|-----------------
-email       | Account email address                 |
-token       | Account access token                  |
-password    | Account password                      |
-domainToken | Domain specific API access token      |
-timeout     | End API call after this amount of ms  | 30000
-hostname    | API endpoint                          | api.dnsimple.com
+name           | description                          | default
+---------------|--------------------------------------|-----------------
+email          | Account email address                |
+token          | Account access token                 |
+password       | Account password                     |
+domainToken    | Domain specific API access token     |
+twoFactorOTP   | One-time code, i.e. Authy            |
+twoFactorToken | Login token, from `twoFactorOTP`     |
+timeout        | End API call after this amount of ms | 30000
+hostname       | API endpoint                         | api.dnsimple.com
 
 
 To use the [sandbox](http://developer.dnsimple.com/sandbox/) environment
@@ -141,7 +143,7 @@ See the [API documentation](http://developer.dnsimple.com/) for details on each 
 name     | type     | required | description
 ---------|----------|----------|--------------------------------------
 method   | string   | yes      | GET, POST, PUT, DELETE
-path     | string   | yes      | i.e. `/domains`
+path     | string   | yes      | i.e. `/domains/two.com`
 params   | object   | no       | i.e. `{domain: { name: 'one.com' } }`
 callback | function | yes      | Function to receive response
 
