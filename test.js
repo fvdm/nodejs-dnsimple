@@ -6,7 +6,7 @@ var util = require('util');
 // or use cli arguments: npm test --dnsemail=me@some.where --dnstoken=abc123
 var acc = {
   hostname: process.env.npm_config_dnshostname || process.env.DNSIMPLE_HOSTNAME || 'api.sandbox.dnsimple.com',
-  timeout: process.env.npm_config_dnstimeout || process.env.DNSIMPLE_TIMEOUT || null,
+  timeout: process.env.npm_config_dnstimeout || process.env.DNSIMPLE_TIMEOUT || 30000,
   email: process.env.npm_config_dnsemail || process.env.DNSIMPLE_EMAIL || null
 };
 
