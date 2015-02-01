@@ -6,7 +6,7 @@
   },
   "name":                  "dnsimple",
   "description":           "Access the DNSimple API",
-  "version":               "1.0.0",
+  "version":               "1.1.0",
   "repository": {
       "type":              "git",
       "url":               "git://github.com/fvdm/nodejs-dnsimple.git"
@@ -19,11 +19,14 @@
   "devDependencies":       {},
   "optionalDependencies":  {},
   "engines": {
-    "node":                "*"
+    "node":                ">=0.8.0"
   },
   "keywords":              ["dnsimple", "domains", "dns", "api", "unlicense"],
   "license": {
     "type":                "Public Domain",
     "url":                 "https://github.com/fvdm/nodejs-dnsimple/raw/master/UNLICENSE"
+  },
+  "scripts": {
+    "test":                "node test.js"
   }
 }
