@@ -41,6 +41,8 @@ dnsimple( 'POST', '/domains', input, function( err, data ) {
 });
 ```
 
+> **More examples:** https://github.com/fvdm/nodejs-dnsimple/wiki
+
 
 Authentication
 --------------
