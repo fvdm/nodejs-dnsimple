@@ -54,7 +54,7 @@ module.exports = function (setup) {
 
     // credentials set?
     if (! (api.email && api.token) && ! (api.email && api.password) && ! api.domainToken && ! api.twoFactorToken) {
-      doCallback (new Error('credentials missing'));
+      doCallback (new Error ('credentials missing'));
       return;
     }
 
@@ -75,7 +75,7 @@ module.exports = function (setup) {
     }
 
     // build request
-    if (method.match ( /(POST|PUT|DELETE)/ )) {
+    if (method.match (/(POST|PUT|DELETE)/)) {
       headers['Content-Type'] = 'application/json';
       headers['Content-Length'] = querystr.length;
     }
@@ -153,18 +153,18 @@ module.exports = function (setup) {
         }
 
         // domain check 404 = free
-        if (path.match ( /^domains\/.+\/check$/ ) && meta.statusCode === 404) {
+        if (path.match (/^domains\/.+\/check$/) && meta.statusCode === 404) {
           noError = true;
         }
 
         // check HTTP status code
         if (noError || (!failed && response.statusCode < 300)) {
-          doCallback ( null, data, meta );
+          doCallback (null, data, meta);
         } else {
           if (response.statusCode === 401 && response.headers['x-dnsimple-otp'] === 'required') {
             error = new Error ('twoFactorOTP required');
           } else {
-            error = failed || new Error('API error');
+            error = failed || new Error ('API error');
           }
           error.code = response.statusCode;
           error.error = data.message || data.error || (data.errors && data instanceof Object && Object.keys (data.errors)[0] ? data.errors[ Object.keys (data.errors)[0] ] : null) || null;
@@ -198,7 +198,7 @@ module.exports = function (setup) {
     });
 
     // run it
-    if (method.match ( /(POST|PUT|DELETE)/ )) {
+    if (method.match (/(POST|PUT|DELETE)/)) {
       request.end (querystr);
     } else {
       request.end ();
