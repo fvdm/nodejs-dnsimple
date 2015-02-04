@@ -127,8 +127,8 @@ timeout        | End API call after this amount of ms | 30000
 hostname       | API endpoint                         | api.dnsimple.com
 
 
-To use the [sandbox](http://developer.dnsimple.com/sandbox/) environment
-set `hostname` to `api.sandbox.dnsimple.com`.
+> To use the [sandbox](http://developer.dnsimple.com/sandbox/) environment
+> set `hostname` to `api.sandbox.dnsimple.com`.
 
 
 dnsimple ( method, path, [params], callback )
