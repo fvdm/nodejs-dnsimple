@@ -177,8 +177,8 @@ module.exports = function (setup) {
     // timeout
     request.on ('socket', function (socket) {
       if (typeof api.timeout === 'number') {
-        socket.setTimeout (api.timeout);
-        socket.on ('timeout', function() {
+        socket.setTimeout (parseInt (api.timeout));
+        socket.on ('timeout', function () {
           doCallback (new Error ('request timeout'));
           request.abort ();
         });
