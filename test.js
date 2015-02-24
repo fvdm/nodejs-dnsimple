@@ -29,11 +29,11 @@ process.on ('exit', function () {
   var testTime = Date.now () - testStart;
   if (errors === 0) {
     console.log ('\n\033[1mDONE, no errors.\033[0m');
-    console.log ('Timing: \033[33m%s ms\033[0m\n', testTime);
+    console.log ('Timing: %s ms\n', testTime);
     process.exit (0);
   } else {
     console.log ('\n\033[1mFAIL, '+ errors +' error'+ (errors > 1 ? 's' : '') +' occurred!\033[0m');
-    console.log ('Timing: \033[33m%s ms\033[0m\n', testTime);
+    console.log ('Timing: %s ms\n', testTime);
     process.exit (1);
   }
 });
