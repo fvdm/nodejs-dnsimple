@@ -103,6 +103,27 @@ queue.push (function () {
 });
 
 
+// ! Timeout error
+queue.push (function () {
+  var tmp_acc = acc;
+  var tmp_acc.timeout = 1;
+  var tmp_app = require ('./') (tmp_acc);
+
+  tmp_app ('GET', '/prices', function (err, data) {
+    if (err) {
+      doTest (null, 'Timeout error', [
+        ['type', err instanceof Error],
+        ['message', err.message && err.message === 'request timeout'],
+        ['data', !data]
+      ]);
+    }
+  });
+
+  delete tmp_app;
+  delete tmp_acc;
+});
+
+
 // fake material to use
 var bogus = {
   domain: {
