@@ -103,6 +103,16 @@ queue.push (function () {
 });
 
 
+// ! API error
+queue.push (function () {
+  app ('GET', '/domains/'+ bogus.domain.id, function (err) {
+    doTest (null, 'API error', [
+      ['type', err && err.message === 'API error']
+    ]);
+  });
+});
+
+
 // ! Timeout error
 queue.push (function () {
   var tmp_acc = acc;
@@ -180,14 +190,6 @@ queue.push (function () {
   });
 });
 
-// ! Error
-queue.push (function () {
-  app ('GET', '/domains/'+ bogus.domain.id, function (err) {
-    doTest (null, 'Error', [
-      ['type', err && err.message === 'API error']
-    ]);
-  });
-});
 
 // Start the tests
 queue[0]();
