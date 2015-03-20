@@ -116,7 +116,7 @@ queue.push (function () {
 // ! Timeout error
 queue.push (function () {
   var tmp_acc = acc;
-  var tmp_acc.timeout = 1;
+  tmp_acc.timeout = 1;
   var tmp_app = require ('./') (tmp_acc);
 
   tmp_app ('GET', '/prices', function (err, data) {
