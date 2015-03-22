@@ -164,7 +164,7 @@ queue.push (function () {
   app ('GET', '/domains/'+ bogus.domain.id, function (err, data) {
     doTest (err, 'GET object', [
       ['type', data && data.domain instanceof Object],
-      ['name', data.domain.name === bogus.domain.name]
+      ['name', data && data.domain.name === bogus.domain.name]
     ]);
   });
 });
