@@ -121,13 +121,11 @@ queue.push (function () {
   var tmp_app = require ('./') (tmp_acc);
 
   tmp_app ('GET', '/prices', function (err, data) {
-    if (err) {
-      doTest (null, 'Timeout error', [
-        ['type', err instanceof Error],
-        ['message', err.message && err.message === 'request timeout'],
-        ['data', !data]
-      ]);
-    }
+    doTest (null, 'Timeout error', [
+      ['type', err instanceof Error],
+      ['code', err.error.code === 'TIMEOUT'],
+      ['data', !data]
+    ]);
   });
 
   delete tmp_app;
