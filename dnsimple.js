@@ -12,6 +12,8 @@ Service API:   http://developer.dnsimple.com
 */
 
 
+var http = require ('httpreq');
+
 module.exports = function (setup) {
   // ! Defaults
   var api = {
@@ -59,34 +61,31 @@ module.exports = function (setup) {
     }
 
     // prepare
-    var querystr = JSON.stringify (fields);
-    var headers = {
-      'Accept': 'application/json',
-      'User-Agent': 'Nodejs-DNSimple'
+    var options = {
+      url: 'https://' + api.hostname + '/v1' + path,
+      method: method || 'GET',
+      timeout: api.timeout,
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Nodejs-DNSimple'
+      }
     };
 
     // token in headers
     if (api.token) {
-      headers['X-DNSimple-Token'] = api.email +':'+ api.token;
+      options.headers['X-DNSimple-Token'] = api.email +':'+ api.token;
     }
 
     if (api.domainToken) {
-      headers['X-DNSimple-Domain-Token'] = api.domainToken;
+      options.headers['X-DNSimple-Domain-Token'] = api.domainToken;
     }
 
     // build request
     if (method.match (/(POST|PUT|DELETE)/)) {
-      headers['Content-Type'] = 'application/json';
-      headers['Content-Length'] = querystr.length;
+      options.json = fields;
+    } else {
+      options.parameters = fields;
     }
-
-    var options = {
-      host: api.hostname,
-      port: 443,
-      path: '/v1'+ path,
-      method: method,
-      headers: headers
-    };
 
     // password authentication
     if (! api.twoFactorToken && ! api.token && ! api.domainToken && api.password && api.email) {
@@ -105,103 +104,59 @@ module.exports = function (setup) {
     }
 
     // start request
-    var request = require ('https').request (options);
+    http.doRequest (options, function (err, response) {
+      var error = null;
+      var apiError = null;
+      var data = response && response.body || '';
+      var meta = {};
 
-    // response
-    request.on ('response', function (response) {
-      var meta = {statusCode: null};
-      var data = [];
-      var size = 0;
-
-      response.on ('data', function (chunk) {
-        data.push (chunk);
-        size += chunk.length;
-      });
-
-      response.on ('close', function() {
-        doCallback (new Error('connection dropped'));
-      });
-
-      // request finished
-      response.on ('end', function() {
-        data = new Buffer.concat (data, size).toString ('utf8').trim ();
-        var failed = null;
-
-        meta.statusCode = response.statusCode;
-        meta.request_id = response.headers['x-request-id'];
-        meta.runtime = response.headers['x-runtime'];
-
-        if (typeof response.headers['x-dnsimple-otp-token'] === 'string') {
-          meta.twoFactorToken = response.headers['x-dnsimple-otp-token'];
-        }
-
-        if (response.statusCode !== 204) {
-          try {
-            data = JSON.parse (data);
-          } catch (e) {
-            doCallback (new Error ('not json'), data);
-          }
-        }
-
-        // overrides
-        var noError = false;
-        var error = null;
-
-        // status ok, no data
-        if (data === '' && meta.statusCode < 300) {
-          noError = true;
-        }
-
-        // domain check 404 = free
-        if (path.match (/^domains\/.+\/check$/) && meta.statusCode === 404) {
-          noError = true;
-        }
-
-        // check HTTP status code
-        if (noError || (!failed && response.statusCode < 300)) {
-          doCallback (null, data, meta);
-        } else {
-          if (response.statusCode === 401 && response.headers['x-dnsimple-otp'] === 'required') {
-            error = new Error ('twoFactorOTP required');
-          } else {
-            error = failed || new Error ('API error');
-          }
-          error.code = response.statusCode;
-          error.error = data.message || data.error || (data.errors && data instanceof Object && Object.keys (data.errors)[0] ? data.errors[ Object.keys (data.errors)[0] ] : null) || null;
-          error.data = data;
-          doCallback (error, null, meta);
-        }
-      });
-    });
-
-    // timeout
-    request.on ('socket', function (socket) {
-      if (typeof api.timeout === 'number') {
-        socket.setTimeout (parseInt (api.timeout));
-        socket.on ('timeout', function () {
-          doCallback (new Error ('request timeout'));
-          request.abort ();
-        });
+      if (err) {
+        error = new Error ('request failed');
+        error.error = err;
+        doCallback (error);
+        return;
       }
-    });
 
-    // error
-    request.on ('error', function (error) {
-      var er = null;
-      if (error.code === 'ECONNRESET') {
-        er = new Error ('request timeout');
+      try {
+        data = JSON.parse (data);
+      } catch (e) {
+        error = new Error ('invalid response');
+        error.error = e;
+      }
+
+      meta.statusCode = response.statusCode;
+      meta.request_id = response.headers ['x-request-id'];
+      meta.runtime = response.headers ['x-runtime'];
+
+      if (typeof response.headers ['x-dnsimple-otp-token'] === 'string') {
+        meta.twoFactorToken = response.headers ['x-dnsimple-otp-token'];
+      }
+
+      // status ok, no data
+      if (!data && meta.statusCode < 300) {
+        error = null;
+      }
+
+      // domain check 404 = free
+      if (path.match (/^domains\/.+\/check$/) && meta.statusCode === 404) {
+        error = null;
+      }
+
+      // check HTTP status code
+      if (!error && response.statusCode < 300) {
+        doCallback (null, data, meta);
+        return;
+      } else if (response.statusCode === 401 && response.headers ['x-dnsimple-otp'] === 'required') {
+        error = new Error ('twoFactorOTP required');
       } else {
-        er = new Error ('request failed');
+        error = new Error ('API error');
       }
-      er.error = error;
-      doCallback (er);
-    });
 
-    // run it
-    if (method.match (/(POST|PUT|DELETE)/)) {
-      request.end (querystr);
-    } else {
-      request.end ();
-    }
+      error.code = response.statusCode;
+      error.error = data.message || data.error || data.errors || null;
+      error.data = data;
+
+      doCallback (error, null, meta);
+    });
   };
 };
