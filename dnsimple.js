@@ -71,7 +71,7 @@ module.exports = function doSetup (setup) {
 
     // token in headers
     if (api.token) {
-      options.headers['X-DNSimple-Token'] = api.email +':'+ api.token;
+      options.headers['X-DNSimple-Token'] = api.email + ':' + api.token;
     }
 
     if (api.domainToken) {
@@ -87,7 +87,7 @@ module.exports = function doSetup (setup) {
 
     // password authentication
     if (!api.twoFactorToken && !api.token && !api.domainToken && api.password && api.email) {
-      options.auth = api.email +':'+ api.password;
+      options.auth = api.email + ':' + api.password;
 
       // two-factor authentication (2FA)
       if (api.twoFactorOTP) {
@@ -97,7 +97,7 @@ module.exports = function doSetup (setup) {
     }
 
     if (api.twoFactorToken) {
-      options.auth = api.twoFactorToken +':x-2fa-basic';
+      options.auth = api.twoFactorToken + ':x-2fa-basic';
       headers['X-DNSimple-2FA-Strict'] = 1;
     }
 
