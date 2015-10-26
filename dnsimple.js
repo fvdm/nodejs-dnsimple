@@ -104,7 +104,6 @@ module.exports = function doSetup (setup) {
     // start request
     http.doRequest (options, function doResponse (err, response) {
       var error = null;
-      var apiError = null;
       var data = response && response.body || '';
       var meta = {};
 
