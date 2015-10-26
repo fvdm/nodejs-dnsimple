@@ -91,14 +91,14 @@ module.exports = function doSetup (setup) {
 
       // two-factor authentication (2FA)
       if (api.twoFactorOTP) {
-        headers['X-DNSimple-2FA-Strict'] = 1;
-        headers['X-DNSimple-OTP'] = api.twoFactorOTP;
+        options.headers['X-DNSimple-2FA-Strict'] = 1;
+        options.headers['X-DNSimple-OTP'] = api.twoFactorOTP;
       }
     }
 
     if (api.twoFactorToken) {
       options.auth = api.twoFactorToken + ':x-2fa-basic';
-      headers['X-DNSimple-2FA-Strict'] = 1;
+      options.headers['X-DNSimple-2FA-Strict'] = 1;
     }
 
     // start request
