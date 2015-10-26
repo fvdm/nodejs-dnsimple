@@ -20,8 +20,8 @@ module.exports = function doSetup (setup) {
     email: setup.email || null,
     token: setup.token || null,
     domainToken: setup.domainToken || null,
-    twoFactorOTP: setup.twoFactorOTP || null,     // one time password (ie. Authy)
-    twoFactorToken: setup.twoFactorToken || null, // OTP exchange token
+    twoFactorOTP: setup.twoFactorOTP || null,
+    twoFactorToken: setup.twoFactorToken || null,
     password: setup.password || null,
     timeout: setup.timeout || 30000
   };
