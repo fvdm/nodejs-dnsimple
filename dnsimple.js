@@ -29,6 +29,15 @@ module.exports = function doSetup (setup) {
   // ! API
   return function talk (method, path, fields, callback) {
     var complete = false;
+    var options = {
+      url: 'https://' + api.hostname + '/v1' + path,
+      method: method || 'GET',
+      timeout: api.timeout,
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Nodejs-DNSimple'
+      }
+    };
 
     if (!callback && typeof fields === 'function') {
       callback = fields;
@@ -59,17 +68,6 @@ module.exports = function doSetup (setup) {
       doCallback (new Error ('credentials missing'));
       return;
     }
-
-    // prepare
-    var options = {
-      url: 'https://' + api.hostname + '/v1' + path,
-      method: method || 'GET',
-      timeout: api.timeout,
-      headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'Nodejs-DNSimple'
-      }
-    };
 
     // token in headers
     if (api.token) {
