@@ -1,5 +1,6 @@
-var testStart = Date.now ();
+var pkg = require ('./package.json');
 var util = require ('util');
+var testStart = Date.now ();
 
 // Setup
 // set env DNSIMPLE_EMAIL and DNSIMPLE_TOKEN (Travis CI)
@@ -192,4 +193,8 @@ queue.push (function () {
 
 
 // Start the tests
-queue[0]();
+console.log ('Running tests...');
+console.log ('Node.js v' + process.versions.node);
+console.log ('Module  v' + pkg.version);
+console.log ();
+queue [0] ();
