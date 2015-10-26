@@ -17,7 +17,7 @@ var acc = {
 // fake material to use
 var bogus = {
   domain: {
-    name: 'test-'+ Date.now () +'-delete.me'
+    name: 'test-' + Date.now () + '-delete.me'
   }
 };
 
@@ -88,7 +88,7 @@ function doTest (err, label, tests) {
 queue.push (function () {
   app ('GET', '/prices', function (err) {
     if (err) {
-      console.log ('API access: failed ('+ err.message +')');
+      console.log ('API access: failed (' + err.message + ')');
       console.log (err.stack);
       errors++;
       process.exit (1);
@@ -149,7 +149,7 @@ queue.push (function () {
 // ! GET object
 queue.push (function () {
   var works = null;
-  app ('GET', '/domains/'+ bogus.domain.id, function (err, data) {
+  app ('GET', '/domains/' + bogus.domain.id, function (err, data) {
     doTest (err, 'GET object', [
       ['type', works = data && data.domain instanceof Object],
       ['name', works && data.domain.name === bogus.domain.name]
@@ -172,7 +172,7 @@ queue.push (function () {
 
 // ! DELETE
 queue.push (function () {
-  app ('DELETE', '/domains/'+ bogus.domain.id, function (err, data) {
+  app ('DELETE', '/domains/' + bogus.domain.id, function (err, data) {
     doTest (err, 'DELETE', [
       ['data', data === true]
     ]);
