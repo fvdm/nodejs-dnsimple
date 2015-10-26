@@ -127,9 +127,6 @@ queue.push (function () {
       ['data', !data]
     ]);
   });
-
-  delete tmp_app;
-  delete tmp_acc;
 });
 
 
