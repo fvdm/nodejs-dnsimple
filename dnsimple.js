@@ -28,13 +28,14 @@ module.exports = function doSetup (setup) {
 
   // ! API
   return function talk (method, path, fields, callback) {
+    var complete = false;
+
     if (!callback && typeof fields === 'function') {
       callback = fields;
       fields = {};
     }
 
     // process callback data
-    var complete = false;
     function doCallback (err, data, meta) {
       if (!complete) {
         complete = true;
