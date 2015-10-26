@@ -150,7 +150,9 @@ queue.push (function () {
     }
   };
   app ('POST', '/domains', input, function (err, data, meta) {
-    bogus.domain = data.domain;
+    if (data) {
+      bogus.domain = data.domain;
+    }
     doTest (err, 'POST object', [
       ['code', meta.statusCode === 201],
       ['type', works = data && data.domain instanceof Object],
