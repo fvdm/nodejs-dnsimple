@@ -15,7 +15,9 @@
     "url":                 "https://github.com/fvdm/nodejs-dnsimple/issues"
   },
   "main":                  "dnsimple.js",
-  "dependencies":          {},
+  "dependencies": {
+    "httpreq":             "0.4.x"
+  },
   "devDependencies":       {},
   "optionalDependencies":  {},
   "engines": {
