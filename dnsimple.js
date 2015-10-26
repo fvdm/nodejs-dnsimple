@@ -55,7 +55,7 @@ module.exports = function doSetup (setup) {
     }
 
     // credentials set?
-    if (! (api.email && api.token) && ! (api.email && api.password) && ! api.domainToken && ! api.twoFactorToken) {
+    if (!(api.email && api.token) && !(api.email && api.password) && !api.domainToken && !api.twoFactorToken) {
       doCallback (new Error ('credentials missing'));
       return;
     }
@@ -88,7 +88,7 @@ module.exports = function doSetup (setup) {
     }
 
     // password authentication
-    if (! api.twoFactorToken && ! api.token && ! api.domainToken && api.password && api.email) {
+    if (!api.twoFactorToken && !api.token && !api.domainToken && api.password && api.email) {
       options.auth = api.email +':'+ api.password;
 
       // two-factor authentication (2FA)
