@@ -8,19 +8,18 @@ var next = 0;
 var acc = {
   hostname: process.env.DNSIMPLE_HOSTNAME || 'api.sandbox.dnsimple.com',
   timeout: process.env.DNSIMPLE_TIMEOUT || 30000,
-  email: process.env.DNSIMPLE_EMAIL || null
+  email: process.env.DNSIMPLE_EMAIL || null,
+  token: process.env.DNSIMPLE_TOKEN || null,
+  password: process.env.DNSIMPLE_PASS || null,
+  twoFactorOTP: process.env.DNSIMPLE_OTP || null
 };
 
-var token = process.env.DNSIMPLE_TOKEN || null;
-var pass = process.env.DNSIMPLE_PASS || null;
-var otp = process.env.DNSIMPLE_OTP || null;
-
-if (pass && otp) {
-  acc.password = pass;
-  acc.twoFactorOTP = otp;
-} else if (token) {
-  acc.token = token;
-}
+// fake material to use
+var bogus = {
+  domain: {
+    name: 'test-'+ Date.now () +'-delete.me'
+  }
+};
 
 var app = require ('./') (acc);
 
@@ -115,10 +114,9 @@ queue.push (function () {
 // ! Timeout error
 queue.push (function () {
   var tmp_acc = acc;
-  tmp_acc.timeout = 1;
-  var tmp_app = require ('./') (tmp_acc);
 
-  tmp_app ('GET', '/prices', function (err, data) {
+  tmp_acc.timeout = 1;
+  require ('./') (tmp_acc) ('GET', '/prices', function (err, data) {
     doTest (null, 'Timeout error', [
       ['type', err instanceof Error],
       ['code', err.error.code === 'TIMEOUT'],
@@ -126,14 +124,6 @@ queue.push (function () {
     ]);
   });
 });
-
-
-// fake material to use
-var bogus = {
-  domain: {
-    name: 'test-'+ Date.now () +'-delete.me'
-  }
-};
 
 
 // ! POST object
