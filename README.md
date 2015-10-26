@@ -8,7 +8,7 @@ You need a DNSimple account to use this.
 
 [Changelog](https://github.com/fvdm/nodejs-dnsimple/releases) -
 [DNSimple](https://dnsimple.com/) -
-[API documentation](http://developer.dnsimple.com/)
+[API documentation](https://developer.dnsimple.com/)
 
 
 Installation
@@ -26,18 +26,18 @@ See _Configuration_ below for details.
 
 
 ```js
-var dnsimple = new require('dnsimple')({ email: 'you@web.tld', token: 'abc123' });
+var dnsimple = new require ('dnsimple') ({ email: 'you@web.tld', token: 'abc123' });
 
 // Add a domain name
 var input = {
   domain: { name: 'example.tld' }
 };
 
-dnsimple( 'POST', '/domains', input, function( err, data ) {
-  if( err ) {
-    return console.log( err );
+dnsimple ('POST', '/domains', input, function (err, data) {
+  if (err) {
+    return console.log (err);
   }
-  console.log( data.domain.name +' created with ID '+ data.domain.id );
+  console.log (data.domain.name + ' created with ID ' + data.domain.id);
 });
 ```
 
@@ -57,14 +57,14 @@ Most secure, easy to reset at [dnsimple.com/account](https://dnsimple.com/accoun
 
 
 ```js
-require('dnsimple')({ email: 'your@email.tld', token: '12345abcde' })
+require ('dnsimple') ({ email: 'your@email.tld', token: '12345abcde' });
 ```
 
 
 ### Email & password
 
 ```js
-require('dnsimple')({ email: 'your@email.tld', password: 'secret' })
+require ('dnsimple') ({ email: 'your@email.tld', password: 'secret' });
 ```
 
 
@@ -73,7 +73,7 @@ require('dnsimple')({ email: 'your@email.tld', password: 'secret' })
 Access to only one domain name, easy to reset.
 
 ```js
-require('dnsimple')({ domainToken: 'abc123' })
+require ('dnsimple') ({ domainToken: 'abc123' });
 ```
 
 
@@ -89,20 +89,20 @@ method. Then the API returns a token which you can use instead of your email and
 
 ```js
 // Set the OTP code on load
-var dnsimple = require('dnsimple')({
+var dnsimple = require ('dnsimple') ({
   email: 'my@mail.tld',
   password: 'my-secret',
   twoFactorOTP: '0123456'
 });
 
 // Now call a random method to trade the OTP for a longterm token
-dnsimple( 'GET', '/subscription', function( err, data, meta ) {
-  if( err ) { return console.log(err) }
-  console.log( 'Two-factor token: '+ meta.twoFactorToken );
+dnsimple ('GET', '/subscription', function (err, data, meta) {
+  if (err) { return console.log (err); }
+  console.log ('Two-factor token: '+ meta.twoFactorToken);
 });
 
 // From now on only use this token - no email/password
-var dnsimple = require('dnsimple')({
+var dnsimple = require ('dnsimple') ({
   twoFactorToken: '22596363b3de40b06f981fb85d82312e'
 });
 ```
@@ -116,7 +116,7 @@ authentication as described above.
 This object can have a few more settings.
 
 name           | description                          | default
----------------|--------------------------------------|-----------------
+:--------------|:-------------------------------------|:----------------
 email          | Account email address                |
 token          | Account access token                 |
 password       | Account password                     |
@@ -143,7 +143,7 @@ See the [API documentation](http://developer.dnsimple.com/) for details on each 
 #### Module Arguments
 
 name     | type     | required | description
----------|----------|----------|--------------------------------------
+:--------|:---------|:---------|:-------------------------------------
 method   | string   | yes      | GET, POST, PUT, DELETE
 path     | string   | yes      | i.e. `/domains/two.com`
 params   | object   | no       | i.e. `{domain: { name: 'one.com' } }`
@@ -153,16 +153,14 @@ callback | function | yes      | Function to receive response
 #### Callback Arguments
 
 The last argument `callback` receives three arguments: `err`, `data` and `meta`.
-
-* When an error occurs `err` is an instance of `Error` and `data` is _null_.
+When an error occurs `err` is an instance of _Error_ and `data` is _null_.
 `err` can have additional properties.
+When everything is good `err` will be _null_ and `data` will be the parsed result.
 
-* When everything is good `err` will be _null_ and `data` will be the parsed result.
-
-	* DELETE result `data` is _true_ on success, _false_ otherwise.
-
-* The `meta` parameter is always available and contains extra information from
+The `meta` parameter is always available and contains extra information from
 the API, such as statusCode, request_id, runtime and twoFactorToken.
+
+* DELETE result `data` is boolean _true_ on success, _false_ otherwise.
 
 
 #### Errors
@@ -170,14 +168,12 @@ the API, such as statusCode, request_id, runtime and twoFactorToken.
 The `err.message` can be any of these:
 
 
-message             | description
---------------------|---------------------------------------------------------
-credentials missing | No authentication details set
-connection dropped  | Connection was closed too early
-not json            | Invalid API response, see `err.code` and `err.data`
-API error           | The API returned an error, see `err.code` and `err.data`
-request timeout     | The request took too long
-request failed      | The request cannot be made, see `err.error`
+message             | description                     | additional
+:-------------------|:--------------------------------|:----------------------
+credentials missing | No authentication details set   |
+request failed      | The request cannot be made      | `err.error`
+invalid reponse     | Invalid API response            | `err.code`, `err.error`, `err.data`
+API error           | The API returned an error       | `err.code`, `err.error`, `err.data`
 
 
 Unlicense
