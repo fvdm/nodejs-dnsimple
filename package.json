@@ -22,10 +22,7 @@
     "node":                ">=0.8.0"
   },
   "keywords":              ["dnsimple", "domains", "dns", "api", "unlicense"],
-  "license": {
-    "type":                "Public Domain",
-    "url":                 "https://github.com/fvdm/nodejs-dnsimple/raw/master/UNLICENSE"
-  },
+  "license":               "Unlicense",
   "scripts": {
     "test":                "node test.js"
   }
