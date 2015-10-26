@@ -1,6 +1,4 @@
 var pkg = require ('./package.json');
-var util = require ('util');
-var testStart = Date.now ();
 var errors = 0;
 var queue = [];
 var next = 0;
