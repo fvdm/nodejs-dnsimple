@@ -14,7 +14,6 @@ Service API:   http://developer.dnsimple.com
 
 var http = require ('httpreq');
 
-  // ! Defaults
 module.exports = function setup (setup) {
   var api = {
     hostname: setup.hostname || 'api.dnsimple.com',
