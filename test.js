@@ -105,9 +105,10 @@ queue.push (function () {
 
 // ! API error
 queue.push (function () {
-  app ('GET', '/domains/'+ bogus.domain.id, function (err) {
+  app ('GET', '/invalid-path', function (err) {
     doTest (null, 'API error', [
-      ['type', err && err.message === 'API error']
+      ['type', err instanceof Error],
+      ['message', err && err.message === 'API error']
     ]);
   });
 });
