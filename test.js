@@ -143,6 +143,7 @@ var bogus = {
 
 // ! POST object
 queue.push (function () {
+  var works = null;
   var input = {
     domain: {
       name: bogus.domain.name
@@ -152,18 +153,19 @@ queue.push (function () {
     bogus.domain = data.domain;
     doTest (err, 'POST object', [
       ['code', meta.statusCode === 201],
-      ['type', data && data.domain instanceof Object],
-      ['item', data.domain.name === bogus.domain.name]
+      ['type', works = data && data.domain instanceof Object],
+      ['item', works && data.domain.name === bogus.domain.name]
     ]);
   });
 });
 
 // ! GET object
 queue.push (function () {
+  var works = null;
   app ('GET', '/domains/'+ bogus.domain.id, function (err, data) {
     doTest (err, 'GET object', [
-      ['type', data && data.domain instanceof Object],
-      ['name', data && data.domain.name === bogus.domain.name]
+      ['type', works = data && data.domain instanceof Object],
+      ['name', works && data.domain.name === bogus.domain.name]
     ]);
   });
 });
@@ -171,11 +173,12 @@ queue.push (function () {
 // ! GET array object
 queue.push (function () {
   app ('GET', '/domains', function (err, data) {
+    var works = null;
     doTest (err, 'GET array object', [
-      ['data type', data instanceof Array],
-      ['data size', data && data.length >= 1],
-      ['item type', data && data[0] && data[0].domain instanceof Object],
-      ['item name', data && data[0] && data[0].domain && typeof data[0].domain.name === 'string']
+      ['data type', works = data instanceof Array],
+      ['data size', works = works && data.length >= 1],
+      ['item type', works = works && data[0].domain instanceof Object],
+      ['item name', works && typeof data[0].domain.name === 'string']
     ]);
   });
 });
