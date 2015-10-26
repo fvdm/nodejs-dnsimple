@@ -1,31 +1,37 @@
 {
   "author": {
-    "name":               "Franklin van de Meent",
-    "email":              "fr@nkl.in",
-    "url":                "https://frankl.in"
+    "name": "Franklin van de Meent",
+    "email": "fr@nkl.in",
+    "url": "https://frankl.in"
   },
-  "name":                  "dnsimple",
-  "description":           "Wrapper for DNSimple API",
-  "version":               "1.1.1",
+  "name": "dnsimple",
+  "description": "Wrapper for DNSimple API",
+  "version": "1.2.0",
   "repository": {
-      "type":              "git",
-      "url":               "git://github.com/fvdm/nodejs-dnsimple.git"
+    "type": "git",
+    "url": "git://github.com/fvdm/nodejs-dnsimple.git"
   },
   "bugs": {
-    "url":                 "https://github.com/fvdm/nodejs-dnsimple/issues"
+    "url": "https://github.com/fvdm/nodejs-dnsimple/issues"
   },
-  "main":                  "dnsimple.js",
+  "main": "dnsimple.js",
   "dependencies": {
-    "httpreq":             "0.4.x"
+    "httpreq": "0.4.x"
   },
-  "devDependencies":       {},
-  "optionalDependencies":  {},
+  "devDependencies": {},
+  "optionalDependencies": {},
   "engines": {
-    "node":                ">=0.8.0"
+    "node": ">=0.8.0"
   },
-  "keywords":              ["dnsimple", "domains", "dns", "api", "unlicense"],
-  "license":               "Unlicense",
+  "keywords": [
+    "dnsimple",
+    "domains",
+    "dns",
+    "api",
+    "unlicense"
+  ],
+  "license": "Unlicense",
   "scripts": {
-    "test":                "node test.js"
+    "test": "node test.js"
   }
 }
