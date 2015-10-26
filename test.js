@@ -134,6 +134,7 @@ queue.push (function () {
       name: bogus.domain.name
     }
   };
+
   app ('POST', '/domains', input, function (err, data, meta) {
     if (data) {
       bogus.domain = data.domain;
@@ -149,6 +150,7 @@ queue.push (function () {
 // ! GET object
 queue.push (function () {
   var works = null;
+
   app ('GET', '/domains/' + bogus.domain.id, function (err, data) {
     doTest (err, 'GET object', [
       ['type', works = data && data.domain instanceof Object],
@@ -161,6 +163,7 @@ queue.push (function () {
 queue.push (function () {
   app ('GET', '/domains', function (err, data) {
     var works = null;
+
     doTest (err, 'GET array object', [
       ['data type', works = data instanceof Array],
       ['data size', works = works && data.length >= 1],
