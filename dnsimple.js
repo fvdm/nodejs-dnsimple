@@ -14,8 +14,8 @@ Service API:   http://developer.dnsimple.com
 
 var http = require ('httpreq');
 
-module.exports = function (setup) {
   // ! Defaults
+module.exports = function setup (setup) {
   var api = {
     hostname: setup.hostname || 'api.dnsimple.com',
     email: setup.email || null,
@@ -28,7 +28,7 @@ module.exports = function (setup) {
   };
 
   // ! API
-  return function (method, path, fields, callback) {
+  return function talk (method, path, fields, callback) {
     if (!callback && typeof fields === 'function') {
       callback = fields;
       fields = {};
@@ -104,7 +104,7 @@ module.exports = function (setup) {
     }
 
     // start request
-    http.doRequest (options, function (err, response) {
+    http.doRequest (options, function doResponse (err, response) {
       var error = null;
       var apiError = null;
       var data = response && response.body || '';
