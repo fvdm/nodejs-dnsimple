@@ -33,5 +33,34 @@
   "license": "Unlicense",
   "scripts": {
     "test": "node test.js"
-  }
+  },
+  "contributors": [
+    {
+      "name": "Franklin van de Meent",
+      "email": "fr@nkl.in",
+      "url": "https://github.com/fvdm",
+      "contributions": 406,
+      "additions": 7743,
+      "deletions": 6968,
+      "hireable": true
+    },
+    {
+      "name": "Simone Carletti",
+      "email": "weppos@weppos.net",
+      "url": "https://github.com/weppos",
+      "contributions": 4,
+      "additions": 63,
+      "deletions": 69,
+      "hireable": true
+    },
+    {
+      "name": "Adam Anderly",
+      "email": null,
+      "url": "https://github.com/anderly",
+      "contributions": 1,
+      "additions": 8,
+      "deletions": 1,
+      "hireable": null
+    }
+  ]
 }
