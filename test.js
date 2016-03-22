@@ -1,7 +1,5 @@
-var pkg = require ('./package.json');
-var errors = 0;
-var queue = [];
-var next = 0;
+var dotest = require ('dotest');
+var app = require ('./');
 
 // Setup
 // set env DNSIMPLE_EMAIL and DNSIMPLE_TOKEN (Travis CI)
@@ -21,171 +19,104 @@ var bogus = {
   }
 };
 
-var app = require ('./') (acc);
+var dnsimple = app (acc);
 
-// handle exits
-process.on ('exit', function () {
-  if (errors === 0) {
-    console.log ('\n\u001b[1mDONE, no errors.\u001b[0m\n');
-    process.exit (0);
-  } else {
-    console.log ('\n\u001b[1mFAIL, ' + errors + ' error' + (errors > 1 ? 's' : '') + ' occurred!\u001b[0m\n');
-    process.exit (1);
-  }
-});
-
-// prevent errors from killing the process
-process.on ('uncaughtException', function (err) {
-  console.log ();
-  console.log (err);
-  console.log ();
-  console.log (err.stack);
-  console.log ();
-  errors++;
-});
-
-// Queue to prevent flooding
-function doNext () {
-  next++;
-  if (queue [next]) {
-    queue [next] ();
-  }
-}
-
-// doTest( passErr, 'methods', [
-//   ['feeds', typeof feeds === 'object']
-// ])
-function doTest (err, label, tests) {
-  var testErrors = [];
-  var i;
-
-  if (err instanceof Error) {
-    console.log ('\u001b[1m\u001b[31mERROR\u001b[0m - ' + label + '\n');
-    console.dir (err, { depth: null, colors: true });
-    console.log ();
-    console.log (err.stack);
-    console.log ();
-    errors++;
-  } else {
-    for (i = 0; i < tests.length; i++) {
-      if (tests [i] [1] !== true) {
-        testErrors.push (tests [i] [0]);
-        errors++;
-      }
-    }
-
-    if (testErrors.length === 0) {
-      console.log ('\u001b[1m\u001b[32mgood\u001b[0m - ' + label);
-    } else {
-      console.log ('\u001b[1m\u001b[31mFAIL\u001b[0m - ' + label + ' (' + testErrors.join (', ') + ')');
-    }
-  }
-
-  doNext ();
-}
 
 // First check API access
-queue.push (function () {
-  app ('GET', '/prices', function (err) {
-    if (err) {
-      console.log ('API access: failed (' + err.message + ')');
-      console.log (err.stack);
-      errors++;
-      process.exit (1);
-    } else {
-      console.log ('\u001b[1m\u001b[32mgood\u001b[0m - API access');
-      doNext ();
-    }
-  });
+dotest.add ('Module', function () {
+  dotest.test ()
+    .isFunction ('fail', 'exports', app)
+    .isFunction ('fail', 'module', dnsimple)
+    .done ();
 });
 
 
 // ! API error
-queue.push (function () {
-  app ('GET', '/invalid-path', function (err) {
-    doTest (null, 'API error', [
-      ['type', err instanceof Error],
-      ['message', err && err.message === 'API error']
-    ]);
+dotest.add ('API error', function () {
+  dnsimple ('GET', '/invalid-path', function (err) {
+    dotest.test ()
+      .isError ('fail', 'err', err)
+      .isExactly ('fail', 'err.message', err.message, 'API error')
+      .done ();
   });
 });
 
 
 // ! Timeout error
-queue.push (function () {
+dotest.add ('Timeout error', function () {
   var tmp_acc = acc;
 
   tmp_acc.timeout = 1;
-  require ('./') (tmp_acc) ('GET', '/prices', function (err, data) {
-    doTest (null, 'Timeout error', [
-      ['type', err instanceof Error],
-      ['code', err.error.code === 'TIMEOUT'],
-      ['data', !data]
-    ]);
+  app (tmp_acc) ('GET', '/prices', function (err) {
+    dotest.test ()
+      .isError ('fail', 'err', err)
+      .isExactly ('fail', 'err.message', err && err.message, 'request failed')
+      .isError ('fail', 'err.error', err && err.error)
+      .isExactly ('fail', 'err.error.code', err && err.error && err.error.code, 'TIMEOUT')
+      .done ();
   });
 });
 
 
 // ! POST object
-queue.push (function () {
-  var works = null;
+dotest.add ('POST object', function () {
   var input = {
     domain: {
       name: bogus.domain.name
     }
   };
 
-  app ('POST', '/domains', input, function (err, data, meta) {
+  dnsimple ('POST', '/domains', input, function (err, data, meta) {
     if (data) {
       bogus.domain = data.domain;
     }
-    doTest (err, 'POST object', [
-      ['code', meta.statusCode === 201],
-      ['type', works = data && data.domain instanceof Object],
-      ['item', works && data.domain.name === bogus.domain.name]
-    ]);
+
+    dotest.test (err)
+      .isObject ('fail', 'meta', meta)
+      .isExactly ('fail', 'meta.statusCode', meta && meta.statusCode, 201)
+      .isObject ('fail', 'data', data)
+      .isObject ('fail', 'data.domain', data && data.domain)
+      .isExactly ('fail', 'data.domain.name', data && data.domain && data.domain.name, bogus.domain.name)
+      .done ()
   });
 });
+
 
 // ! GET object
-queue.push (function () {
-  var works = null;
-
-  app ('GET', '/domains/' + bogus.domain.id, function (err, data) {
-    doTest (err, 'GET object', [
-      ['type', works = data && data.domain instanceof Object],
-      ['name', works && data.domain.name === bogus.domain.name]
-    ]);
+dotest.add ('GET object', function () {
+  dnsimple ('GET', '/domains/' + bogus.domain.id, function (err, data) {
+    dotest.test (err)
+      .isObject ('fail', 'data', data)
+      .isObject ('fail', 'data.domain', data && data.domain)
+      .isExactly ('fail', 'data.domain.name', data && data.domain && data.domain.name, bogus.domain.name)
+      .done ();
   });
 });
+
 
 // ! GET array object
-queue.push (function () {
-  app ('GET', '/domains', function (err, data) {
-    var works = null;
-
-    doTest (err, 'GET array object', [
-      ['data type', works = data instanceof Array],
-      ['data size', works = works && data.length >= 1],
-      ['item type', works = works && data[0].domain instanceof Object],
-      ['item name', works && typeof data[0].domain.name === 'string']
-    ]);
+dotest.add ('GET array object', function () {
+  dnsimple ('GET', '/domains', function (err, data) {
+    dotest.test (err)
+      .isArray ('fail', 'data', data)
+      .isCondition ('fail', 'data.length', data && data.length, '>=', 1)
+      .isObject ('fail', 'data[0].domain', data && data[0] && data[0].domain)
+      .isString ('fail', 'data[0].domain.name', data && data[0] && data[0].domain && data[0].domain.name)
+      .done ();
   });
 });
 
+
 // ! DELETE
-queue.push (function () {
-  app ('DELETE', '/domains/' + bogus.domain.id, function (err, data) {
-    doTest (err, 'DELETE', [
-      ['data', data === true]
-    ]);
+dotest.add ('DELETE', function () {
+  dnsimple ('DELETE', '/domains/' + bogus.domain.id, function (err, data) {
+    dotest.test (err)
+      .isBoolean ('fail', 'data', data)
+      .isExactly ('fail', 'data', data, true)
+      .done ();
   });
 });
 
 
 // Start the tests
-console.log ('Running tests...');
-console.log ('Node.js v' + process.versions.node);
-console.log ('Module  v' + pkg.version);
-console.log ();
-queue [0] ();
+dotest.run ();
