@@ -38,13 +38,13 @@
   },
   "contributors": [
     {
-      "name": "Franklin van de Meent",
-      "email": "fr@nkl.in",
-      "url": "https://github.com/fvdm",
-      "contributions": 406,
-      "additions": 7743,
-      "deletions": 6968,
-      "hireable": true
+      "name": "Adam Anderly",
+      "email": null,
+      "url": "https://github.com/anderly",
+      "contributions": 1,
+      "additions": 8,
+      "deletions": 1,
+      "hireable": null
     },
     {
       "name": "Simone Carletti",
@@ -56,12 +56,12 @@
       "hireable": true
     },
     {
-      "name": "Adam Anderly",
-      "email": null,
-      "url": "https://github.com/anderly",
-      "contributions": 1,
-      "additions": 8,
-      "deletions": 1,
+      "name": "Franklin van de Meent",
+      "email": "fr@nkl.in",
+      "url": "https://github.com/fvdm",
+      "contributions": 409,
+      "additions": 7846,
+      "deletions": 7098,
       "hireable": null
     }
   ]
