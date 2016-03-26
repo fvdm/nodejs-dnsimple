@@ -16,14 +16,14 @@
   },
   "main": "dnsimple.js",
   "dependencies": {
-    "httpreq": "0.4.x"
+    "httpreq": "^0.4.16"
   },
   "devDependencies": {
-    "dotest": "1.x"
+    "dotest": "^1.2.0"
   },
   "optionalDependencies": {},
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.12.0"
   },
   "keywords": [
     "dnsimple",
