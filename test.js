@@ -47,7 +47,7 @@ dotest.add ('Timeout error', function () {
   var tmpAcc = acc;
 
   tmpAcc.timeout = 1;
-  app (tmp_acc) ('GET', '/prices', function (err) {
+  app (tmpAcc) ('GET', '/prices', function (err) {
     dotest.test ()
       .isError ('fail', 'err', err)
       .isExactly ('fail', 'err.message', err && err.message, 'request failed')
