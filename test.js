@@ -44,9 +44,9 @@ dotest.add ('API error', function () {
 
 // ! Timeout error
 dotest.add ('Timeout error', function () {
-  var tmp_acc = acc;
+  var tmpAcc = acc;
 
-  tmp_acc.timeout = 1;
+  tmpAcc.timeout = 1;
   app (tmp_acc) ('GET', '/prices', function (err) {
     dotest.test ()
       .isError ('fail', 'err', err)
@@ -77,7 +77,7 @@ dotest.add ('POST object', function () {
       .isObject ('fail', 'data', data)
       .isObject ('fail', 'data.domain', data && data.domain)
       .isExactly ('fail', 'data.domain.name', data && data.domain && data.domain.name, bogus.domain.name)
-      .done ()
+      .done ();
   });
 });
 
