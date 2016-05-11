@@ -14,146 +14,197 @@ Service API:   http://developer.dnsimple.com
 
 var http = require ('httpreq');
 
-module.exports = function doSetup (setup) {
-  var api = {
-    hostname: setup.hostname || 'api.dnsimple.com',
-    email: setup.email || null,
-    token: setup.token || null,
-    domainToken: setup.domainToken || null,
-    twoFactorOTP: setup.twoFactorOTP || null,
-    twoFactorToken: setup.twoFactorToken || null,
-    password: setup.password || null,
-    timeout: setup.timeout || 30000
+
+/**
+ * Process httpreq response
+ *
+ * @callback callback
+ * @param err {Error, null} - Agent error
+ * @param response {object} - Response details
+ * @param callback {function} - `function (err, data) {}`
+ * @returns {void}
+ */
+
+function processResponse (err, response, callback) {
+  var error = null;
+  var data = response && response.body || '';
+  var meta = {};
+
+  // agent error
+  if (err) {
+    error = new Error ('request failed');
+    error.error = err;
+    callback (error);
+    return;
+  }
+
+  // parse response
+  try {
+    data = JSON.parse (data);
+  } catch (e) {
+    error = new Error ('invalid response');
+    error.error = e;
+  }
+
+  meta.statusCode = response.statusCode;
+  meta.request_id = response.headers ['x-request-id'];
+  meta.runtime = response.headers ['x-runtime'];
+
+  if (typeof response.headers ['x-dnsimple-otp-token'] === 'string') {
+    meta.twoFactorToken = response.headers ['x-dnsimple-otp-token'];
+  }
+
+  // status ok, no data
+  if (!data && meta.statusCode < 300) {
+    error = null;
+  }
+
+  // domain check 404 = free
+  if (path.match (/^domains\/.+\/check$/) && meta.statusCode === 404) {
+    error = null;
+  }
+
+  // delete ok
+  if (method === 'DELETE' && !(data instanceof Object && Object.keys (data).length > 0)) {
+    callback (null, meta.statusCode === 200 || meta.statusCode === 204, meta);
+    return;
+  }
+
+
+  // check HTTP status code
+  if (!error && response.statusCode < 300) {
+    callback (null, data, meta);
+    return;
+  } else if (response.statusCode === 401 && response.headers ['x-dnsimple-otp'] === 'required') {
+    error = new Error ('twoFactorOTP required');
+  } else {
+    error = new Error ('API error');
+  }
+
+  error.code = response.statusCode;
+  error.error = data.message || data.error || data.errors || null;
+  error.data = data;
+
+  callback (error, null, meta);
+}
+
+
+/**
+ * Send request to API
+ *
+ * @param config {object}
+ * @param config.path {string} - Request path
+ * @param [config.method] {string} - GET, POST, PUT, DELETE
+ * @param config.auth {object} - See module.exports below
+ */
+
+function sendRequest (props) {
+  var options = {
+    url: 'https://' + props.config.hostname + '/v1' + props.path,
+    method: props.method || 'GET',
+    timeout: props.config.timeout,
+    headers: {
+      'Accept': 'application/json',
+      'User-Agent': 'Nodejs-DNSimple'
+    }
   };
 
-  // ! API
-  return function talk (method, path, fields, callback) {
-    var complete = false;
-    var options = {
-      url: 'https://' + api.hostname + '/v1' + path,
-      method: method || 'GET',
-      timeout: api.timeout,
-      headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'Nodejs-DNSimple'
-      }
-    };
+  // credentials set?
+  if (
+    !(props.config.email && props.config.token)
+    && !(props.config.email && props.config.password)
+    && !props.config.domainToken
+    && !props.config.twoFactorToken
+  ) {
+    callback (new Error ('credentials missing'));
+    return;
+  }
 
-    if (!callback && typeof fields === 'function') {
-      callback = fields;
-      fields = {};
-    }
+  // token in headers
+  if (props.config.token) {
+    options.headers['X-DNSimple-Token'] = props.config.email + ':' + props.config.token;
+  }
 
-    // process callback data
-    function doCallback (err, data, meta) {
-      if (!complete) {
-        complete = true;
+  if (props.config.domainToken) {
+    options.headers['X-DNSimple-Domain-Token'] = props.config.domainToken;
+  }
 
-        if (err) {
-          callback (err, null, meta);
-          return;
-        }
+  // build request
+  if (method.match (/(POST|PUT|DELETE)/)) {
+    options.json = props.fields;
+  } else {
+    options.parameters = props.fields;
+  }
 
-        if (method === 'DELETE' && !(data instanceof Object && Object.keys (data).length > 0)) {
-          callback (null, meta.statusCode === 200 || meta.statusCode === 204, meta);
-          return;
-        }
+  // password authentication
+  if (
+    !props.config.twoFactorToken
+    && !props.config.token
+    && !props.config.domainToken
+    && props.config.password
+    && props.config.email
+  ) {
+    options.auth = props.config.email + ':' + props.config.password;
 
-        callback (null, data, meta);
-      }
-    }
-
-    // credentials set?
-    if (!(api.email && api.token) && !(api.email && api.password) && !api.domainToken && !api.twoFactorToken) {
-      doCallback (new Error ('credentials missing'));
-      return;
-    }
-
-    // token in headers
-    if (api.token) {
-      options.headers['X-DNSimple-Token'] = api.email + ':' + api.token;
-    }
-
-    if (api.domainToken) {
-      options.headers['X-DNSimple-Domain-Token'] = api.domainToken;
-    }
-
-    // build request
-    if (method.match (/(POST|PUT|DELETE)/)) {
-      options.json = fields;
-    } else {
-      options.parameters = fields;
-    }
-
-    // password authentication
-    if (!api.twoFactorToken && !api.token && !api.domainToken && api.password && api.email) {
-      options.auth = api.email + ':' + api.password;
-
-      // two-factor authentication (2FA)
-      if (api.twoFactorOTP) {
-        options.headers['X-DNSimple-2FA-Strict'] = 1;
-        options.headers['X-DNSimple-OTP'] = api.twoFactorOTP;
-      }
-    }
-
-    if (api.twoFactorToken) {
-      options.auth = api.twoFactorToken + ':x-2fa-basic';
+    // two-factor authentication (2FA)
+    if (props.config.twoFactorOTP) {
       options.headers['X-DNSimple-2FA-Strict'] = 1;
+      options.headers['X-DNSimple-OTP'] = props.config.twoFactorOTP;
+    }
+  }
+
+  if (props.config.twoFactorToken) {
+    options.auth = props.config.twoFactorToken + ':x-2fa-basic';
+    options.headers['X-DNSimple-2FA-Strict'] = 1;
+  }
+
+  // start request
+  http.doRequest (options, function (err, res) {
+    processResponse (err, res, callback);
+  });
+}
+
+
+/**
+ * Module configuration and interface
+ *
+ * @param config {object} - Configuration, see README.md
+ * @param [config.hostname = api.dnsimple.com] {string} - API hostname
+ * @param [config.email] {string} - Account email
+ * @param [config.token] {string} - Account token
+ * @param [config.password] {string} - Account password
+ * @param [config.domainToken] {string} - Domain token
+ * @param [config.twoFactorTokeb] {string} - TFA token
+ * @param [config.twoFactorOTP] {string} - TFA one-time code
+ * @param [config.timeout = 30000] {string} - Request timeout in ms
+ * @returns {function} - `( method, path, [fields], callback )`
+ */
+
+module.exports = function (config) {
+  var api = {
+    hostname: config.hostname || 'api.dnsimple.com',
+    email: config.email || null,
+    token: config.token || null,
+    domainToken: config.domainToken || null,
+    twoFactorOTP: config.twoFactorOTP || null,
+    twoFactorToken: config.twoFactorToken || null,
+    password: config.password || null,
+    timeout: config.timeout || 30000
+  };
+
+  // interface
+  return function (method, path, fields, callback) {
+    if (typeof fields === 'fubction') {
+      callback = fields;
+      fields = null;
     }
 
-    // start request
-    http.doRequest (options, function doResponse (err, response) {
-      var error = null;
-      var data = response && response.body || '';
-      var meta = {};
-
-      if (err) {
-        error = new Error ('request failed');
-        error.error = err;
-        doCallback (error);
-        return;
-      }
-
-      try {
-        data = JSON.parse (data);
-      } catch (e) {
-        error = new Error ('invalid response');
-        error.error = e;
-      }
-
-      meta.statusCode = response.statusCode;
-      meta.request_id = response.headers ['x-request-id'];
-      meta.runtime = response.headers ['x-runtime'];
-
-      if (typeof response.headers ['x-dnsimple-otp-token'] === 'string') {
-        meta.twoFactorToken = response.headers ['x-dnsimple-otp-token'];
-      }
-
-      // status ok, no data
-      if (!data && meta.statusCode < 300) {
-        error = null;
-      }
-
-      // domain check 404 = free
-      if (path.match (/^domains\/.+\/check$/) && meta.statusCode === 404) {
-        error = null;
-      }
-
-      // check HTTP status code
-      if (!error && response.statusCode < 300) {
-        doCallback (null, data, meta);
-        return;
-      } else if (response.statusCode === 401 && response.headers ['x-dnsimple-otp'] === 'required') {
-        error = new Error ('twoFactorOTP required');
-      } else {
-        error = new Error ('API error');
-      }
-
-      error.code = response.statusCode;
-      error.error = data.message || data.error || data.errors || null;
-      error.data = data;
-
-      doCallback (error, null, meta);
+    talk ({
+      method: method,
+      path: path,
+      fields: fields,
+      callback: callback,
+      auth: api
     });
   };
 };
