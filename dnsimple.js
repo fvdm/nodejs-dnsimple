@@ -66,7 +66,7 @@ function processResponse (err, response, request, callback) {
   }
 
   // delete ok
-  if (reques.method === 'DELETE' && !(data instanceof Object && Object.keys (data).length > 0)) {
+  if (request.method === 'DELETE' && !(data instanceof Object && Object.keys (data).length > 0)) {
     callback (null, meta.statusCode === 200 || meta.statusCode === 204, meta);
     return;
   }
