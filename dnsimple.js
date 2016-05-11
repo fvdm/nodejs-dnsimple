@@ -199,7 +199,7 @@ module.exports = function (config) {
       fields = null;
     }
 
-    talk ({
+    sendRequest ({
       method: method,
       path: path,
       fields: fields,
