@@ -21,11 +21,12 @@ var http = require ('httpreq');
  * @callback callback
  * @param err {Error, null} - Agent error
  * @param response {object} - Response details
+ * @param request {object} - Request details
  * @param callback {function} - `function (err, data) {}`
  * @returns {void}
  */
 
-function processResponse (err, response, callback) {
+function processResponse (err, response, request, callback) {
   var error = null;
   var data = response && response.body || '';
   var meta = {};
@@ -60,12 +61,12 @@ function processResponse (err, response, callback) {
   }
 
   // domain check 404 = free
-  if (path.match (/^domains\/.+\/check$/) && meta.statusCode === 404) {
+  if (request.path.match (/^domains\/.+\/check$/) && meta.statusCode === 404) {
     error = null;
   }
 
   // delete ok
-  if (method === 'DELETE' && !(data instanceof Object && Object.keys (data).length > 0)) {
+  if (reques.method === 'DELETE' && !(data instanceof Object && Object.keys (data).length > 0)) {
     callback (null, meta.statusCode === 200 || meta.statusCode === 204, meta);
     return;
   }
@@ -160,7 +161,7 @@ function sendRequest (props) {
 
   // start request
   http.doRequest (options, function (err, res) {
-    processResponse (err, res, callback);
+    processResponse (err, res, options, callback);
   });
 }
 
