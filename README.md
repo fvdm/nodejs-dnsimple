@@ -5,18 +5,18 @@ This is an unofficial DNSimple API module for node.js.
 You need a DNSimple account to use this.
 
 [![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=master)](https://travis-ci.org/fvdm/nodejs-dnsimple)
+[![Dependency Status](https://gemnasium.com/badges/github.com/fvdm/nodejs-dnsimple.svg)](https://gemnasium.com/github.com/fvdm/nodejs-dnsimple#runtime-dependencies)
 
-[Changelog](https://github.com/fvdm/nodejs-dnsimple/releases) -
-[DNSimple](https://dnsimple.com/) -
-[API documentation](https://developer.dnsimple.com/)
+* [Node.js](https://nodejs.org)
+* [Source code](https://github.com/fvdm/nodejs-dnsimple)
+* [DNSimple](https://dnsimple.com/)
+* [API documentation](https://developer.dnsimple.com/)
 
 
 Installation
 ------------
 
-Stable: `npm install dnsimple`
-
-Develop: `npm install fvdm/nodejs-dnsimple#develop`
+`npm install dnsimple`
 
 
 Example
@@ -37,6 +37,7 @@ dnsimple ('POST', '/domains', input, function (err, data) {
   if (err) {
     return console.log (err);
   }
+
   console.log (data.domain.name + ' created with ID ' + data.domain.id);
 });
 ```
@@ -57,14 +58,20 @@ Most secure, easy to reset at [dnsimple.com/account](https://dnsimple.com/accoun
 
 
 ```js
-require ('dnsimple') ({ email: 'your@email.tld', token: '12345abcde' });
+var dnsimple = require ('dnsimple') ({
+  email: 'your@email.tld',
+  token: '12345abcde'
+});
 ```
 
 
 ### Email & password
 
 ```js
-require ('dnsimple') ({ email: 'your@email.tld', password: 'secret' });
+var dnsimple = require ('dnsimple') ({
+  email: 'your@email.tld',
+  password: 'secret'
+});
 ```
 
 
@@ -73,7 +80,9 @@ require ('dnsimple') ({ email: 'your@email.tld', password: 'secret' });
 Access to only one domain name, easy to reset.
 
 ```js
-require ('dnsimple') ({ domainToken: 'abc123' });
+var dnsimple = require ('dnsimple') ({
+  domainToken: 'abc123'
+});
 ```
 
 
@@ -98,6 +107,7 @@ var dnsimple = require ('dnsimple') ({
 // Now call a random method to trade the OTP for a longterm token
 dnsimple ('GET', '/subscription', function (err, data, meta) {
   if (err) { return console.log (err); }
+
   console.log ('Two-factor token: '+ meta.twoFactorToken);
 });
 
@@ -131,8 +141,9 @@ hostname       | API endpoint                         | api.dnsimple.com
 > set `hostname` to `api.sandbox.dnsimple.com`.
 
 
-dnsimple ( method, path, [params], callback )
+dnsimple
 --------
+**( method, path, [params], callback )**
 
 The module is only one method which takes care of all the error handling
 and basic post-processing.
@@ -208,6 +219,4 @@ For more information, please refer to <http://unlicense.org/>
 Author
 ------
 
-Franklin van de Meent
-| [Website](https://frankl.in)
-| [Github](https://github.com/fvdm)
+[Franklin van de Meent](https://frankl.in)
