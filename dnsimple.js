@@ -117,7 +117,7 @@ function sendRequest (props) {
     && !props.config.domainToken
     && !props.config.twoFactorToken
   ) {
-    callback (new Error ('credentials missing'));
+    props.callback (new Error ('credentials missing'));
     return;
   }
 
@@ -131,7 +131,7 @@ function sendRequest (props) {
   }
 
   // build request
-  if (method.match (/(POST|PUT|DELETE)/)) {
+  if (options.method.match (/(POST|PUT|DELETE)/)) {
     options.json = props.fields;
   } else {
     options.parameters = props.fields;
@@ -161,7 +161,7 @@ function sendRequest (props) {
 
   // start request
   http.doRequest (options, function (err, res) {
-    processResponse (err, res, options, callback);
+    processResponse (err, res, options, props.callback);
   });
 }
 
@@ -195,7 +195,7 @@ module.exports = function (config) {
 
   // interface
   return function (method, path, fields, callback) {
-    if (typeof fields === 'fubction') {
+    if (typeof fields === 'function') {
       callback = fields;
       fields = null;
     }
