@@ -16,11 +16,11 @@
   },
   "main": "dnsimple.js",
   "dependencies": {
-    "httpreq": "^0.4.16"
+    "httpreq": "^0.4.22"
   },
   "devDependencies": {
-    "dotest": "^1.2.0",
-    "eslint": "^2.5.1"
+    "dotest": "^1.10.4",
+    "eslint": "^2.9.0"
   },
   "optionalDependencies": {},
   "engines": {
