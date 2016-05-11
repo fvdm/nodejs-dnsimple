@@ -61,7 +61,7 @@ function processResponse (err, response, request, callback) {
   }
 
   // domain check 404 = free
-  if (request.path.match (/^domains\/.+\/check$/) && meta.statusCode === 404) {
+  if (request.url.match (/\/domains\/.+\/check$/) && meta.statusCode === 404) {
     error = null;
   }
 
