@@ -48,11 +48,13 @@ dotest.add ('Timeout error', function () {
 
   tmpAcc.timeout = 1;
   app (tmpAcc) ('GET', '/prices', function (err) {
+    var error = err && err.error;
+
     dotest.test ()
       .isError ('fail', 'err', err)
       .isExactly ('fail', 'err.message', err && err.message, 'request failed')
-      .isError ('fail', 'err.error', err && err.error)
-      .isExactly ('fail', 'err.error.code', err && err.error && err.error.code, 'TIMEOUT')
+      .isError ('fail', 'err.error', error)
+      .isExactly ('fail', 'err.error.code', error && error.code, 'TIMEOUT')
       .done ();
   });
 });
@@ -67,16 +69,18 @@ dotest.add ('POST object', function () {
   };
 
   dnsimple ('POST', '/domains', input, function (err, data, meta) {
+    var domain = data && data.domain;
+
     if (data) {
-      bogus.domain = data.domain;
+      bogus.domain = domain;
     }
 
     dotest.test (err)
       .isObject ('fail', 'meta', meta)
       .isExactly ('fail', 'meta.statusCode', meta && meta.statusCode, 201)
       .isObject ('fail', 'data', data)
-      .isObject ('fail', 'data.domain', data && data.domain)
-      .isExactly ('fail', 'data.domain.name', data && data.domain && data.domain.name, bogus.domain.name)
+      .isObject ('fail', 'data.domain', domain)
+      .isExactly ('fail', 'data.domain.name', domain && domain.name, bogus.domain.name)
       .done ();
   });
 });
@@ -85,10 +89,12 @@ dotest.add ('POST object', function () {
 // ! GET object
 dotest.add ('GET object', function () {
   dnsimple ('GET', '/domains/' + bogus.domain.id, function (err, data) {
+    var domain = data && data.domain;
+
     dotest.test (err)
       .isObject ('fail', 'data', data)
-      .isObject ('fail', 'data.domain', data && data.domain)
-      .isExactly ('fail', 'data.domain.name', data && data.domain && data.domain.name, bogus.domain.name)
+      .isObject ('fail', 'data.domain', domain)
+      .isExactly ('fail', 'data.domain.name', domain && domain.name, bogus.domain.name)
       .done ();
   });
 });
@@ -97,11 +103,13 @@ dotest.add ('GET object', function () {
 // ! GET array object
 dotest.add ('GET array object', function () {
   dnsimple ('GET', '/domains', function (err, data) {
+    var domain = data && data[0] && data[0].domain;
+
     dotest.test (err)
       .isArray ('fail', 'data', data)
       .isCondition ('fail', 'data.length', data && data.length, '>=', 1)
-      .isObject ('fail', 'data[0].domain', data && data[0] && data[0].domain)
-      .isString ('fail', 'data[0].domain.name', data && data[0] && data[0].domain && data[0].domain.name)
+      .isObject ('fail', 'data[0].domain', domain)
+      .isString ('fail', 'data[0].domain.name', domain && domain.name)
       .done ();
   });
 });
