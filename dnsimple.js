@@ -93,10 +93,10 @@ function processResponse (err, response, request, callback) {
 /**
  * Send request to API
  *
- * @param config {object}
- * @param config.path {string} - Request path
- * @param [config.method] {string} - GET, POST, PUT, DELETE
- * @param config.auth {object} - See module.exports below
+ * @param props {object}
+ * @param props.path {string} - Request path
+ * @param [props.method] {string} - GET, POST, PUT, DELETE
+ * @param props.config {object} - See module.exports below
  */
 
 function sendRequest (props) {
@@ -205,7 +205,7 @@ module.exports = function (config) {
       path: path,
       fields: fields,
       callback: callback,
-      auth: api
+      config: api
     });
   };
 };
