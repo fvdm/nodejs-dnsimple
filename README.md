@@ -26,7 +26,10 @@ See _Configuration_ below for details.
 
 
 ```js
-var dnsimple = new require ('dnsimple') ({ email: 'you@web.tld', token: 'abc123' });
+var dnsimple = new require ('dnsimple') ({
+  email: 'you@web.tld',
+  token: 'abc123'
+});
 
 // Add a domain name
 var input = {
