@@ -4,6 +4,7 @@ dnsimple
 This is an unofficial DNSimple API module for node.js.
 You need a DNSimple account to use this.
 
+[![npm](https://img.shields.io/npm/v/dnsimple.svg?maxAge=3600)](https://github.com/fvdm/nodejs-dnsimple/blob/master/CHANGELOG.md)
 [![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=master)](https://travis-ci.org/fvdm/nodejs-dnsimple)
 [![Dependency Status](https://gemnasium.com/badges/github.com/fvdm/nodejs-dnsimple.svg)](https://gemnasium.com/github.com/fvdm/nodejs-dnsimple#runtime-dependencies)
 
