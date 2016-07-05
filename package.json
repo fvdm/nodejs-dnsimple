@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "dotest": "^1.10.4",
-    "eslint": "^3.0.0"
+    "eslint": "^3.0.1"
   },
   "optionalDependencies": {},
   "engines": {
