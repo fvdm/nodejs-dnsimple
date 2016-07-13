@@ -59,6 +59,7 @@
     "no-alert": 2,
     "no-caller": 2,
     "no-catch-shadow": 2,
+    "no-console": 1,
     "no-delete-var": 2,
     "no-div-regex": 2,
     "no-duplicate-case": 2,
