@@ -37,7 +37,7 @@
   ],
   "license": "Unlicense",
   "scripts": {
-    "test": "st=0; eslint . || st=1; node test.js || st=1; exit $st"
+    "test": "bash test.sh"
   },
   "contributors": [
     {
