@@ -24,7 +24,6 @@
     "eslint": "^3.0.1",
     "istanbul": "^0.4.4"
   },
-  "optionalDependencies": {},
   "engines": {
     "node": ">=4.0.0"
   },
