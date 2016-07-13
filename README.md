@@ -7,6 +7,7 @@ You need a DNSimple account to use this.
 [![npm](https://img.shields.io/npm/v/dnsimple.svg?maxAge=3600)](https://github.com/fvdm/nodejs-dnsimple/blob/master/CHANGELOG.md)
 [![Build Status](https://travis-ci.org/fvdm/nodejs-dnsimple.svg?branch=master)](https://travis-ci.org/fvdm/nodejs-dnsimple)
 [![Dependency Status](https://gemnasium.com/badges/github.com/fvdm/nodejs-dnsimple.svg)](https://gemnasium.com/github.com/fvdm/nodejs-dnsimple#runtime-dependencies)
+[![Coverage Status](https://coveralls.io/repos/github/fvdm/nodejs-dnsimple/badge.svg?branch=master)](https://coveralls.io/github/fvdm/nodejs-dnsimple?branch=master)
 
 * [Node.js](https://nodejs.org)
 * [Source code](https://github.com/fvdm/nodejs-dnsimple)
