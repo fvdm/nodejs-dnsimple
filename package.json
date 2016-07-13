@@ -43,18 +43,9 @@
       "name": "Franklin van de Meent",
       "email": "fr@nkl.in",
       "url": "https://github.com/fvdm",
-      "contributions": 430,
-      "additions": 8146,
-      "deletions": 7314,
-      "hireable": null
-    },
-    {
-      "name": "Adam Anderly",
-      "email": null,
-      "url": "https://github.com/anderly",
-      "contributions": 1,
-      "additions": 8,
-      "deletions": 1,
+      "contributions": 438,
+      "additions": 8198,
+      "deletions": 7340,
       "hireable": null
     },
     {
@@ -65,6 +56,24 @@
       "additions": 63,
       "deletions": 69,
       "hireable": true
+    },
+    {
+      "name": "Greenkeeper",
+      "email": null,
+      "url": "https://github.com/greenkeeperio-bot",
+      "contributions": 1,
+      "additions": 1,
+      "deletions": 1,
+      "hireable": true
+    },
+    {
+      "name": "Adam Anderly",
+      "email": null,
+      "url": "https://github.com/anderly",
+      "contributions": 1,
+      "additions": 8,
+      "deletions": 1,
+      "hireable": null
     }
   ]
 }
